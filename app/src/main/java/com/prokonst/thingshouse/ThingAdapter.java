@@ -3,6 +3,8 @@ package com.prokonst.thingshouse;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
@@ -12,11 +14,14 @@ import com.prokonst.thingshouse.databinding.ThingListItemBinding;
 import com.prokonst.thingshouse.model.Thing;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class ThingAdapter extends RecyclerView.Adapter<ThingAdapter.ThingViewHolder>{
+public class ThingAdapter extends RecyclerView.Adapter<ThingAdapter.ThingViewHolder>
+        implements Filterable {
 
     private OnItemClickListener onItemClickListener;
     private ArrayList<Thing> thingArrayList = new ArrayList<>();
+    private ArrayList<Thing> thingArrayListFiltered = new ArrayList<>();
 
     @NonNull
     @Override
@@ -32,13 +37,48 @@ public class ThingAdapter extends RecyclerView.Adapter<ThingAdapter.ThingViewHol
 
     @Override
     public void onBindViewHolder(@NonNull ThingViewHolder holder, int position) {
-        Thing thing = thingArrayList.get(position);
+        Thing thing = thingArrayListFiltered.get(position);
         holder.thingListItemBinding.setThing(thing);
     }
 
     @Override
     public int getItemCount() {
-        return thingArrayList.size();
+        return thingArrayListFiltered.size();
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                String charString = charSequence.toString();
+                if (charString.isEmpty()) {
+                    thingArrayListFiltered = thingArrayList;
+                } else {
+                    List<Thing> filteredList = new ArrayList<>();
+                    for (Thing row : thingArrayList) {
+
+                        // name match condition. this might differ depending on your requirement
+                        // here we are looking for name or phone number match
+                        if (row.getName().toLowerCase().contains(charString.toLowerCase()) ) {
+                            filteredList.add(row);
+                        }
+                    }
+
+                    thingArrayListFiltered = (ArrayList<Thing>) filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = thingArrayListFiltered;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                thingArrayListFiltered = (ArrayList<Thing>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     class ThingViewHolder extends RecyclerView.ViewHolder {
@@ -54,7 +94,7 @@ public class ThingAdapter extends RecyclerView.Adapter<ThingAdapter.ThingViewHol
                 public void onClick(View view) {
                     int position = getAdapterPosition();
                     if(onItemClickListener != null && position != RecyclerView.NO_POSITION) {
-                        onItemClickListener.onItemClick(thingArrayList.get(position));
+                        onItemClickListener.onItemClick(thingArrayListFiltered.get(position));
                     }
                 }
             });

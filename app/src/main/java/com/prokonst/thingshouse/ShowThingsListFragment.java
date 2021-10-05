@@ -83,7 +83,8 @@ public class ShowThingsListFragment extends Fragment {
 
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             //Toast.makeText(MainActivity.this, s.toString(), Toast.LENGTH_SHORT).show();
-            loadThingsInArrayList(s.toString());
+            //loadThingsInArrayList(s.toString());
+            thingAdapter.getFilter().filter(s.toString());
         }
 
         public void onAddClicked(View view) {
@@ -99,7 +100,7 @@ public class ShowThingsListFragment extends Fragment {
     }
 
     private void loadThingsInArrayList(){
-        thingsViewModel.getThings().observe(this, new Observer<List<Thing>>() {
+        thingsViewModel.getThings(/*namePart*/).observe(this.getViewLifecycleOwner(), new Observer<List<Thing>>() {
             @Override
             public void onChanged(List<Thing> things) {
                 thingArrayList = (ArrayList<Thing>) things;
@@ -108,15 +109,6 @@ public class ShowThingsListFragment extends Fragment {
         });
     }
 
-    private void loadThingsInArrayList(String namePart){
-        thingsViewModel.getThings(namePart).observe(this, new Observer<List<Thing>>() {
-            @Override
-            public void onChanged(List<Thing> things) {
-                thingArrayList = (ArrayList<Thing>) things;
-                loadRecyclerView();
-            }
-        });
-    }
 
     private void loadRecyclerView(){
         thingRecyclerView = fragmentShowThingsListBinding.recyclerview;
@@ -126,6 +118,8 @@ public class ShowThingsListFragment extends Fragment {
         thingAdapter = new ThingAdapter();
         thingAdapter.setThingArrayList(thingArrayList);
         thingRecyclerView.setAdapter(thingAdapter);
+
+        thingAdapter.getFilter().filter("");
     }
 
 }
