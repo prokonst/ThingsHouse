@@ -20,9 +20,11 @@ public interface ThingDao {
     @Delete
     void delete(Thing thing);
 
-    @Query("select * from things order by name")
+    //@Query("select * from things order by name")
+    @Query("select * from things")
     LiveData<List<Thing>> getAllThings();
 
-    @Query("select * from things where name like '%' || :namePart || '%'  order by name")
+    //@Query("select * from things where name like '%' || :namePart || '%'  order by name")
+    @Query("select * from things where name like '%' || :namePart || '%'")
     LiveData<List<Thing>> getThings(String namePart);
 }

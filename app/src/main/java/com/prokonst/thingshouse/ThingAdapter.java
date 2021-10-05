@@ -1,5 +1,6 @@
 package com.prokonst.thingshouse;
 
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -7,6 +8,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -14,6 +16,7 @@ import com.prokonst.thingshouse.databinding.ThingListItemBinding;
 import com.prokonst.thingshouse.model.Thing;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class ThingAdapter extends RecyclerView.Adapter<ThingAdapter.ThingViewHolder>
@@ -109,8 +112,17 @@ public class ThingAdapter extends RecyclerView.Adapter<ThingAdapter.ThingViewHol
         this.onItemClickListener = onItemClickListener;
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.N)
     public void setThingArrayList(ArrayList<Thing> thingArrayList) {
         this.thingArrayList = thingArrayList;
+
+        this.thingArrayList.sort(new Comparator<Thing>() {
+            @Override
+            public int compare(Thing thing, Thing t1) {
+                return thing.getName().compareTo(t1.getName());
+            }
+        });
+
         notifyDataSetChanged();
     }
 }
