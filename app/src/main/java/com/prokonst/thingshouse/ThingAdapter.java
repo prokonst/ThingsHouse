@@ -2,7 +2,6 @@ package com.prokonst.thingshouse;
 
 import android.os.Build;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
@@ -17,7 +16,6 @@ import com.prokonst.thingshouse.model.Thing;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.List;
 
 public class ThingAdapter extends RecyclerView.Adapter<ThingAdapter.ThingViewHolder>
         implements Filterable {
@@ -58,7 +56,7 @@ public class ThingAdapter extends RecyclerView.Adapter<ThingAdapter.ThingViewHol
                 if (charString.isEmpty()) {
                     thingArrayListFiltered = thingArrayList;
                 } else {
-                    List<Thing> filteredList = new ArrayList<>();
+                    ArrayList<Thing> filteredList = new ArrayList<>();
                     for (Thing row : thingArrayList) {
 
                         // name match condition. this might differ depending on your requirement
@@ -68,7 +66,7 @@ public class ThingAdapter extends RecyclerView.Adapter<ThingAdapter.ThingViewHol
                         }
                     }
 
-                    thingArrayListFiltered = (ArrayList<Thing>) filteredList;
+                    thingArrayListFiltered = filteredList;
                 }
 
                 FilterResults filterResults = new FilterResults();
@@ -77,6 +75,7 @@ public class ThingAdapter extends RecyclerView.Adapter<ThingAdapter.ThingViewHol
             }
 
             @Override
+            @SuppressWarnings("unchecked")
             protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
                 thingArrayListFiltered = (ArrayList<Thing>) filterResults.values;
                 notifyDataSetChanged();
@@ -92,15 +91,12 @@ public class ThingAdapter extends RecyclerView.Adapter<ThingAdapter.ThingViewHol
             super(thingListItemBinding.getRoot());
 
             this.thingListItemBinding = thingListItemBinding;
-            thingListItemBinding.getRoot().setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+            thingListItemBinding.getRoot().setOnClickListener( (view) -> {
                     int position = getAdapterPosition();
                     if(onItemClickListener != null && position != RecyclerView.NO_POSITION) {
                         onItemClickListener.onItemClick(thingArrayListFiltered.get(position));
                     }
-                }
-            });
+                });
         }
     }
 
@@ -116,12 +112,7 @@ public class ThingAdapter extends RecyclerView.Adapter<ThingAdapter.ThingViewHol
     public void setThingArrayList(ArrayList<Thing> thingArrayList) {
         this.thingArrayList = thingArrayList;
 
-        this.thingArrayList.sort(new Comparator<Thing>() {
-            @Override
-            public int compare(Thing thing, Thing t1) {
-                return thing.getName().compareTo(t1.getName());
-            }
-        });
+        this.thingArrayList.sort( Comparator.comparing(Thing::getName) );
 
         notifyDataSetChanged();
     }
