@@ -58,9 +58,6 @@ public class ThingAdapter extends RecyclerView.Adapter<ThingAdapter.ThingViewHol
                 } else {
                     ArrayList<Thing> filteredList = new ArrayList<>();
                     for (Thing row : thingArrayList) {
-
-                        // name match condition. this might differ depending on your requirement
-                        // here we are looking for name or phone number match
                         if (row.getName().toLowerCase().contains(charString.toLowerCase()) ) {
                             filteredList.add(row);
                         }

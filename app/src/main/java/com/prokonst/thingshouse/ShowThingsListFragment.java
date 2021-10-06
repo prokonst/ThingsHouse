@@ -35,6 +35,7 @@ public class ShowThingsListFragment extends Fragment {
 
     private ThingsListClickHandlers thingsListClickHandlers;
 
+
     @Override
     public View onCreateView(
             LayoutInflater inflater, ViewGroup container,
@@ -43,13 +44,13 @@ public class ShowThingsListFragment extends Fragment {
 
         fragmentShowThingsListBinding = FragmentShowThingsListBinding.inflate(inflater, container, false);
 
-
         thingsViewModel = new ViewModelProvider
                 .AndroidViewModelFactory(getActivity().getApplication())
                 .create(ThingsViewModel.class);
 
         thingsListClickHandlers = new ThingsListClickHandlers();
         fragmentShowThingsListBinding.setThingsListClickHandlers(thingsListClickHandlers);
+
 
 
         return fragmentShowThingsListBinding.getRoot();
@@ -76,6 +77,45 @@ public class ShowThingsListFragment extends Fragment {
         fragmentShowThingsListBinding = null;
     }
 
+
+
+    private void loadThingsInArrayList(){
+        thingsViewModel.getThings(/*namePart*/).observe(this.getViewLifecycleOwner(), new Observer<List<Thing>>() {
+            @Override
+            public void onChanged(List<Thing> things) {
+                thingArrayList = (ArrayList<Thing>) things;
+                loadRecyclerView();
+            }
+        });
+    }
+
+    private void loadRecyclerView(){
+        thingRecyclerView = fragmentShowThingsListBinding.recyclerview;
+        thingRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
+        thingRecyclerView.setHasFixedSize(true);
+
+        thingAdapter = new ThingAdapter();
+        thingAdapter.setThingArrayList(thingArrayList);
+        thingRecyclerView.setAdapter(thingAdapter);
+        thingAdapter.setOnItemClickListener(new ThingAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Thing thing) {
+
+                //thing.setBarCode(thing.getBarCode() + "_1");
+                //ThingsDataBase.UpdateThing(thing);
+
+                //Toast.makeText(ShowThingsListFragment.this.getContext(), "Clicked: " + thing.getName(), Toast.LENGTH_SHORT).show();
+
+                //Toast.makeText(ShowThingsListFragment.this.getContext(), "Test: " + MainActivity.class.getName(), Toast.LENGTH_SHORT).show();
+
+                Utils.getCaptureCameraImage().capture(thing);
+
+            }
+        });
+
+        thingAdapter.getFilter().filter("");
+    }
+
     public class ThingsListClickHandlers {
         public void onFabClicked(View view) {
             Toast.makeText(view.getContext(), "But is cl", Toast.LENGTH_SHORT).show();
@@ -93,33 +133,10 @@ public class ShowThingsListFragment extends Fragment {
             String newName = textInputEditText.getText().toString();
 
             ThingsDataBase.AddTestThing(newName );
-
+            thingAdapter.getFilter().filter(newName);
 
             Toast.makeText(view.getContext(), "Created: " + newName, Toast.LENGTH_SHORT).show();
         }
-    }
-
-    private void loadThingsInArrayList(){
-        thingsViewModel.getThings(/*namePart*/).observe(this.getViewLifecycleOwner(), new Observer<List<Thing>>() {
-            @Override
-            public void onChanged(List<Thing> things) {
-                thingArrayList = (ArrayList<Thing>) things;
-                loadRecyclerView();
-            }
-        });
-    }
-
-
-    private void loadRecyclerView(){
-        thingRecyclerView = fragmentShowThingsListBinding.recyclerview;
-        thingRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
-        thingRecyclerView.setHasFixedSize(true);
-
-        thingAdapter = new ThingAdapter();
-        thingAdapter.setThingArrayList(thingArrayList);
-        thingRecyclerView.setAdapter(thingAdapter);
-
-        thingAdapter.getFilter().filter("");
     }
 
 }

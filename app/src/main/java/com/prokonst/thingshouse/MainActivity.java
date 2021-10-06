@@ -43,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        Utils.setCaptureCameraImage(new CaptureCameraImage(this));
     }
 
     @Override

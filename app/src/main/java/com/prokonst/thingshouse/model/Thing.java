@@ -8,6 +8,7 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import com.prokonst.thingshouse.BR;
+import com.prokonst.thingshouse.Utils;
 
 
 @Entity(tableName = "things")
@@ -19,16 +20,22 @@ public class Thing extends BaseObservable {
     private String unit;
     private String barCode;
     private String name;
+    private String mainPhotoId;
+
+    @Ignore
+    private String mainPhotoSrc;
 
     @Ignore
     public Thing() {
     }
 
-    public Thing(String id, String unit, String barCode, String name) {
+    public Thing(String id, String unit, String barCode, String name, String mainPhotoId) {
         this.id = id;
         this.unit = unit;
         this.barCode = barCode;
         this.name = name;
+        this.mainPhotoId = mainPhotoId;
+        this.mainPhotoSrc = Utils.getImagePreviewPath(mainPhotoId);
     }
 
     @Bindable
@@ -69,5 +76,26 @@ public class Thing extends BaseObservable {
     public void setName(String name) {
         this.name = name;
         notifyPropertyChanged(BR.name);
+    }
+
+    @Bindable
+    public String getMainPhotoId() {
+        return mainPhotoId;
+    }
+
+    public void setMainPhotoId(String mainPhotoId) {
+        this.mainPhotoId = mainPhotoId;
+        notifyPropertyChanged(BR.mainPhotoId);
+
+        setMainPhotoSrc(Utils.getImagePreviewPath(this.mainPhotoId));
+    }
+
+    @Bindable
+    public String getMainPhotoSrc() {
+        return mainPhotoSrc;
+    }
+    public void setMainPhotoSrc(String mainPhotoSrc) {
+        this.mainPhotoSrc = mainPhotoSrc;
+        notifyPropertyChanged(BR.mainPhotoSrc);
     }
 }
