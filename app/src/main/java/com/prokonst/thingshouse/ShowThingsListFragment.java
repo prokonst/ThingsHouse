@@ -100,16 +100,7 @@ public class ShowThingsListFragment extends Fragment {
         thingAdapter.setOnItemClickListener(new ThingAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Thing thing) {
-
-                //thing.setBarCode(thing.getBarCode() + "_1");
-                //ThingsDataBase.UpdateThing(thing);
-
-                //Toast.makeText(ShowThingsListFragment.this.getContext(), "Clicked: " + thing.getName(), Toast.LENGTH_SHORT).show();
-
-                //Toast.makeText(ShowThingsListFragment.this.getContext(), "Test: " + MainActivity.class.getName(), Toast.LENGTH_SHORT).show();
-
-                Utils.getCaptureCameraImage().capture(thing);
-
+                CaptureCameraImage.getCaptureCameraImage().capture(thing);
             }
         });
 

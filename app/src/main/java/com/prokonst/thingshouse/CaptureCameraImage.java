@@ -34,8 +34,25 @@ public class CaptureCameraImage {
 
     private ActivityResultLauncher<Intent> startCaptureImageActivityResultLauncher;
 
+    private static CaptureCameraImage captureCameraImage = null;
+
+    public static void setCaptureCameraImage(AppCompatActivity activity) {
+        if(captureCameraImage == null){
+            captureCameraImage = new CaptureCameraImage(activity);
+        }
+        else {
+            captureCameraImage.setmActivity(activity);
+        }
+    }
+
+    public static CaptureCameraImage getCaptureCameraImage(){
+
+        return captureCameraImage;
+    }
+
+
     public CaptureCameraImage(AppCompatActivity activity) {
-        mActivity = activity;
+        setmActivity(activity);
 
         //Request For Premissions
         if(isNotAllPermissionsGranted()){
@@ -49,6 +66,11 @@ public class CaptureCameraImage {
         //StrictMode.setVmPolicy(builder.build());
 
 
+    }
+
+    public void setmActivity(AppCompatActivity mActivity) {
+        this.mActivity = mActivity;
+
         startCaptureImageActivityResultLauncher = mActivity.registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 (result) -> {
@@ -58,6 +80,7 @@ public class CaptureCameraImage {
                     }
                 });
     }
+
 
     private void setDefaultValues(){
         mImageUUID = null;
@@ -97,7 +120,7 @@ public class CaptureCameraImage {
 
 
     public boolean isCaptureImageFileExists(){
-        return mImageFile.exists() && mImageFile.length() > 0;
+        return mImageFile != null && mImageFile.exists() && mImageFile.length() > 0;
     }
 
 

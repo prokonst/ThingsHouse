@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Utils.setCaptureCameraImage(new CaptureCameraImage(this));
+        CaptureCameraImage.setCaptureCameraImage(this);
     }
 
     @Override

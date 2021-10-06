@@ -17,16 +17,6 @@ import java.util.UUID;
 
 public class Utils {
 
-    private static CaptureCameraImage captureCameraImage;
-
-    public static CaptureCameraImage getCaptureCameraImage() {
-        return captureCameraImage;
-    }
-
-    public static void setCaptureCameraImage(CaptureCameraImage captureCameraImage) {
-        Utils.captureCameraImage = captureCameraImage;
-    }
-
     public static String generateUUIDStr() {
         return UUID.randomUUID().toString().toUpperCase();
     }
@@ -56,21 +46,16 @@ public class Utils {
         if(!fileOrig.exists())
             return "";
 
-
-
-        //Bitmap resizedBitmap = decodeSampledBitmapFromFile(pathOrig, 200, 200);
         Bitmap resizedBitmap = resizeBitmap(pathOrig, 400, 400);
 
 
-//        int rotation = getExifRotateDegree(pathOrig);
-        int rotation = 90;
+        int rotation = getExifRotateDegree(pathOrig);
+
         Matrix matrix = new Matrix();
-//        //matrix.postRotate(rotation);
         matrix.setRotate((float)rotation, resizedBitmap.getWidth(), resizedBitmap.getHeight());
-//
+
         Bitmap rotatedBitmap = Bitmap.createBitmap(resizedBitmap, 0, 0, resizedBitmap.getWidth(), resizedBitmap.getHeight(),
                 matrix, true);
-//        Bitmap rotatedBitmap = resizedBitmap;
 
         try (FileOutputStream out = new FileOutputStream(pathPreview)) {
             rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 72, out);
@@ -79,6 +64,7 @@ public class Utils {
             return pathOrig;
         }
     }
+
     private static Bitmap resizeBitmap(String photoPath, int targetW, int targetH) {
         BitmapFactory.Options bmOptions = new BitmapFactory.Options();
         bmOptions.inJustDecodeBounds = true;
@@ -98,7 +84,6 @@ public class Utils {
         return BitmapFactory.decodeFile(photoPath, bmOptions);
     }
 
-    //Данный код не работает, всегда ориентация - 0
     private static int getExifRotateDegree(String photoPath){
         try {
             ExifInterface exif;
