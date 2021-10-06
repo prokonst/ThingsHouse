@@ -10,9 +10,11 @@ import androidx.room.PrimaryKey;
 import com.prokonst.thingshouse.BR;
 import com.prokonst.thingshouse.Utils;
 
+import java.io.Serializable;
+
 
 @Entity(tableName = "things")
-public class Thing extends BaseObservable {
+public class Thing extends BaseObservable implements Serializable {
 
     @PrimaryKey(autoGenerate = false)
     @NonNull

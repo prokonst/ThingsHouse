@@ -1,5 +1,6 @@
 package com.prokonst.thingshouse;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -95,12 +96,20 @@ public class ShowThingsListFragment extends Fragment {
         thingRecyclerView.setHasFixedSize(true);
 
         thingAdapter = new ThingAdapter();
-        thingAdapter.setThingArrayList(thingArrayList);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            thingAdapter.setThingArrayList(thingArrayList);
+        }
         thingRecyclerView.setAdapter(thingAdapter);
+
         thingAdapter.setOnItemClickListener(new ThingAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Thing thing) {
-                CaptureCameraImage.getCaptureCameraImage().capture(thing);
+                //CaptureCameraImage.getCaptureCameraImage().capture(thing);
+
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("SelectedThing", thing);
+                NavHostFragment.findNavController(ShowThingsListFragment.this)
+                        .navigate(R.id.action_SecondFragment_to_thingDataFragment, bundle);
             }
         });
 
