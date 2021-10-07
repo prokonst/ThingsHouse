@@ -130,4 +130,27 @@ public abstract class ThingsDataBase extends RoomDatabase {
             return null;
         }
     }
+
+    public static void DeleteThing(Thing thing){
+        new DeleteThingAsyncTask(instance).execute(thing);
+
+        return;
+    }
+
+    private static class DeleteThingAsyncTask extends AsyncTask<Thing, Void, Void>{
+
+        private ThingDao thingDao;
+
+        public DeleteThingAsyncTask(ThingsDataBase database) {
+            thingDao = database.getThingDao();
+        }
+
+        @Override
+        protected Void doInBackground(Thing... things) {
+
+            thingDao.delete(things[0]);
+
+            return null;
+        }
+    }
 }

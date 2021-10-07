@@ -32,6 +32,8 @@ android {
     dataBinding {
         enabled = true
     }
+
+    apply plugin: "androidx.navigation.safeargs"
 }
 
 dependencies {

@@ -36,5 +36,8 @@
         <argument
             android:name="SelectedThing"
             app:argType="com.prokonst.thingshouse.model.Thing" />
+        <action
+            android:id="@+id/action_thingDataFragment_to_SecondFragment"
+            app:destination="@id/SecondFragment" />
     </fragment>
 </navigation>

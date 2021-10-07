@@ -11,6 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -104,12 +105,9 @@ public class ShowThingsListFragment extends Fragment {
         thingAdapter.setOnItemClickListener(new ThingAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Thing thing) {
-                //CaptureCameraImage.getCaptureCameraImage().capture(thing);
-
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("SelectedThing", thing);
+                NavDirections action = ShowThingsListFragmentDirections.actionSecondFragmentToThingDataFragment(thing);
                 NavHostFragment.findNavController(ShowThingsListFragment.this)
-                        .navigate(R.id.action_SecondFragment_to_thingDataFragment, bundle);
+                        .navigate(action);
             }
         });
 
