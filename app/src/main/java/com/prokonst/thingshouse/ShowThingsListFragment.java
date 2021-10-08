@@ -163,8 +163,8 @@ public class ShowThingsListFragment extends Fragment {
 
             //TextInputEditText textInputEditText = getView().findViewById(R.id.textInputEditText);
             String newName = textInputEditText.getText().toString();
-
-            ThingsDataBase.AddTestThing(newName );
+            Thing newThing = new Thing(Utils.generateUUIDStr(), "шт", "", newName, "");
+            thingsViewModel.addNewThing(newThing);
             thingAdapter.getFilter().filter(newName);
 
             Toast.makeText(view.getContext(), "Created: " + newName, Toast.LENGTH_SHORT).show();

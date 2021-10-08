@@ -86,7 +86,7 @@ public abstract class ThingsDataBase extends RoomDatabase {
             return null;
         }
     }
-
+/*
     public static void AddTestThing(String name){
         new AddTestThingAsyncTask(instance).execute(name);
 
@@ -153,5 +153,5 @@ public abstract class ThingsDataBase extends RoomDatabase {
 
             return null;
         }
-    }
+    }*/
 }

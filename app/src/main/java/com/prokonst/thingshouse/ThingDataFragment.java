@@ -77,7 +77,7 @@ public class ThingDataFragment extends Fragment {
                                 Toast.makeText(ThingDataFragment.this.getActivity(), "BarCode: " + barCode + " is existing", Toast.LENGTH_SHORT).show();
                             } else {
                                 thing.setBarCode(barCode);
-                                ThingsDataBase.UpdateThing(thing);
+                                thingsViewModel.updateThing(thing);
                             }
                         } else {
                             Toast.makeText(ThingDataFragment.this.getActivity(), "BarCodeNotScanned", Toast.LENGTH_SHORT).show();
@@ -145,7 +145,7 @@ public class ThingDataFragment extends Fragment {
                     }
 
                     thing.setName(newThingName);
-                    ThingsDataBase.UpdateThing(thing);
+                    thingsViewModel.updateThing(thing);
                 }
             });
         }
@@ -155,7 +155,7 @@ public class ThingDataFragment extends Fragment {
         }
 
         public void onDeleteThing(View view) {
-            ThingsDataBase.DeleteThing(thing);
+            thingsViewModel.deleteThing(thing);
             NavDirections action = ThingDataFragmentDirections.actionThingDataFragmentToSecondFragment();
             NavHostFragment.findNavController(ThingDataFragment.this)
                     .navigate(action);
