@@ -23,6 +23,7 @@ public abstract class ThingsDataBase extends RoomDatabase {
         if(instance == null) {
             instance = Room.databaseBuilder(context.getApplicationContext(),
                     ThingsDataBase.class, "thingsDB")
+                    .allowMainThreadQueries() //HACK
                     .fallbackToDestructiveMigration()
                     .addCallback(callback)
                     .build();

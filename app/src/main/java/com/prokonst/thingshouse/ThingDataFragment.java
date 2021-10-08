@@ -1,12 +1,17 @@
 package com.prokonst.thingshouse;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -21,17 +26,23 @@ import android.widget.Toast;
 import com.google.android.material.textfield.TextInputEditText;
 import com.prokonst.thingshouse.databinding.FragmentThingDataBinding;
 import com.prokonst.thingshouse.databinding.FragmentThingDataBindingImpl;
+import com.prokonst.thingshouse.model.AppRepository;
 import com.prokonst.thingshouse.model.Thing;
 import com.prokonst.thingshouse.model.ThingsDataBase;
+import com.prokonst.thingshouse.tools.ScanBarCodeLauncher;
+import com.prokonst.thingshouse.viewmodel.ThingsViewModel;
 
+import java.util.List;
 import java.util.NavigableMap;
 
 
 public class ThingDataFragment extends Fragment {
 
 
+    private ThingsViewModel thingsViewModel;
     private Thing thing;
     FragmentThingDataBinding fragmentThingDataBinding;
+    private ActivityResultLauncher<Intent> startBarCodeScannerActivityResultLauncher;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,6 +58,36 @@ public class ThingDataFragment extends Fragment {
         fragmentThingDataBinding = FragmentThingDataBinding.inflate(inflater, container, false);
         fragmentThingDataBinding.setThing(thing);
         fragmentThingDataBinding.setCkickHandlers(new ThingDataClickHandlers());
+
+        thingsViewModel = new ViewModelProvider
+                .AndroidViewModelFactory(getActivity().getApplication())
+                .create(ThingsViewModel.class);
+
+        startBarCodeScannerActivityResultLauncher = ThingDataFragment.this.registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                (result) -> {
+
+                    try {
+                        String barCode = ScanBarCodeLauncher.getBarCode(result);
+
+                        if (barCode != null && thing != null) {
+
+                            List<Thing> existThing = thingsViewModel.getThingsByBarCode(barCode);
+                            if (existThing != null && existThing.size() != 0) {
+                                Toast.makeText(ThingDataFragment.this.getActivity(), "BarCode: " + barCode + " is existing", Toast.LENGTH_SHORT).show();
+                            } else {
+                                thing.setBarCode(barCode);
+                                ThingsDataBase.UpdateThing(thing);
+                            }
+                        } else {
+                            Toast.makeText(ThingDataFragment.this.getActivity(), "BarCodeNotScanned", Toast.LENGTH_SHORT).show();
+                        }
+                    }catch (Exception ex) {
+                        Toast.makeText(ThingDataFragment.this.getActivity(), "Error: " + ex.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+        );
 
         return fragmentThingDataBinding.getRoot();
     }
@@ -118,6 +159,9 @@ public class ThingDataFragment extends Fragment {
             NavDirections action = ThingDataFragmentDirections.actionThingDataFragmentToSecondFragment();
             NavHostFragment.findNavController(ThingDataFragment.this)
                     .navigate(action);
+        }
+        public void onSetBarCode(View view) {
+            ScanBarCodeLauncher.startScanBarCodeLauncher(ThingDataFragment.this.getActivity(), startBarCodeScannerActivityResultLauncher);
         }
     }
 }

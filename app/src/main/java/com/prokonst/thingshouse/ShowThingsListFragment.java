@@ -1,5 +1,6 @@
 package com.prokonst.thingshouse;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -7,7 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -21,6 +25,7 @@ import com.prokonst.thingshouse.databinding.ActivityMainBinding;
 import com.prokonst.thingshouse.databinding.FragmentShowThingsListBinding;
 import com.prokonst.thingshouse.model.Thing;
 import com.prokonst.thingshouse.model.ThingsDataBase;
+import com.prokonst.thingshouse.tools.ScanBarCodeLauncher;
 import com.prokonst.thingshouse.viewmodel.ThingsViewModel;
 
 import java.util.ArrayList;
@@ -37,6 +42,17 @@ public class ShowThingsListFragment extends Fragment {
 
     private ThingsListClickHandlers thingsListClickHandlers;
 
+    private TextInputEditText textInputEditText;
+
+
+    private ActivityResultLauncher<Intent> startBarCodeScannerActivityResultLauncher;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        textInputEditText = ShowThingsListFragment.this.getActivity().findViewById(R.id.textInputEditText);
+    }
 
     @Override
     public View onCreateView(
@@ -54,6 +70,24 @@ public class ShowThingsListFragment extends Fragment {
         fragmentShowThingsListBinding.setThingsListClickHandlers(thingsListClickHandlers);
 
 
+
+        startBarCodeScannerActivityResultLauncher = ShowThingsListFragment.this.registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                (result) -> {
+
+                    try {
+                        String barCode = ScanBarCodeLauncher.getBarCode(result);
+                        textInputEditText.setText(barCode);
+                        //thingAdapter.getFilter().filter(barCode);
+
+                    }catch (Exception ex) {
+                        Toast.makeText(ShowThingsListFragment.this.getActivity(), "Error: " + ex.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+
+                }
+        );
+
+        textInputEditText = fragmentShowThingsListBinding.getRoot().findViewById(R.id.textInputEditText);
 
         return fragmentShowThingsListBinding.getRoot();
 
@@ -127,13 +161,18 @@ public class ShowThingsListFragment extends Fragment {
 
         public void onAddClicked(View view) {
 
-            TextInputEditText textInputEditText = getView().findViewById(R.id.textInputEditText);
+            //TextInputEditText textInputEditText = getView().findViewById(R.id.textInputEditText);
             String newName = textInputEditText.getText().toString();
 
             ThingsDataBase.AddTestThing(newName );
             thingAdapter.getFilter().filter(newName);
 
             Toast.makeText(view.getContext(), "Created: " + newName, Toast.LENGTH_SHORT).show();
+        }
+
+        public void onScanClicked(View view) {
+            ScanBarCodeLauncher.startScanBarCodeLauncher(ShowThingsListFragment.this.getActivity(), startBarCodeScannerActivityResultLauncher);
+
         }
     }
 

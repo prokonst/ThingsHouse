@@ -26,6 +26,10 @@ public class AppRepository {
         return thingDao.getThings(namePart);
     }
 
+    public List<Thing> getThingsByBarCode(String barCode) {
+        return thingDao.getThingsByBarCode(barCode);
+    }
+
     public void insertThing(Thing thing) {
         (new InsertThingAsyncTask(thingDao)).execute(thing);
     }

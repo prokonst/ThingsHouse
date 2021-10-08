@@ -58,7 +58,7 @@ public class ThingAdapter extends RecyclerView.Adapter<ThingAdapter.ThingViewHol
                 } else {
                     ArrayList<Thing> filteredList = new ArrayList<>();
                     for (Thing row : thingArrayList) {
-                        if (row.getName().toLowerCase().contains(charString.toLowerCase()) ) {
+                        if (row.getName().toLowerCase().contains(charString.toLowerCase()) || row.getBarCode().toLowerCase().contains(charString.toLowerCase())) {
                             filteredList.add(row);
                         }
                     }

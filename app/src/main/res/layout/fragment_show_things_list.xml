@@ -19,23 +19,32 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerview"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_margin="8dp"
             app:layout_constraintBottom_toTopOf="@+id/textInputEditText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <Button
+            android:id="@+id/button_ScanBarCode"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:onClick="@{thingsListClickHandlers::onScanClicked}"
+            android:text="Scan"
+            app:layout_constraintBottom_toTopOf="@+id/button_add"
+            tools:layout_editor_absoluteX="0dp" />
 
         <Button
             android:id="@+id/button_add"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Add"
             android:onClick="@{thingsListClickHandlers::onAddClicked}"
+            android:text="Add"
             app:layout_constraintBottom_toTopOf="@+id/button_second"
-            tools:layout_editor_absoluteX="-16dp" />
+            tools:layout_editor_absoluteX="16dp" />
 
         <Button
             android:id="@+id/button_second"
@@ -51,8 +60,7 @@
             android:layout_height="wrap_content"
             android:hint="hint"
             android:onTextChanged="@{thingsListClickHandlers::onTextChanged}"
-            app:layout_constraintBottom_toTopOf="@+id/button_add"
-            tools:layout_editor_absoluteX="0dp" />
+            app:layout_constraintBottom_toTopOf="@+id/button_ScanBarCode" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

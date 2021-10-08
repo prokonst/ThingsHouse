@@ -35,6 +35,10 @@ public class ThingsViewModel extends AndroidViewModel {
         return things;
     }
 
+    public List<Thing> getThingsByBarCode(String barCode) {
+        return appRepository.getThingsByBarCode(barCode);
+    }
+
     public void addNewThing(Thing thing){
         appRepository.insertThing(thing);
     }
