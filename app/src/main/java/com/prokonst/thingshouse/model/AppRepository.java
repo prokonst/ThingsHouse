@@ -22,9 +22,9 @@ public class AppRepository {
         return thingDao.getAllThings();
     }
 
-    public LiveData<List<Thing>> getThings(String namePart) {
+    /*public LiveData<List<Thing>> getThings(String namePart) {
         return thingDao.getThings(namePart);
-    }
+    }*/
 
     public List<Thing> getThingsByBarCode(String barCode) {
         return thingDao.getThingsByBarCode(barCode);

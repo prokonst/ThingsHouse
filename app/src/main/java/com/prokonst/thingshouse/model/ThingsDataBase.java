@@ -57,7 +57,7 @@ public abstract class ThingsDataBase extends RoomDatabase {
             thingDao.insert(new Thing(Utils.generateUUIDStr(), "шт", "barCode3", "Test_Шайба", ""));
             thingDao.insert(new Thing(Utils.generateUUIDStr(), "шт", "barCode4", "Test_Гровер", ""));
             thingDao.insert(new Thing(Utils.generateUUIDStr(), "шт", "barCode5", "Test_Стопор", ""));
-
+/*
             thingDao.insert(new Thing(Utils.generateUUIDStr(), "шт", "barCode11", "Test_Болт1", ""));
             thingDao.insert(new Thing(Utils.generateUUIDStr(), "шт", "barCode21", "Test_Гайка1", ""));
             thingDao.insert(new Thing(Utils.generateUUIDStr(), "шт", "barCode31", "Test_Шайба1", ""));
@@ -80,7 +80,7 @@ public abstract class ThingsDataBase extends RoomDatabase {
             thingDao.insert(new Thing(Utils.generateUUIDStr(), "шт", "barCode24", "Test_Гайка4", ""));
             thingDao.insert(new Thing(Utils.generateUUIDStr(), "шт", "barCode34", "Test_Шайба4", ""));
             thingDao.insert(new Thing(Utils.generateUUIDStr(), "шт", "barCode44", "Test_Гровер4", ""));
-            thingDao.insert(new Thing(Utils.generateUUIDStr(), "шт", "barCode54", "Test_Стопор4", ""));
+            thingDao.insert(new Thing(Utils.generateUUIDStr(), "шт", "barCode54", "Test_Стопор4", ""));*/
 
 
             return null;
