@@ -19,8 +19,10 @@ import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.room.util.StringUtil;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.zxing.common.StringUtils;
 import com.prokonst.thingshouse.databinding.ActivityMainBinding;
 import com.prokonst.thingshouse.databinding.FragmentShowThingsListBinding;
 import com.prokonst.thingshouse.model.Thing;
@@ -44,6 +46,7 @@ public class ShowThingsListFragment extends Fragment {
 
     private TextInputEditText textInputEditText;
 
+    private static String filter = "";
 
     private ActivityResultLauncher<Intent> startBarCodeScannerActivityResultLauncher;
 
@@ -77,8 +80,9 @@ public class ShowThingsListFragment extends Fragment {
 
                     try {
                         String barCode = ScanBarCodeLauncher.getBarCode(result);
+                        applyFilter(barCode);
                         textInputEditText.setText(barCode);
-                        //thingAdapter.getFilter().filter(barCode);
+
 
                     }catch (Exception ex) {
                         Toast.makeText(ShowThingsListFragment.this.getActivity(), "Error: " + ex.getMessage(), Toast.LENGTH_LONG).show();
@@ -104,36 +108,11 @@ public class ShowThingsListFragment extends Fragment {
             }
         });
 
-        loadThingsInArrayList();
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        fragmentShowThingsListBinding = null;
-    }
-
-
-
-    private void loadThingsInArrayList(){
-        thingsViewModel.getThings(/*namePart*/).observe(this.getViewLifecycleOwner(), new Observer<List<Thing>>() {
-            @Override
-            public void onChanged(List<Thing> things) {
-                thingArrayList = (ArrayList<Thing>) things;
-                loadRecyclerView();
-            }
-        });
-    }
-
-    private void loadRecyclerView(){
         thingRecyclerView = fragmentShowThingsListBinding.recyclerview;
         thingRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         thingRecyclerView.setHasFixedSize(true);
 
         thingAdapter = new ThingAdapter();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            thingAdapter.setThingArrayList(thingArrayList);
-        }
         thingRecyclerView.setAdapter(thingAdapter);
 
         thingAdapter.setOnItemClickListener(new ThingAdapter.OnItemClickListener() {
@@ -145,7 +124,28 @@ public class ShowThingsListFragment extends Fragment {
             }
         });
 
-        thingAdapter.getFilter().filter("");
+
+        thingsViewModel.getThings(/*namePart*/).observe(this.getViewLifecycleOwner(), new Observer<List<Thing>>() {
+            @Override
+            public void onChanged(List<Thing> things) {
+                thingArrayList = (ArrayList<Thing>) things;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    thingAdapter.setThingArrayList(thingArrayList);
+                }
+                thingAdapter.getFilter().filter(filter);
+            }
+        });
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        fragmentShowThingsListBinding = null;
+    }
+
+    private void applyFilter(String newFilter){
+        filter = newFilter;
+        thingAdapter.getFilter().filter(filter);
     }
 
     public class ThingsListClickHandlers {
@@ -154,25 +154,25 @@ public class ShowThingsListFragment extends Fragment {
         }
 
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            //Toast.makeText(MainActivity.this, s.toString(), Toast.LENGTH_SHORT).show();
-            //loadThingsInArrayList(s.toString());
-            thingAdapter.getFilter().filter(s.toString());
+            applyFilter(s.toString());
         }
 
         public void onAddClicked(View view) {
-
-            //TextInputEditText textInputEditText = getView().findViewById(R.id.textInputEditText);
             String newName = textInputEditText.getText().toString();
+            if(newName == null || newName.length() == 0) {
+                Toast.makeText(ShowThingsListFragment.this.getContext(), "Input new name", Toast.LENGTH_LONG).show();
+                return;
+            }
+
             Thing newThing = new Thing(Utils.generateUUIDStr(), "шт", "", newName, "");
             thingsViewModel.addNewThing(newThing);
-            thingAdapter.getFilter().filter(newName);
+            applyFilter(newName);
 
-            Toast.makeText(view.getContext(), "Created: " + newName, Toast.LENGTH_SHORT).show();
+            Toast.makeText(ShowThingsListFragment.this.getContext(), "CREATE: <" + newName + ">", Toast.LENGTH_LONG).show();
         }
 
         public void onScanClicked(View view) {
             ScanBarCodeLauncher.startScanBarCodeLauncher(ShowThingsListFragment.this.getActivity(), startBarCodeScannerActivityResultLauncher);
-
         }
     }
 
