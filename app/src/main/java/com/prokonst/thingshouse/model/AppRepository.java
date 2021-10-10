@@ -1,7 +1,6 @@
 package com.prokonst.thingshouse.model;
 
 import android.app.Application;
-import android.app.AsyncNotedAppOp;
 import android.content.Context;
 import android.database.sqlite.SQLiteConstraintException;
 import android.os.AsyncTask;
@@ -11,14 +10,15 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
-import javax.xml.transform.Result;
-
 public class AppRepository {
+
+    private  Application application;
     private ThingDao thingDao;
 
     private LiveData<List<Thing>> things;
 
     public AppRepository(Application application) {
+        this.application = application;
         ThingsDataBase database = ThingsDataBase.getInstance(application);
         thingDao = database.getThingDao();
     }
@@ -32,91 +32,52 @@ public class AppRepository {
     }
 
     public void insertThing(Thing thing) {
-        (new InsertThingAsyncTask(thingDao)).execute(thing);
+        (new InsertThingAsyncTask(application, thingDao)).execute(thing);
     }
 
-    private static  class InsertThingAsyncTask extends AsyncTask<Thing, Void, Void> {
+    private static  class InsertThingAsyncTask extends AsyncTaskEnhanced<Thing, Void, Void> {
 
-        private ThingDao thingDao;
-
-        public InsertThingAsyncTask(ThingDao thingDao) {
-            this.thingDao = thingDao;
+        public InsertThingAsyncTask(Application application, ThingDao thingDao) {
+            super(application, thingDao);
         }
 
         @Override
-        protected Void doInBackground(Thing... things) {
-
+        protected Void doInBackgroundWithFaultTolerance(Thing... things) throws Exception {
             thingDao.insert(things[0]);
-
             return null;
         }
     }
 
     public void updateThing(Thing thing, Context context) {
-        UpdateThingAsyncTask updateThingAsyncTask = new UpdateThingAsyncTask(thingDao, context);
-        updateThingAsyncTask.execute(thing);
+        (new UpdateThingAsyncTask(application, thingDao)).execute(thing);
     }
 
-    private static  class UpdateThingAsyncTask extends AsyncTask<Thing, Void, Void> {
+    private static class UpdateThingAsyncTask extends AsyncTaskEnhanced<Thing, Void, Void> {
 
-        private boolean onPostExecuteCalled = false;
-        private Exception exception = null;
-        private Context context;
-
-        private ThingDao thingDao;
-
-        public UpdateThingAsyncTask(ThingDao thingDao, Context context) {
-            this.thingDao = thingDao;
-            this.context = context;
+        public UpdateThingAsyncTask(Application application, ThingDao thingDao) {
+            super(application, thingDao);
         }
 
         @Override
-        protected Void doInBackground(Thing... things) {
-            try {
-                thingDao.update(things[0]);
-            } catch (Exception ex) {
-                exception = ex;
-            }
-
+        protected Void doInBackgroundWithFaultTolerance(Thing... things) throws Exception {
+            thingDao.update(things[0]);
             return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void unused) {
-            if (this.onPostExecuteCalled) {
-                return;
-            }
-
-            this.onPostExecuteCalled = true;
-            super.onPostExecute(unused);
-
-            if(exception != null) {
-                if(exception instanceof SQLiteConstraintException && exception.getMessage().contains("barCode")){
-                    Toast.makeText(context, "BD Error: Likely bar code is already used", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(context, exception.getMessage(), Toast.LENGTH_LONG).show();
-                }
-            }
         }
     }
 
     public void deleteThing(Thing thing) {
-        (new DeleteThingAsyncTask(thingDao)).execute(thing);
+        (new DeleteThingAsyncTask(application, thingDao)).execute(thing);
     }
 
-    private static  class DeleteThingAsyncTask extends AsyncTask<Thing, Void, Void> {
+    private static class DeleteThingAsyncTask extends AsyncTaskEnhanced<Thing, Void, Void> {
 
-        private ThingDao thingDao;
-
-        public DeleteThingAsyncTask(ThingDao thingDao) {
-            this.thingDao = thingDao;
+        public DeleteThingAsyncTask(Application application, ThingDao thingDao) {
+            super(application, thingDao);
         }
 
         @Override
-        protected Void doInBackground(Thing... things) {
-
+        protected Void doInBackgroundWithFaultTolerance(Thing... things) throws Exception {
             thingDao.delete(things[0]);
-
             return null;
         }
     }
