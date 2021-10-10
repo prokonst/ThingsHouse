@@ -164,7 +164,7 @@ public class ShowThingsListFragment extends Fragment {
                 return;
             }
 
-            Thing newThing = new Thing(Utils.generateUUIDStr(), "шт", "", newName, "");
+            Thing newThing = new Thing(Utils.generateUUIDStr(), "шт", "<" + newName + ">", newName, "");
             thingsViewModel.addNewThing(newThing);
             applyFilter(newName);
 

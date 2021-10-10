@@ -2,11 +2,16 @@ package com.prokonst.thingshouse.model;
 
 import android.app.Application;
 import android.app.AsyncNotedAppOp;
+import android.content.Context;
+import android.database.sqlite.SQLiteConstraintException;
 import android.os.AsyncTask;
+import android.widget.Toast;
 
 import androidx.lifecycle.LiveData;
 
 import java.util.List;
+
+import javax.xml.transform.Result;
 
 public class AppRepository {
     private ThingDao thingDao;
@@ -21,10 +26,6 @@ public class AppRepository {
     public LiveData<List<Thing>> getThings() {
         return thingDao.getAllThings();
     }
-
-    /*public LiveData<List<Thing>> getThings(String namePart) {
-        return thingDao.getThings(namePart);
-    }*/
 
     public List<Thing> getThingsByBarCode(String barCode) {
         return thingDao.getThingsByBarCode(barCode);
@@ -51,24 +52,51 @@ public class AppRepository {
         }
     }
 
-    public void updateThing(Thing thing) {
-        (new UpdateThingAsyncTask(thingDao)).execute(thing);
+    public void updateThing(Thing thing, Context context) {
+        UpdateThingAsyncTask updateThingAsyncTask = new UpdateThingAsyncTask(thingDao, context);
+        updateThingAsyncTask.execute(thing);
     }
 
     private static  class UpdateThingAsyncTask extends AsyncTask<Thing, Void, Void> {
 
+        private boolean onPostExecuteCalled = false;
+        private Exception exception = null;
+        private Context context;
+
         private ThingDao thingDao;
 
-        public UpdateThingAsyncTask(ThingDao thingDao) {
+        public UpdateThingAsyncTask(ThingDao thingDao, Context context) {
             this.thingDao = thingDao;
+            this.context = context;
         }
 
         @Override
         protected Void doInBackground(Thing... things) {
-
-            thingDao.update(things[0]);
+            try {
+                thingDao.update(things[0]);
+            } catch (Exception ex) {
+                exception = ex;
+            }
 
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void unused) {
+            if (this.onPostExecuteCalled) {
+                return;
+            }
+
+            this.onPostExecuteCalled = true;
+            super.onPostExecute(unused);
+
+            if(exception != null) {
+                if(exception instanceof SQLiteConstraintException && exception.getMessage().contains("barCode")){
+                    Toast.makeText(context, "BD Error: Likely bar code is already used", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(context, exception.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            }
         }
     }
 

@@ -16,10 +16,13 @@ public class ThingsViewModel extends AndroidViewModel {
     private AppRepository appRepository;
     private LiveData<List<Thing>> things;
 
+    private Application application;
+
 
     public ThingsViewModel(@NonNull Application application) {
         super(application);
 
+        this.application = application;
         appRepository = new AppRepository(application);
 
 
@@ -44,7 +47,7 @@ public class ThingsViewModel extends AndroidViewModel {
     }
 
     public void updateThing(Thing thing){
-        appRepository.updateThing(thing);
+        appRepository.updateThing(thing, application);
     }
 
     public void deleteThing(Thing thing){

@@ -2,6 +2,7 @@ package com.prokonst.thingshouse;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.sqlite.SQLiteConstraintException;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -72,13 +73,14 @@ public class ThingDataFragment extends Fragment {
 
                         if (barCode != null && thing != null) {
 
-                            List<Thing> existThing = thingsViewModel.getThingsByBarCode(barCode);
-                            if (existThing != null && existThing.size() != 0) {
-                                Toast.makeText(ThingDataFragment.this.getActivity(), "BarCode: " + barCode + " is existing", Toast.LENGTH_SHORT).show();
-                            } else {
+                            try {
                                 thing.setBarCode(barCode);
                                 thingsViewModel.updateThing(thing);
+                            } catch (SQLiteConstraintException sqlEx) {
+                                Toast.makeText(ThingDataFragment.this.getActivity(), "BarCode already used", Toast.LENGTH_LONG).show();
                             }
+
+
                         } else {
                             Toast.makeText(ThingDataFragment.this.getActivity(), "BarCodeNotScanned", Toast.LENGTH_SHORT).show();
                         }

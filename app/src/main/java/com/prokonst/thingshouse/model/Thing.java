@@ -3,8 +3,10 @@ package com.prokonst.thingshouse.model;
 import androidx.annotation.NonNull;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 import com.prokonst.thingshouse.BR;
@@ -13,7 +15,7 @@ import com.prokonst.thingshouse.Utils;
 import java.io.Serializable;
 
 
-@Entity(tableName = "things")
+@Entity(tableName = "things", indices = {@Index(value = {"barCode"}, unique = true)})
 public class Thing extends BaseObservable implements Serializable {
 
     @PrimaryKey(autoGenerate = false)
