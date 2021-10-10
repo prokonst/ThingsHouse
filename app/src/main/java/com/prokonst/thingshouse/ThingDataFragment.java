@@ -10,6 +10,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
@@ -79,8 +80,6 @@ public class ThingDataFragment extends Fragment {
                             } catch (SQLiteConstraintException sqlEx) {
                                 Toast.makeText(ThingDataFragment.this.getActivity(), "BarCode already used", Toast.LENGTH_LONG).show();
                             }
-
-
                         } else {
                             Toast.makeText(ThingDataFragment.this.getActivity(), "BarCodeNotScanned", Toast.LENGTH_SHORT).show();
                         }
@@ -90,6 +89,8 @@ public class ThingDataFragment extends Fragment {
 
                 }
         );
+
+        setTitleActionBar();
 
         return fragmentThingDataBinding.getRoot();
     }
@@ -102,54 +103,32 @@ public class ThingDataFragment extends Fragment {
         testTextView.setText(thing.getName());
     }
 
+    private void setTitleActionBar(){
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Edit " + thing.getName());
+    }
+
+
     public class ThingDataClickHandlers {
+
         public void onChangeNameClicked(View view) {
-            LayoutInflater layoutInflaterAndroid = LayoutInflater.from(ThingDataFragment.this.getActivity().getApplicationContext());
-            View viewEditThing = layoutInflaterAndroid.inflate(R.layout.layout_edit_thing, null);
-
-            AlertDialog.Builder alertDialogBuilderUserInput = new AlertDialog.Builder(ThingDataFragment.this.getActivity());
-            alertDialogBuilderUserInput.setView(viewEditThing);
-
-            TextView thingTitleTextView = viewEditThing.findViewById(R.id.thingTitle);
-            final EditText nameEditText = viewEditThing.findViewById(R.id.nameEditText);
-
-            thingTitleTextView.setText("Edit Thing");
-            nameEditText.setText(thing.getName());
-
-            alertDialogBuilderUserInput
-                    .setCancelable(false)
-                    .setPositiveButton("ChangeName", new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialogBox, int id) {
-
-                        }
-                    })
-                    .setNegativeButton("Cancel",
-                            new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialogBox, int id) {
-                                    Toast.makeText(ThingDataFragment.this.getActivity(), "Command cancelled by user", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-
-
-            final AlertDialog alertDialog = alertDialogBuilderUserInput.create();
-            alertDialog.show();
-
-            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    String newThingName = nameEditText.getText().toString().trim();
-                    if (TextUtils.isEmpty(newThingName)) {
-                        Toast.makeText(ThingDataFragment.this.getActivity(), "Enter thing name!", Toast.LENGTH_SHORT).show();
-                        return;
-                    } else {
-                        alertDialog.dismiss();
+            (new ChangeThingValueDialog(ThingDataFragment.this.getActivity(), "Name",
+                    () -> thing.getName(),
+                    (newValue) -> {
+                        thing.setName(newValue);
+                        thingsViewModel.updateThing(thing);
+                        setTitleActionBar();
                     }
+            )).show();
+        }
 
-                    thing.setName(newThingName);
-                    thingsViewModel.updateThing(thing);
-                }
-            });
+        public void onChangeUnitClicked(View view) {
+            (new ChangeThingValueDialog(ThingDataFragment.this.getActivity(), "Unit",
+                    () -> thing.getUnit(),
+                    (newValue) -> {
+                        thing.setUnit(newValue);
+                        thingsViewModel.updateThing(thing);
+                    }
+            )).show();
         }
 
         public void onChangePhoto(View view) {
