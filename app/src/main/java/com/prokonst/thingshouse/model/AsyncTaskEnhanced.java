@@ -35,12 +35,14 @@ public abstract class AsyncTaskEnhanced<Params, Progress, Result> extends AsyncT
         this.onPostExecuteCalled = true;
         super.onPostExecute(result);
 
-        notifyUserAboutException(this.exception);
+        notifyUser(this.exception);
     }
 
-    private void notifyUserAboutException(Exception ex) {
-        if(ex == null)
+    private void notifyUser(Exception ex) {
+        if(ex == null) {
+            showAppToast("Success");
             return;
+        }
         if(ex instanceof SQLiteConstraintException){
             if(ex.getMessage().contains("barCode")) {
                 showAppToast("BD Error: Likely bar code is already used");

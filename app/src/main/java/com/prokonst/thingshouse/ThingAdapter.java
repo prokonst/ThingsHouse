@@ -44,6 +44,9 @@ public class ThingAdapter extends RecyclerView.Adapter<ThingAdapter.ThingViewHol
 
     @Override
     public int getItemCount() {
+        if(thingArrayListFiltered == null)
+            return 0;
+
         return thingArrayListFiltered.size();
     }
 
