@@ -19,14 +19,10 @@ import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.room.util.StringUtil;
 
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.zxing.common.StringUtils;
-import com.prokonst.thingshouse.databinding.ActivityMainBinding;
 import com.prokonst.thingshouse.databinding.FragmentShowThingsListBinding;
 import com.prokonst.thingshouse.model.Thing;
-import com.prokonst.thingshouse.model.ThingsDataBase;
 import com.prokonst.thingshouse.tools.ScanBarCodeLauncher;
 import com.prokonst.thingshouse.viewmodel.ThingsViewModel;
 
@@ -53,8 +49,6 @@ public class ShowThingsListFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        textInputEditText = ShowThingsListFragment.this.getActivity().findViewById(R.id.textInputEditText);
     }
 
     @Override
@@ -92,6 +86,7 @@ public class ShowThingsListFragment extends Fragment {
         );
 
         textInputEditText = fragmentShowThingsListBinding.getRoot().findViewById(R.id.textInputEditText);
+        textInputEditText.setText(filter);
 
         return fragmentShowThingsListBinding.getRoot();
 
@@ -104,7 +99,7 @@ public class ShowThingsListFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 NavHostFragment.findNavController(ShowThingsListFragment.this)
-                        .navigate(R.id.action_SecondFragment_to_FirstFragment);
+                        .navigate(R.id.action_ShowThingsListFragment_to_FirstFragment);
             }
         });
 
@@ -118,7 +113,7 @@ public class ShowThingsListFragment extends Fragment {
         thingAdapter.setOnItemClickListener(new ThingAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Thing thing) {
-                NavDirections action = ShowThingsListFragmentDirections.actionSecondFragmentToThingDataFragment(thing);
+                NavDirections action = ShowThingsListFragmentDirections.actionShowThingsListFragmentToThingDataFragment(thing);
                 NavHostFragment.findNavController(ShowThingsListFragment.this)
                         .navigate(action);
             }
