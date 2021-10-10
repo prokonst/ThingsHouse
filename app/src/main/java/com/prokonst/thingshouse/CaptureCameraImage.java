@@ -81,7 +81,7 @@ public class CaptureCameraImage {
                 (result) -> {
                     if(isCaptureImageFileExists() && mThing != null){
                         mThing.setMainPhotoId(mImageUUID);
-                        appRepository.updateThing(mThing, mActivity);
+                        appRepository.updateThing(mThing);
                     }
                 });
     }

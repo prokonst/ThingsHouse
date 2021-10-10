@@ -1,13 +1,7 @@
 package com.prokonst.thingshouse.model;
 
 import android.app.Application;
-import android.content.Context;
-import android.database.sqlite.SQLiteConstraintException;
-import android.os.AsyncTask;
-import android.widget.Toast;
-
 import androidx.lifecycle.LiveData;
-
 import java.util.List;
 
 public class AppRepository {
@@ -48,7 +42,7 @@ public class AppRepository {
         }
     }
 
-    public void updateThing(Thing thing, Context context) {
+    public void updateThing(Thing thing) {
         (new UpdateThingAsyncTask(application, thingDao)).execute(thing);
     }
 

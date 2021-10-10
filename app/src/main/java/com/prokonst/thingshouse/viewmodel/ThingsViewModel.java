@@ -47,7 +47,7 @@ public class ThingsViewModel extends AndroidViewModel {
     }
 
     public void updateThing(Thing thing){
-        appRepository.updateThing(thing, application);
+        appRepository.updateThing(thing);
     }
 
     public void deleteThing(Thing thing){
