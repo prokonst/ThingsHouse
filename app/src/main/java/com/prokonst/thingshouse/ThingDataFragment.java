@@ -142,7 +142,7 @@ public class ThingDataFragment extends Fragment {
                     .setCancelable(false)
                     .setPositiveButton("Delete ", (dialogBox, id) -> {
                         thingsViewModel.deleteThing(thing);
-                        NavDirections action = ThingDataFragmentDirections.actionThingDataFragmentToSecondFragment();
+                        NavDirections action = ThingDataFragmentDirections.actionThingDataFragmentToSecondFragment(true);
                         NavHostFragment.findNavController(ThingDataFragment.this)
                                 .navigate(action);
                     })

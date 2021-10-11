@@ -21,6 +21,9 @@
         android:label="@string/show_things_list_fragment_label"
         tools:layout="@layout/fragment_show_things_list">
 
+        <argument
+            android:name="IsClearFilter"
+            app:argType="boolean" />
         <action
             android:id="@+id/action_ShowThingsListFragment_to_FirstFragment"
             app:destination="@id/firstFragment" />
@@ -38,8 +41,8 @@
             app:argType="com.prokonst.thingshouse.model.Thing" />
         <action
             android:id="@+id/action_thingDataFragment_to_SecondFragment"
-            app:destination="@id/showThingsListFragment"
-            app:popUpTo="@+id/nav_graph"
-            app:popUpToInclusive="true"/>
+            app:destination="@id/showThingsListFragment"/>
+            <!--app:popUpTo="@+id/nav_graph"
+            app:popUpToInclusive="true"-->
     </fragment>
 </navigation>

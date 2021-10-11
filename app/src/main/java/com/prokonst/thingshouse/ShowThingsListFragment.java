@@ -57,6 +57,13 @@ public class ShowThingsListFragment extends Fragment {
             Bundle savedInstanceState
     ) {
 
+        ShowThingsListFragmentArgs args = ShowThingsListFragmentArgs.fromBundle(getArguments());
+        if(args != null && args.getIsClearFilter())
+        {
+            filter = "";
+        }
+
+
         fragmentShowThingsListBinding = FragmentShowThingsListBinding.inflate(inflater, container, false);
 
         thingsViewModel = new ViewModelProvider
@@ -110,14 +117,12 @@ public class ShowThingsListFragment extends Fragment {
         thingAdapter = new ThingAdapter();
         thingRecyclerView.setAdapter(thingAdapter);
 
-        thingAdapter.setOnItemClickListener(new ThingAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(Thing thing) {
+        thingAdapter.setOnItemClickListener(
+                (thing) -> {
                 NavDirections action = ShowThingsListFragmentDirections.actionShowThingsListFragmentToThingDataFragment(thing);
                 NavHostFragment.findNavController(ShowThingsListFragment.this)
                         .navigate(action);
-            }
-        });
+                 });
 
 
         thingsViewModel.getThings(/*namePart*/).observe(this.getViewLifecycleOwner(), new Observer<List<Thing>>() {

@@ -2,27 +2,26 @@ package com.prokonst.thingshouse.model;
 
 import android.app.AlertDialog;
 import android.app.Application;
-import android.content.Context;
 import android.database.sqlite.SQLiteConstraintException;
 import android.os.AsyncTask;
 import android.view.Gravity;
 import android.widget.Toast;
 
-public abstract class AsyncTaskEnhanced<Params, Progress, Result> extends AsyncTask<Params, Progress, Result> {
+public class AsyncTaskCUD extends AsyncTask<Void, Void, Void> {
     private boolean onPostExecuteCalled = false;
     private Exception exception = null;
     private Application application;
-    protected ThingDao thingDao;
+    private DoInBackgroundInterface doInBackgroundInterface;
 
-    public AsyncTaskEnhanced(Application application, ThingDao thingDao) {
+    public AsyncTaskCUD(Application application, DoInBackgroundInterface doInBackgroundInterface) {
         this.application = application;
-        this.thingDao = thingDao;
+        this.doInBackgroundInterface = doInBackgroundInterface;
     }
 
     @Override
-    protected final Result doInBackground(Params... params) {
+    protected final Void doInBackground(Void... params) {
         try {
-            this.doInBackgroundWithFaultTolerance(params);
+            this.doInBackgroundInterface.onDoInBackground();
         } catch (Exception ex) {
             this.exception = ex;
         }
@@ -30,7 +29,7 @@ public abstract class AsyncTaskEnhanced<Params, Progress, Result> extends AsyncT
     }
 
     @Override
-    protected void onPostExecute(Result result) {
+    protected void onPostExecute(Void result) {
         if (this.onPostExecuteCalled) {
             return;
         }
@@ -66,7 +65,7 @@ public abstract class AsyncTaskEnhanced<Params, Progress, Result> extends AsyncT
 
     private void showAppToast(String message, int duration) {
         Toast toast = Toast.makeText(application, message, duration);
-        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL, 0, 0);
         toast.show();
     }
 
@@ -74,7 +73,7 @@ public abstract class AsyncTaskEnhanced<Params, Progress, Result> extends AsyncT
         showAppToast(message, Toast.LENGTH_SHORT);
     }
 
-
+/*
     private void showAlertDialogOk(String message) {
         (new AlertDialog.Builder(application.getApplicationContext()))
                 .setMessage(message)
@@ -84,7 +83,5 @@ public abstract class AsyncTaskEnhanced<Params, Progress, Result> extends AsyncT
                 //.setNegativeButton("Cancel", null)
                 .create()
                 .show();
-    }
-
-    protected abstract Result doInBackgroundWithFaultTolerance(Params... params) throws Exception;
+    }*/
 }

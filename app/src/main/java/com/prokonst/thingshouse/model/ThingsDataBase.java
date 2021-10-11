@@ -11,19 +11,20 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.prokonst.thingshouse.Utils;
 
-@Database(entities = {Thing.class}, version = 1)
+@Database(entities = {Thing.class, Storage.class}, version = 1)
 public abstract class ThingsDataBase extends RoomDatabase {
 
     private static ThingsDataBase instance;
 
     public abstract ThingDao getThingDao();
+    public abstract StorageDao getStorageDao();
 
     public static synchronized ThingsDataBase getInstance(Context context) {
 
         if(instance == null) {
             instance = Room.databaseBuilder(context.getApplicationContext(),
                     ThingsDataBase.class, "thingsDB")
-                    .allowMainThreadQueries() //HACK
+                    //.allowMainThreadQueries() //HACK
                     .fallbackToDestructiveMigration()
                     .addCallback(callback)
                     .build();
@@ -86,72 +87,4 @@ public abstract class ThingsDataBase extends RoomDatabase {
             return null;
         }
     }
-/*
-    public static void AddTestThing(String name){
-        new AddTestThingAsyncTask(instance).execute(name);
-
-        return;
-    }
-
-    private static class AddTestThingAsyncTask extends AsyncTask<String, Void, Void>{
-
-        private ThingDao thingDao;
-
-        public AddTestThingAsyncTask(ThingsDataBase database) {
-            thingDao = database.getThingDao();
-        }
-
-        @Override
-        protected Void doInBackground(String... strings) {
-
-            thingDao.insert(new Thing(Utils.generateUUIDStr(), "шт", "barCode" + strings[0], strings[0], ""));
-            return null;
-        }
-    }
-
-    public static void UpdateThing(Thing thing){
-        new UpdateThingAsyncTask(instance).execute(thing);
-
-        return;
-    }
-
-    private static class UpdateThingAsyncTask extends AsyncTask<Thing, Void, Void>{
-
-        private ThingDao thingDao;
-
-        public UpdateThingAsyncTask(ThingsDataBase database) {
-            thingDao = database.getThingDao();
-        }
-
-        @Override
-        protected Void doInBackground(Thing... things) {
-
-            thingDao.update(things[0]);
-
-            return null;
-        }
-    }
-
-    public static void DeleteThing(Thing thing){
-        new DeleteThingAsyncTask(instance).execute(thing);
-
-        return;
-    }
-
-    private static class DeleteThingAsyncTask extends AsyncTask<Thing, Void, Void>{
-
-        private ThingDao thingDao;
-
-        public DeleteThingAsyncTask(ThingsDataBase database) {
-            thingDao = database.getThingDao();
-        }
-
-        @Override
-        protected Void doInBackground(Thing... things) {
-
-            thingDao.delete(things[0]);
-
-            return null;
-        }
-    }*/
 }

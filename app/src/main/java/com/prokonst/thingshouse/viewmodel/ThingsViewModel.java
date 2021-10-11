@@ -24,8 +24,6 @@ public class ThingsViewModel extends AndroidViewModel {
 
         this.application = application;
         appRepository = new AppRepository(application);
-
-
     }
 
     public LiveData<List<Thing>> getThings() {
@@ -37,10 +35,10 @@ public class ThingsViewModel extends AndroidViewModel {
         things = appRepository.getThings(namePart);
         return things;
     }*/
-
+/*
     public List<Thing> getThingsByBarCode(String barCode) {
         return appRepository.getThingsByBarCode(barCode);
-    }
+    }*/
 
     public void addNewThing(Thing thing){
         appRepository.insertThing(thing);

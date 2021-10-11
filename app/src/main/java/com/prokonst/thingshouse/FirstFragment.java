@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.prokonst.thingshouse.databinding.FragmentFirstBinding;
@@ -32,8 +33,9 @@ public class FirstFragment extends Fragment {
         binding.buttonFirst.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                NavDirections action = FirstFragmentDirections.actionFirstFragmentToShowThingsListFragment(false);
                 NavHostFragment.findNavController(FirstFragment.this)
-                        .navigate(R.id.action_FirstFragment_to_ShowThingsListFragment);
+                        .navigate(action);
             }
         });
     }

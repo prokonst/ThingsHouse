@@ -58,7 +58,7 @@
             android:id="@+id/textInputEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="hint"
+            android:hint="Input here name or barcode"
             android:onTextChanged="@{thingsListClickHandlers::onTextChanged}"
             app:layout_constraintBottom_toTopOf="@+id/button_ScanBarCode" />
 
