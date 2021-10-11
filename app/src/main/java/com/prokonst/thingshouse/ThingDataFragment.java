@@ -1,5 +1,6 @@
 package com.prokonst.thingshouse;
 
+import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteConstraintException;
@@ -9,7 +10,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.LiveData;
@@ -35,6 +35,7 @@ import com.prokonst.thingshouse.tools.ScanBarCodeLauncher;
 import com.prokonst.thingshouse.viewmodel.ThingsViewModel;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.NavigableMap;
 
 
@@ -136,10 +137,21 @@ public class ThingDataFragment extends Fragment {
         }
 
         public void onDeleteThing(View view) {
-            thingsViewModel.deleteThing(thing);
-            NavDirections action = ThingDataFragmentDirections.actionThingDataFragmentToSecondFragment();
-            NavHostFragment.findNavController(ThingDataFragment.this)
-                    .navigate(action);
+            final AlertDialog alertDialog = (new AlertDialog.Builder(view.getContext()))
+                    .setMessage("Delete thing " + thing.getName() + "?")
+                    .setCancelable(false)
+                    .setPositiveButton("Delete ", (dialogBox, id) -> {
+                        thingsViewModel.deleteThing(thing);
+                        NavDirections action = ThingDataFragmentDirections.actionThingDataFragmentToSecondFragment();
+                        NavHostFragment.findNavController(ThingDataFragment.this)
+                                .navigate(action);
+                    })
+                    .setNegativeButton("Cancel", (dialogBox, id) -> {
+                        dialogBox.dismiss();
+                    })
+                    .create();
+
+            alertDialog.show();
         }
         public void onSetBarCode(View view) {
             ScanBarCodeLauncher.startScanBarCodeLauncher(ThingDataFragment.this.getActivity(), startBarCodeScannerActivityResultLauncher);

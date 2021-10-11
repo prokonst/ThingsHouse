@@ -1,8 +1,11 @@
 package com.prokonst.thingshouse.model;
 
+import android.app.AlertDialog;
 import android.app.Application;
+import android.content.Context;
 import android.database.sqlite.SQLiteConstraintException;
 import android.os.AsyncTask;
+import android.view.Gravity;
 import android.widget.Toast;
 
 public abstract class AsyncTaskEnhanced<Params, Progress, Result> extends AsyncTask<Params, Progress, Result> {
@@ -43,20 +46,44 @@ public abstract class AsyncTaskEnhanced<Params, Progress, Result> extends AsyncT
             showAppToast("Success");
             return;
         }
+
         if(ex instanceof SQLiteConstraintException){
             if(ex.getMessage().contains("barCode")) {
-                showAppToast("BD Error: Likely bar code is already used");
+                try {
+                    showAppToast("BD Error: Likely bar code is already used");
+                } catch (Exception exc)
+                {
+                    showAppToast(exc.getMessage(), Toast.LENGTH_LONG);
+                }
             }
             else {
-                showAppToast("BD Error: " + ex.toString());
+                showAppToast("BD Error: " + ex.toString(), Toast.LENGTH_LONG);
             }
         } else {
-            showAppToast(ex.getMessage());
+            showAppToast(ex.getMessage(), Toast.LENGTH_LONG);
         }
     }
 
-    private void showAppToast(String message) {
-        Toast.makeText(application, message, Toast.LENGTH_LONG).show();
+    private void showAppToast(String message, int duration) {
+        Toast toast = Toast.makeText(application, message, duration);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
+    }
+
+    private void showAppToast(String message){
+        showAppToast(message, Toast.LENGTH_SHORT);
+    }
+
+
+    private void showAlertDialogOk(String message) {
+        (new AlertDialog.Builder(application.getApplicationContext()))
+                .setMessage(message)
+                .setPositiveButton("Ok", (dialog, which) -> {
+                    // handle click
+                })
+                //.setNegativeButton("Cancel", null)
+                .create()
+                .show();
     }
 
     protected abstract Result doInBackgroundWithFaultTolerance(Params... params) throws Exception;

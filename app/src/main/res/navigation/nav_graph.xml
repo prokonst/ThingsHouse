@@ -32,12 +32,14 @@
         android:id="@+id/thingDataFragment"
         android:name="com.prokonst.thingshouse.ThingDataFragment"
         android:label="fragment_thing_data"
-        tools:layout="@layout/fragment_thing_data" >
+        tools:layout="@layout/fragment_thing_data">
         <argument
             android:name="SelectedThing"
             app:argType="com.prokonst.thingshouse.model.Thing" />
         <action
             android:id="@+id/action_thingDataFragment_to_SecondFragment"
-            app:destination="@id/showThingsListFragment" />
+            app:destination="@id/showThingsListFragment"
+            app:popUpTo="@+id/nav_graph"
+            app:popUpToInclusive="true"/>
     </fragment>
 </navigation>
