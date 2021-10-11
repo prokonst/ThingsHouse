@@ -45,19 +45,33 @@ public abstract class ThingsDataBase extends RoomDatabase {
     private static class InitialDataAsyncTask extends AsyncTask<Void, Void, Void>{
 
         private ThingDao thingDao;
+        private StorageDao storageDao;
 
         public InitialDataAsyncTask(ThingsDataBase database) {
             thingDao = database.getThingDao();
+            storageDao = database.getStorageDao();
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
 
-            thingDao.insert(new Thing(Utils.generateUUIDStr(), "шт", "barCode1", "Test_Болт", ""));
-            thingDao.insert(new Thing(Utils.generateUUIDStr(), "шт", "barCode2", "Test_Гайка", ""));
-            thingDao.insert(new Thing(Utils.generateUUIDStr(), "шт", "barCode3", "Test_Шайба", ""));
-            thingDao.insert(new Thing(Utils.generateUUIDStr(), "шт", "barCode4", "Test_Гровер", ""));
-            thingDao.insert(new Thing(Utils.generateUUIDStr(), "шт", "barCode5", "Test_Стопор", ""));
+            Thing thing1 = new Thing(Utils.generateUUIDStr(), "шт", "barCode1", "Вещь 1", "");
+            thingDao.insert(thing1);
+
+            Thing thing2 = new Thing(Utils.generateUUIDStr(), "шт", "barCode2", "Вещь 2", "");
+            thingDao.insert(thing2);
+
+            Thing box1 = new Thing(Utils.generateUUIDStr(), "шт", "barCode3", "Ящик 1", "");
+            thingDao.insert(box1);
+
+            Thing box2 = new Thing(Utils.generateUUIDStr(), "шт", "barCode4", "Ящик 2", "");
+            thingDao.insert(box2);
+
+            Storage storage_thing1_in_box1 = new Storage(Utils.generateUUIDStr(), box1.getThingId(), thing1.getThingId(), 3.0);
+            storageDao.insert(storage_thing1_in_box1);
+
+            Storage storage_thing2_in_box1 = new Storage(Utils.generateUUIDStr(), box1.getThingId(), thing2.getThingId(), 5.0);
+            storageDao.insert(storage_thing2_in_box1);
 /*
             thingDao.insert(new Thing(Utils.generateUUIDStr(), "шт", "barCode11", "Test_Болт1", ""));
             thingDao.insert(new Thing(Utils.generateUUIDStr(), "шт", "barCode21", "Test_Гайка1", ""));

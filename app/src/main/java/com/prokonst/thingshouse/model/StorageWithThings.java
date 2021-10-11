@@ -1,34 +1,16 @@
 package com.prokonst.thingshouse.model;
 
-import static androidx.room.ForeignKey.CASCADE;
-
-import androidx.annotation.NonNull;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 import androidx.room.ColumnInfo;
-import androidx.room.Entity;
-import androidx.room.ForeignKey;
-import androidx.room.Index;
-import androidx.room.PrimaryKey;
+import androidx.room.Relation;
 
 
 
 import java.io.Serializable;
 
-@Entity(tableName = "storages",
-        foreignKeys = {
-                @ForeignKey(entity = Thing.class, parentColumns = "thing_id", childColumns = "parent_id", onDelete = CASCADE),
-                @ForeignKey(entity = Thing.class, parentColumns = "thing_id", childColumns = "child_id", onDelete = CASCADE)
-        }, indices = {
-                @Index(value = {"parent_id"}),
-                @Index(value = {"child_id"})
-        }
-)
-public class Storage extends BaseObservable implements Serializable {
+public class StorageWithThings extends BaseObservable implements Serializable {
 
-    @PrimaryKey(autoGenerate = false)
-    @NonNull
-    @ColumnInfo(name = "storage_id")
     private String storageId;
 
     @ColumnInfo(name = "parent_id")
@@ -39,20 +21,19 @@ public class Storage extends BaseObservable implements Serializable {
 
     private double quantity;
 
-    public Storage(@NonNull String storageId, String parentId, String childId, double quantity) {
-        this.storageId = storageId;
-        this.parentId = parentId;
-        this.childId = childId;
-        this.quantity = quantity;
-    }
+
+    @Relation(parentColumn = "parent_id", entityColumn = "thing_id")
+    public Thing parentThing;
+
+    @Relation(parentColumn = "child_id", entityColumn = "thing_id")
+    public Thing childThing;
 
     @Bindable
-    @NonNull
     public String getStorageId() {
         return storageId;
     }
 
-    public void setStorageId(@NonNull String storageId) {
+    public void setStorageId(String storageId) {
         this.storageId = storageId;
         notifyPropertyChanged(androidx.databinding.library.baseAdapters.BR.storageId);
     }
@@ -85,5 +66,25 @@ public class Storage extends BaseObservable implements Serializable {
     public void setQuantity(double quantity) {
         this.quantity = quantity;
         notifyPropertyChanged(androidx.databinding.library.baseAdapters.BR.quantity);
+    }
+
+    @Bindable
+    public Thing getParentThing() {
+        return parentThing;
+    }
+
+    public void setParentThing(Thing parentThing) {
+        this.parentThing = parentThing;
+        notifyPropertyChanged(androidx.databinding.library.baseAdapters.BR.parentThing);
+    }
+
+    @Bindable
+    public Thing getChildThing() {
+        return childThing;
+    }
+
+    public void setChildThing(Thing childThing) {
+        this.childThing = childThing;
+        notifyPropertyChanged(androidx.databinding.library.baseAdapters.BR.childThing);
     }
 }

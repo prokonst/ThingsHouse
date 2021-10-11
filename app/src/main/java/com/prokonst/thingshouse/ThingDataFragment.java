@@ -27,7 +27,6 @@ import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.prokonst.thingshouse.databinding.FragmentThingDataBinding;
-import com.prokonst.thingshouse.databinding.FragmentThingDataBindingImpl;
 import com.prokonst.thingshouse.model.AppRepository;
 import com.prokonst.thingshouse.model.Thing;
 import com.prokonst.thingshouse.model.ThingsDataBase;

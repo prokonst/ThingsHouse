@@ -23,9 +23,15 @@ public interface StorageDao {
     @Query("select * from storages")
     LiveData<List<Storage>> getAllStorages();
 
-    @Query("select * from storages where parentId = :parentId")
+    @Query("select * from storages where parent_id = :parentId")
     LiveData<List<Storage>> getStoragesByParentId(String parentId);
 
-    @Query("select * from storages where childId = :childId")
+    @Query("select * from storages where child_id = :childId")
     LiveData<List<Storage>> getStoragesByChildId(String childId);
+
+    @Query("select * from storages where parent_id = :parentId")
+    LiveData<List<StorageWithThings>> getStoragesWithTingsByParentId(String parentId);
+
+    @Query("select * from storages where child_id = :childId")
+    LiveData<List<StorageWithThings>> getStoragesWithTingsByChildId(String childId);
 }

@@ -9,7 +9,7 @@ import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-import com.prokonst.thingshouse.BR;
+
 import com.prokonst.thingshouse.Utils;
 
 import java.io.Serializable;
@@ -20,7 +20,8 @@ public class Thing extends BaseObservable implements Serializable {
 
     @PrimaryKey(autoGenerate = false)
     @NonNull
-    private String id;
+    @ColumnInfo(name = "thing_id")
+    private String thingId;
     private String unit;
     private String barCode;
     private String name;
@@ -33,8 +34,8 @@ public class Thing extends BaseObservable implements Serializable {
     public Thing() {
     }
 
-    public Thing(String id, String unit, String barCode, String name, String mainPhotoId) {
-        this.id = id;
+    public Thing(String thingId, String unit, String barCode, String name, String mainPhotoId) {
+        this.thingId = thingId;
         this.unit = unit;
         this.barCode = barCode;
         this.name = name;
@@ -43,13 +44,13 @@ public class Thing extends BaseObservable implements Serializable {
     }
 
     @Bindable
-    public String getId() {
-        return id;
+    public String getThingId() {
+        return thingId;
     }
 
-    public void setId(String id) {
-        this.id = id;
-        notifyPropertyChanged(BR.id);
+    public void setThingId(String thingId) {
+        this.thingId = thingId;
+        notifyPropertyChanged(androidx.databinding.library.baseAdapters.BR.thingId);
     }
 
     @Bindable
@@ -59,7 +60,7 @@ public class Thing extends BaseObservable implements Serializable {
 
     public void setUnit(String unit) {
         this.unit = unit;
-        notifyPropertyChanged(BR.unit);
+        notifyPropertyChanged(androidx.databinding.library.baseAdapters.BR.unit);
     }
 
     @Bindable
@@ -69,7 +70,7 @@ public class Thing extends BaseObservable implements Serializable {
 
     public void setBarCode(String barCode) {
         this.barCode = barCode;
-        notifyPropertyChanged(BR.barCode);
+        notifyPropertyChanged(androidx.databinding.library.baseAdapters.BR.barCode);
     }
 
     @Bindable
@@ -79,7 +80,7 @@ public class Thing extends BaseObservable implements Serializable {
 
     public void setName(String name) {
         this.name = name;
-        notifyPropertyChanged(BR.name);
+        notifyPropertyChanged(androidx.databinding.library.baseAdapters.BR.name);
     }
 
     @Bindable
@@ -89,7 +90,7 @@ public class Thing extends BaseObservable implements Serializable {
 
     public void setMainPhotoId(String mainPhotoId) {
         this.mainPhotoId = mainPhotoId;
-        notifyPropertyChanged(BR.mainPhotoId);
+        notifyPropertyChanged(androidx.databinding.library.baseAdapters.BR.mainPhotoId);
 
         setMainPhotoSrc(Utils.getImagePreviewPath(this.mainPhotoId));
     }
@@ -100,6 +101,6 @@ public class Thing extends BaseObservable implements Serializable {
     }
     public void setMainPhotoSrc(String mainPhotoSrc) {
         this.mainPhotoSrc = mainPhotoSrc;
-        notifyPropertyChanged(BR.mainPhotoSrc);
+        notifyPropertyChanged(androidx.databinding.library.baseAdapters.BR.mainPhotoSrc);
     }
 }
