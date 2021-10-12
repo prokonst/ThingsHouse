@@ -34,12 +34,15 @@
             app:argType="string" />
 
         <argument
-            android:name="SourceId"
-            app:argType="string" />
+            android:name="SourceThing"
+            app:argType="com.prokonst.thingshouse.model.Thing"
+            app:nullable="true" />
 
         <argument
-            android:name="TargetId"
-            app:argType="string" />
+            android:name="TargetThing"
+            app:argType="com.prokonst.thingshouse.model.Thing"
+            app:nullable="true" />
+
 
         <action
             android:id="@+id/action_ShowThingsListFragment_to_FirstFragment"
@@ -47,7 +50,10 @@
         <action
             android:id="@+id/action_ShowThingsListFragment_to_thingDataFragment"
             app:destination="@id/thingDataFragment" />
-
+        <argument
+            android:name="Quantity"
+            app:argType="string"
+            app:nullable="true" />
 
 
     </fragment>

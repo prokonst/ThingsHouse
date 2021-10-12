@@ -131,7 +131,7 @@ public class ThingDataFragment extends Fragment {
                     .setPositiveButton("Delete ", (dialogBox, id) -> {
                         thingsViewModel.deleteThing(thing);
                         NavDirections action = ThingDataFragmentDirections.actionThingDataFragmentToSecondFragment(
-                                true, "Browse things", "ViewThings", "", "");
+                                true, "Browse things", "ViewThings", null, null, null);
                         NavHostFragment.findNavController(ThingDataFragment.this)
                                 .navigate(action);
                     })
@@ -148,12 +148,19 @@ public class ThingDataFragment extends Fragment {
         public void onAddTo(View view) {
 
             (new ChangeThingValueDialog(ThingDataFragment.this.getActivity(), "Quantity",
-                    () -> "1.0",
+                    () -> "1",
                     (newValue) -> {
-                        NavDirections action = ThingDataFragmentDirections.actionThingDataFragmentToSecondFragment(
-                                true, "Select storage for: " + thing.getName(), "AddThingTo", thing.getThingId(), "");
-                        NavHostFragment.findNavController(ThingDataFragment.this)
-                                .navigate(action);
+                        try {
+                            newValue = newValue.replace(',', '.');
+                            double newValDouble = Double.parseDouble(newValue);
+                            NavDirections action = ThingDataFragmentDirections.actionThingDataFragmentToSecondFragment(
+                                    true, "Select storage for: " + thing.getName(), "AddThingTo", thing, null, newValue);
+                            NavHostFragment.findNavController(ThingDataFragment.this)
+                                    .navigate(action);
+                        } catch (Exception ex) {
+                            Toast.makeText(getContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
+                        }
+
                     }
             )).show();
         }

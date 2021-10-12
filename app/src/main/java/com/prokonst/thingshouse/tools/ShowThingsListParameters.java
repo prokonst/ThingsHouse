@@ -1,26 +1,22 @@
 package com.prokonst.thingshouse.tools;
 
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavDirections;
-import androidx.navigation.fragment.NavHostFragment;
-
-import com.prokonst.thingshouse.ThingDataFragment;
-import com.prokonst.thingshouse.ThingDataFragmentDirections;
+import com.prokonst.thingshouse.model.Thing;
 
 public class ShowThingsListParameters {
     private boolean isClearFilter;
     private String title;
     private String actionType;
-    private String sourceId;
-    private String targetId;
+    private Thing sourceThing;
+    private Thing targetThing;
+    private double quantity;
 
     public ShowThingsListParameters() {
         this.isClearFilter = false;
         this.title = "Unknown title";
         this.actionType = "Unknown action type";
-        this.sourceId = "";
-        this.targetId = "";
+        this.sourceThing = null;
+        this.targetThing = null;
+        this.quantity = 0;
     }
 
     public boolean getIsClearFilter() {
@@ -50,22 +46,35 @@ public class ShowThingsListParameters {
         return this;
     }
 
-    public String getSourceId() {
-        return this.sourceId;
+    public Thing getSourceThing() {
+        return this.sourceThing;
     }
 
-    public ShowThingsListParameters setSourceId(String sourceId) {
-        this.sourceId = sourceId;
+    public ShowThingsListParameters setSourceThing(Thing sourceThing) {
+        this.sourceThing = sourceThing;
         return this;
     }
 
-    public String getTargetId() {
-        return this.targetId;
+    public Thing getTargetThing() {
+        return this.targetThing;
     }
 
-    public ShowThingsListParameters setTargetId(String targetId) {
-        this.targetId = targetId;
+    public ShowThingsListParameters setTargetThing(Thing targetThing) {
+        this.targetThing = targetThing;
         return this;
     }
 
+    public double getQuantity() {
+        return this.quantity;
+    }
+
+    public ShowThingsListParameters setQuantity(String quantity) {
+        if(quantity != null) {
+            this.quantity = Double.parseDouble(quantity);
+        }
+        else {
+            this.quantity = 0;
+        }
+        return this;
+    }
 }

@@ -62,30 +62,30 @@ public class ShowThingsListFragment extends Fragment {
     ) {
 
         ShowThingsListFragmentArgs args = ShowThingsListFragmentArgs.fromBundle(getArguments());
-        if(args != null) {
-            showThingsListParameters = (new ShowThingsListParameters())
-                .setIsClearFilter(args.getIsClearFilter())
-                .setTitle(args.getTitle())
-                .setActionType(args.getActionType())
-                .setSourceId(args.getSourceId())
-                .setTargetId(args.getTargetId());
+        showThingsListParameters = (new ShowThingsListParameters())
+            .setIsClearFilter(args.getIsClearFilter())
+            .setTitle(args.getTitle())
+            .setActionType(args.getActionType())
+            .setSourceThing(args.getSourceThing())
+            .setTargetThing(args.getTargetThing())
+            .setQuantity(args.getQuantity());
 
-            if(showThingsListParameters.getIsClearFilter())
-                filter = "";
+        if(showThingsListParameters.getIsClearFilter())
+            filter = "";
 
-            setTitle(showThingsListParameters.getTitle());
+        setTitle(showThingsListParameters.getTitle());
 
-            if(showThingsListParameters.getActionType().equals("ViewThings")) {
-
-            }
-            else if(showThingsListParameters.getActionType().equals("AddThingTo")) {
-
-            }
-            else {
-                setTitle("Unknown action type");
-            }
+        if(showThingsListParameters.getActionType().equals("ViewThings")) {
 
         }
+        else if(showThingsListParameters.getActionType().equals("AddThingTo")) {
+
+        }
+        else {
+            setTitle("Unknown action type");
+        }
+
+
 
 
         fragmentShowThingsListBinding = FragmentShowThingsListBinding.inflate(inflater, container, false);
@@ -155,7 +155,7 @@ public class ShowThingsListFragment extends Fragment {
                     }
                     else if(showThingsListParameters.getActionType().equals("AddThingTo")) {
                         AppRepository appRepository = new AppRepository(ShowThingsListFragment.this.getActivity().getApplication());
-                        appRepository.addQuantityToStorage(thing.getThingId(), showThingsListParameters.getSourceId(), 3.0);
+                        appRepository.addQuantityToStorage(thing.getThingId(), showThingsListParameters.getSourceThing().getThingId(), showThingsListParameters.getQuantity());
                     }
                     else {
                         Toast.makeText(view.getContext(), "Unknown action type", Toast.LENGTH_LONG).show();

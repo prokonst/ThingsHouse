@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -38,7 +39,7 @@ public class FirstFragment extends Fragment {
             public void onClick(View view) {
 
                 NavDirections action = FirstFragmentDirections.actionFirstFragmentToShowThingsListFragment(
-                        false, "Browse things", "ViewThings", "", "");
+                        false, "Browse things", "ViewThings", null, null, null);
                 NavHostFragment.findNavController(FirstFragment.this)
                         .navigate(action);
             }
@@ -48,13 +49,19 @@ public class FirstFragment extends Fragment {
             AppRepository appRepository = new AppRepository(FirstFragment.this.getActivity().getApplication());
             //appRepository.getStoragesWithTingsByParentId("347C8DCE-93FB-43D0-A186-A77DA2F4B974").observe(this.getViewLifecycleOwner(), (listStoragesWithThings) -> {
             appRepository.getStoragesWithTingsByChildId("3D01C18A-6E2F-4E6F-AD8C-7BD429774DED").observe(this.getViewLifecycleOwner(), (listStoragesWithThings) -> {
+                StringBuilder sb = new StringBuilder();
+
+
                 for(StorageWithThings curStorageWithThings : listStoragesWithThings) {
-                    Log.d("TEST", "--------------------------------");
-                    Log.d("TEST", "parentName = " + curStorageWithThings.parentThing.getName());
-                    Log.d("TEST", "childName = " + curStorageWithThings.childThing.getName());
-                    Log.d("TEST", "quantity = " + Double.toString(curStorageWithThings.getQuantity()));
-                    Log.d("TEST", "--------------------------------");
+
+                    sb.append("-----\n");
+                    sb.append("parentName = " + curStorageWithThings.parentThing.getName() + "\n");
+                    sb.append("childName = " + curStorageWithThings.childThing.getName() + "\n");
+                    sb.append("quantity = " + Double.toString(curStorageWithThings.getQuantity()) + "\n");
+                    sb.append("-----\n");
                 }
+
+                Toast.makeText(getContext(), sb.toString(), Toast.LENGTH_LONG).show();
             });
 
 
