@@ -55,22 +55,22 @@ public abstract class ThingsDataBase extends RoomDatabase {
         @Override
         protected Void doInBackground(Void... voids) {
 
-            Thing thing1 = new Thing(Utils.generateUUIDStr(), "шт", "barCode1", "Вещь 1", "");
+            Thing thing1 = new Thing("3D01C18A-6E2F-4E6F-AD8C-7BD429774DED", "шт", "barCode1", "Вещь 1", "");
             thingDao.insert(thing1);
 
-            Thing thing2 = new Thing(Utils.generateUUIDStr(), "шт", "barCode2", "Вещь 2", "");
+            Thing thing2 = new Thing("0ACE3316-E3D4-4383-B9EA-EBFDB240400F", "шт", "barCode2", "Вещь 2", "");
             thingDao.insert(thing2);
 
-            Thing box1 = new Thing(Utils.generateUUIDStr(), "шт", "barCode3", "Ящик 1", "");
+            Thing box1 = new Thing("347C8DCE-93FB-43D0-A186-A77DA2F4B974", "шт", "barCode3", "Ящик 1", "");
             thingDao.insert(box1);
 
-            Thing box2 = new Thing(Utils.generateUUIDStr(), "шт", "barCode4", "Ящик 2", "");
+            Thing box2 = new Thing("41CDBB0C-8FF3-4D29-89D5-4F041BF32EB3", "шт", "barCode4", "Ящик 2", "");
             thingDao.insert(box2);
 
-            Storage storage_thing1_in_box1 = new Storage(Utils.generateUUIDStr(), box1.getThingId(), thing1.getThingId(), 3.0);
+            Storage storage_thing1_in_box1 = new Storage("24F9466F-9FC1-49F6-8A0B-68BD15CE7BBC", box1.getThingId(), thing1.getThingId(), 3.0);
             storageDao.insert(storage_thing1_in_box1);
 
-            Storage storage_thing2_in_box1 = new Storage(Utils.generateUUIDStr(), box1.getThingId(), thing2.getThingId(), 5.0);
+            Storage storage_thing2_in_box1 = new Storage("1CFA31CB-5D14-43F5-BB20-E1D1A5005ED3", box1.getThingId(), thing2.getThingId(), 5.0);
             storageDao.insert(storage_thing2_in_box1);
 /*
             thingDao.insert(new Thing(Utils.generateUUIDStr(), "шт", "barCode11", "Test_Болт1", ""));

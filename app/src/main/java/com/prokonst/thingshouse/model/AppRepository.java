@@ -2,6 +2,9 @@ package com.prokonst.thingshouse.model;
 
 import android.app.Application;
 import androidx.lifecycle.LiveData;
+
+import com.prokonst.thingshouse.Utils;
+
 import java.util.List;
 
 public class AppRepository {
@@ -72,6 +75,14 @@ public class AppRepository {
         return storageDao.getStoragesByChildId(childId);
     }
 
+    public LiveData<List<StorageWithThings>> getStoragesWithTingsByParentId(String parentId) {
+        return storageDao.getStoragesWithTingsByParentId(parentId);
+    }
+
+    public LiveData<List<StorageWithThings>> getStoragesWithTingsByChildId(String childId) {
+        return storageDao.getStoragesWithTingsByChildId(childId);
+    }
+
     public void insertStorage(Storage storage) {
         (new AsyncTaskCUD(application,
                 () -> {
@@ -95,6 +106,22 @@ public class AppRepository {
         (new AsyncTaskCUD(application,
                 () -> {
                     storageDao.delete(storage);
+                    return null;
+                }
+        )).execute();
+    }
+
+    public void addQuantityToStorage(String parentId, String childId, double quantity) {
+        (new AsyncTaskCUD(application,
+                () -> {
+                    Storage storage = storageDao.getStorage(parentId, childId);
+                    if(storage == null) {
+                        storage = new Storage(Utils.generateUUIDStr(), parentId, childId, quantity);
+                        storageDao.insert(storage);
+                    } else {
+                        storage.setQuantity(storage.getQuantity() + quantity);
+                        storageDao.update(storage);
+                    }
                     return null;
                 }
         )).execute();

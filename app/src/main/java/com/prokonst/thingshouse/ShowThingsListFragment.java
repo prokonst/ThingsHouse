@@ -12,6 +12,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -22,8 +23,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.prokonst.thingshouse.databinding.FragmentShowThingsListBinding;
+import com.prokonst.thingshouse.model.AppRepository;
 import com.prokonst.thingshouse.model.Thing;
 import com.prokonst.thingshouse.tools.ScanBarCodeLauncher;
+import com.prokonst.thingshouse.tools.ShowThingsListParameters;
 import com.prokonst.thingshouse.viewmodel.ThingsViewModel;
 
 import java.util.ArrayList;
@@ -43,6 +46,7 @@ public class ShowThingsListFragment extends Fragment {
     private TextInputEditText textInputEditText;
 
     private static String filter = "";
+    private ShowThingsListParameters showThingsListParameters;
 
     private ActivityResultLauncher<Intent> startBarCodeScannerActivityResultLauncher;
 
@@ -58,9 +62,29 @@ public class ShowThingsListFragment extends Fragment {
     ) {
 
         ShowThingsListFragmentArgs args = ShowThingsListFragmentArgs.fromBundle(getArguments());
-        if(args != null && args.getIsClearFilter())
-        {
-            filter = "";
+        if(args != null) {
+            showThingsListParameters = (new ShowThingsListParameters())
+                .setIsClearFilter(args.getIsClearFilter())
+                .setTitle(args.getTitle())
+                .setActionType(args.getActionType())
+                .setSourceId(args.getSourceId())
+                .setTargetId(args.getTargetId());
+
+            if(showThingsListParameters.getIsClearFilter())
+                filter = "";
+
+            setTitle(showThingsListParameters.getTitle());
+
+            if(showThingsListParameters.getActionType().equals("ViewThings")) {
+
+            }
+            else if(showThingsListParameters.getActionType().equals("AddThingTo")) {
+
+            }
+            else {
+                setTitle("Unknown action type");
+            }
+
         }
 
 
@@ -99,6 +123,11 @@ public class ShowThingsListFragment extends Fragment {
 
     }
 
+    private void setTitle(String title) {
+        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(title);
+    }
+
+
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -119,9 +148,18 @@ public class ShowThingsListFragment extends Fragment {
 
         thingAdapter.setOnItemClickListener(
                 (thing) -> {
-                NavDirections action = ShowThingsListFragmentDirections.actionShowThingsListFragmentToThingDataFragment(thing);
-                NavHostFragment.findNavController(ShowThingsListFragment.this)
-                        .navigate(action);
+                    if(showThingsListParameters.getActionType().equals("ViewThings")) {
+                        NavDirections action = ShowThingsListFragmentDirections.actionShowThingsListFragmentToThingDataFragment(thing);
+                        NavHostFragment.findNavController(ShowThingsListFragment.this)
+                                .navigate(action);
+                    }
+                    else if(showThingsListParameters.getActionType().equals("AddThingTo")) {
+                        AppRepository appRepository = new AppRepository(ShowThingsListFragment.this.getActivity().getApplication());
+                        appRepository.addQuantityToStorage(thing.getThingId(), showThingsListParameters.getSourceId(), 3.0);
+                    }
+                    else {
+                        Toast.makeText(view.getContext(), "Unknown action type", Toast.LENGTH_LONG).show();
+                    }
                  });
 
 

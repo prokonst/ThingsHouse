@@ -11,6 +11,7 @@ import java.io.Serializable;
 
 public class StorageWithThings extends BaseObservable implements Serializable {
 
+    @ColumnInfo(name = "storage_id")
     private String storageId;
 
     @ColumnInfo(name = "parent_id")

@@ -23,13 +23,33 @@
 
         <argument
             android:name="IsClearFilter"
-            app:argType="boolean" />
+            app:argType="boolean"/>
+
+        <argument
+            android:name="Title"
+            app:argType="string" />
+
+        <argument
+            android:name="ActionType"
+            app:argType="string" />
+
+        <argument
+            android:name="SourceId"
+            app:argType="string" />
+
+        <argument
+            android:name="TargetId"
+            app:argType="string" />
+
         <action
             android:id="@+id/action_ShowThingsListFragment_to_FirstFragment"
             app:destination="@id/firstFragment" />
         <action
             android:id="@+id/action_ShowThingsListFragment_to_thingDataFragment"
             app:destination="@id/thingDataFragment" />
+
+
+
     </fragment>
     <fragment
         android:id="@+id/thingDataFragment"

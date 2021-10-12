@@ -1,7 +1,6 @@
 package com.prokonst.thingshouse;
 
 import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteConstraintException;
 import android.os.Bundle;
@@ -12,30 +11,20 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
 
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.textfield.TextInputEditText;
 import com.prokonst.thingshouse.databinding.FragmentThingDataBinding;
-import com.prokonst.thingshouse.model.AppRepository;
 import com.prokonst.thingshouse.model.Thing;
-import com.prokonst.thingshouse.model.ThingsDataBase;
 import com.prokonst.thingshouse.tools.ScanBarCodeLauncher;
 import com.prokonst.thingshouse.viewmodel.ThingsViewModel;
-
-import java.util.List;
-import java.util.Locale;
-import java.util.NavigableMap;
 
 
 public class ThingDataFragment extends Fragment {
@@ -141,7 +130,8 @@ public class ThingDataFragment extends Fragment {
                     .setCancelable(false)
                     .setPositiveButton("Delete ", (dialogBox, id) -> {
                         thingsViewModel.deleteThing(thing);
-                        NavDirections action = ThingDataFragmentDirections.actionThingDataFragmentToSecondFragment(true);
+                        NavDirections action = ThingDataFragmentDirections.actionThingDataFragmentToSecondFragment(
+                                true, "Browse things", "ViewThings", "", "");
                         NavHostFragment.findNavController(ThingDataFragment.this)
                                 .navigate(action);
                     })
@@ -154,6 +144,18 @@ public class ThingDataFragment extends Fragment {
         }
         public void onSetBarCode(View view) {
             ScanBarCodeLauncher.startScanBarCodeLauncher(ThingDataFragment.this.getActivity(), startBarCodeScannerActivityResultLauncher);
+        }
+        public void onAddTo(View view) {
+
+            (new ChangeThingValueDialog(ThingDataFragment.this.getActivity(), "Quantity",
+                    () -> "1.0",
+                    (newValue) -> {
+                        NavDirections action = ThingDataFragmentDirections.actionThingDataFragmentToSecondFragment(
+                                true, "Select storage for: " + thing.getName(), "AddThingTo", thing.getThingId(), "");
+                        NavHostFragment.findNavController(ThingDataFragment.this)
+                                .navigate(action);
+                    }
+            )).show();
         }
     }
 }
