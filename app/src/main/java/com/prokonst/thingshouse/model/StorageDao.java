@@ -32,12 +32,23 @@ public interface StorageDao {
 
     @Transaction
     @Query("select * from storages where parent_id = :parentId")
-    LiveData<List<StorageWithThings>> getStoragesWithTingsByParentId(String parentId);
+    LiveData<List<Delete_StorageWithThings>> getStoragesWithTingsByParentId(String parentId);
 
     @Transaction
     @Query("select * from storages where child_id = :childId")
-    LiveData<List<StorageWithThings>> getStoragesWithTingsByChildId(String childId);
+    LiveData<List<Delete_StorageWithThings>> getStoragesWithTingsByChildId(String childId);
 
     @Query("select * from storages where parent_id = :parentId and child_id = :childId")
     Storage getStorage(String parentId, String childId);
+
+    @Query("select storages.storage_id, storages.parent_id, storages.child_id, storages.quantity,"
+            + " things.thing_id, things.unit, things.barCode, things.name, things.mainPhotoId"
+            + "  from things, storages where storages.parent_id = :parentId and storages.child_id = things.thing_id" )
+    LiveData<List<StorageItem>> getStorageItemsByParentId(String parentId);
+
+    @Query("select storages.storage_id, storages.parent_id, storages.child_id, storages.quantity,"
+            + " things.thing_id, things.unit, things.barCode, things.name, things.mainPhotoId"
+            + "  from things, storages where storages.child_id = :childId and storages.parent_id = things.thing_id" )
+    LiveData<List<StorageItem>> getStorageItemsByChildId(String childId);
+
 }

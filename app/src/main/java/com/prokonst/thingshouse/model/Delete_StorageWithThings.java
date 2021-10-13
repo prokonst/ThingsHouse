@@ -9,7 +9,7 @@ import androidx.room.Relation;
 
 import java.io.Serializable;
 
-public class StorageWithThings extends BaseObservable implements Serializable {
+public class Delete_StorageWithThings extends BaseObservable implements Serializable {
 
     @ColumnInfo(name = "storage_id")
     private String storageId;

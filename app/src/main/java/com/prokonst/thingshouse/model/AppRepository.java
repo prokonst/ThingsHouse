@@ -75,12 +75,20 @@ public class AppRepository {
         return storageDao.getStoragesByChildId(childId);
     }
 
-    public LiveData<List<StorageWithThings>> getStoragesWithTingsByParentId(String parentId) {
+    public LiveData<List<Delete_StorageWithThings>> getStoragesWithTingsByParentId(String parentId) {
         return storageDao.getStoragesWithTingsByParentId(parentId);
     }
 
-    public LiveData<List<StorageWithThings>> getStoragesWithTingsByChildId(String childId) {
+    public LiveData<List<Delete_StorageWithThings>> getStoragesWithTingsByChildId(String childId) {
         return storageDao.getStoragesWithTingsByChildId(childId);
+    }
+
+    public LiveData<List<StorageItem>> getStorageItemsByParentId(String parentId) {
+        return storageDao.getStorageItemsByParentId(parentId);
+    }
+
+    public LiveData<List<StorageItem>> getStorageItemsByChildId(String childId) {
+        return storageDao.getStorageItemsByChildId(childId);
     }
 
     public void insertStorage(Storage storage) {
@@ -111,12 +119,32 @@ public class AppRepository {
         )).execute();
     }
 
-    public void addQuantityToStorage(String parentId, String childId, double quantity) {
+    public void addQuantityToStorageByParentId(String parentId, String childId, double quantity) {
         (new AsyncTaskCUD(application,
                 () -> {
                     Storage storage = storageDao.getStorage(parentId, childId);
                     if(storage == null) {
                         storage = new Storage(Utils.generateUUIDStr(), parentId, childId, quantity);
+                        storageDao.insert(storage);
+                    } else {
+                        storage.setQuantity(storage.getQuantity() + quantity);
+                        storageDao.update(storage);
+                    }
+                    return null;
+                }
+        )).execute();
+    }
+
+    public void addQuantityToStorageByBarcode(String barcode, String childId, double quantity) {
+        (new AsyncTaskCUD(application,
+                () -> {
+                    Thing parentThing = thingDao.getThingsByBarCode(barcode);
+                    if(parentThing == null)
+                        throw new Exception("Not found thing with barcode: " + barcode);
+
+                    Storage storage = storageDao.getStorage(parentThing.getThingId(), childId);
+                    if(storage == null) {
+                        storage = new Storage(Utils.generateUUIDStr(), parentThing.getThingId(), childId, quantity);
                         storageDao.insert(storage);
                     } else {
                         storage.setQuantity(storage.getQuantity() + quantity);

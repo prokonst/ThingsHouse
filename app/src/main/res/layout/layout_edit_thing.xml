@@ -21,7 +21,7 @@
         android:layout_marginTop="24dp"
         android:background="@android:color/transparent"
         android:gravity="top"
-        android:hint=" Thing name "
+        android:hint="New value"
         android:textSize="24sp" />
 
 

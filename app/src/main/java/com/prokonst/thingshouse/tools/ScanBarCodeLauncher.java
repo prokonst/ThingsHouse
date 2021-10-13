@@ -11,6 +11,11 @@ import com.google.zxing.integration.android.IntentResult;
 
 public class ScanBarCodeLauncher {
     public static void startScanBarCodeLauncher(Activity activity, ActivityResultLauncher<Intent> launcher){
+        IntentIntegrator intentIntegrator = createIntentIntegrator(activity, launcher);
+        launcher.launch(intentIntegrator.createScanIntent());
+    }
+
+    private static IntentIntegrator createIntentIntegrator(Activity activity, ActivityResultLauncher<Intent> launcher) {
         IntentIntegrator intentIntegrator = new IntentIntegrator(activity);
 
         intentIntegrator.setPrompt("For flash use volume up key");
@@ -18,7 +23,7 @@ public class ScanBarCodeLauncher {
         //intentIntegrator.setBarcodeImageEnabled(true);
         intentIntegrator.setOrientationLocked(true);
         intentIntegrator.setCaptureActivity(Capture.class);
-        launcher.launch(intentIntegrator.createScanIntent());
+        return intentIntegrator;
     }
 
     public static String getBarCode(ActivityResult result) {

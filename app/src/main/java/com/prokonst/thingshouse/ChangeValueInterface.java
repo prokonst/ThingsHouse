@@ -6,6 +6,10 @@ public interface ChangeValueInterface {
         void onChangeValue(T newValue);
     }
 
+    public interface ChangeValueCallbackWithAction<T> {
+        void onChangeValue(T newValue, String actionNameKey);
+    }
+
     public interface GetValueCallback<T> {
         T onGetValue();
     }

@@ -22,7 +22,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.prokonst.thingshouse.databinding.FragmentThingDataBinding;
+import com.prokonst.thingshouse.model.AppRepository;
+import com.prokonst.thingshouse.model.StorageItem;
 import com.prokonst.thingshouse.model.Thing;
+import com.prokonst.thingshouse.tools.ItemsCollectionInterface;
 import com.prokonst.thingshouse.tools.ScanBarCodeLauncher;
 import com.prokonst.thingshouse.viewmodel.ThingsViewModel;
 
@@ -33,7 +36,10 @@ public class ThingDataFragment extends Fragment {
     private ThingsViewModel thingsViewModel;
     private Thing thing;
     FragmentThingDataBinding fragmentThingDataBinding;
-    private ActivityResultLauncher<Intent> startBarCodeScannerActivityResultLauncher;
+    private ActivityResultLauncher<Intent> scanForSetBarCodeActivityResultLauncher;
+    private ActivityResultLauncher<Intent> scanForAddActivityResultLauncher;
+
+    private double currentQuantity;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -54,7 +60,7 @@ public class ThingDataFragment extends Fragment {
                 .AndroidViewModelFactory(getActivity().getApplication())
                 .create(ThingsViewModel.class);
 
-        startBarCodeScannerActivityResultLauncher = ThingDataFragment.this.registerForActivityResult(
+        scanForSetBarCodeActivityResultLauncher = ThingDataFragment.this.registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
                 (result) -> {
 
@@ -68,6 +74,29 @@ public class ThingDataFragment extends Fragment {
                                 thingsViewModel.updateThing(thing);
                             } catch (SQLiteConstraintException sqlEx) {
                                 Toast.makeText(ThingDataFragment.this.getActivity(), "BarCode already used", Toast.LENGTH_LONG).show();
+                            }
+                        } else {
+                            Toast.makeText(ThingDataFragment.this.getActivity(), "BarCodeNotScanned", Toast.LENGTH_SHORT).show();
+                        }
+                    }catch (Exception ex) {
+                        Toast.makeText(ThingDataFragment.this.getActivity(), "Error: " + ex.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+        );
+
+        scanForAddActivityResultLauncher =  ThingDataFragment.this.registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                (result) -> {
+
+                    try {
+                        String barCode = ScanBarCodeLauncher.getBarCode(result);
+                        if (barCode != null && thing != null) {
+                            if(barCode.equals(thing.getBarCode())) {
+                                Toast.makeText(getContext(), "Error: apply to self", Toast.LENGTH_LONG).show();
+                            } else {
+                                AppRepository appRepository = new AppRepository(ThingDataFragment.this.getActivity().getApplication());
+                                appRepository.addQuantityToStorageByBarcode(barCode, thing.getThingId(), currentQuantity);
                             }
                         } else {
                             Toast.makeText(ThingDataFragment.this.getActivity(), "BarCodeNotScanned", Toast.LENGTH_SHORT).show();
@@ -143,26 +172,60 @@ public class ThingDataFragment extends Fragment {
             alertDialog.show();
         }
         public void onSetBarCode(View view) {
-            ScanBarCodeLauncher.startScanBarCodeLauncher(ThingDataFragment.this.getActivity(), startBarCodeScannerActivityResultLauncher);
+            ScanBarCodeLauncher.startScanBarCodeLauncher(ThingDataFragment.this.getActivity(), scanForSetBarCodeActivityResultLauncher);
         }
         public void onAddTo(View view) {
 
-            (new ChangeThingValueDialog(ThingDataFragment.this.getActivity(), "Quantity",
+            (new AddThingToStorageDialog(ThingDataFragment.this.getActivity(),
                     () -> "1",
-                    (newValue) -> {
-                        try {
-                            newValue = newValue.replace(',', '.');
-                            double newValDouble = Double.parseDouble(newValue);
+                    (newValue, actionNameKey) -> {
+                        if(actionNameKey.equals("Select")) {
+
                             NavDirections action = ThingDataFragmentDirections.actionThingDataFragmentToSecondFragment(
                                     true, "Select storage for: " + thing.getName(), "AddThingTo", thing, null, newValue);
                             NavHostFragment.findNavController(ThingDataFragment.this)
                                     .navigate(action);
-                        } catch (Exception ex) {
-                            Toast.makeText(getContext(), ex.getMessage(), Toast.LENGTH_LONG).show();
+                        } else if(actionNameKey.equals("Scan")) {
+                            currentQuantity = Double.parseDouble(newValue);
+                            ScanBarCodeLauncher.startScanBarCodeLauncher(ThingDataFragment.this.getActivity(), scanForAddActivityResultLauncher);
+                        }
+                        else {
+                            Toast.makeText(getContext(), "Unknown ActionNameKey: " + actionNameKey, Toast.LENGTH_LONG).show();
                         }
 
                     }
             )).show();
+        }
+        public void onWhereUsed(View view) {
+            AppRepository appRepository = new AppRepository(ThingDataFragment.this.getActivity().getApplication());
+            showItems(view, () ->  appRepository.getStorageItemsByChildId(thing.getThingId())  );
+        }
+        public void onItems(View view) {
+            AppRepository appRepository = new AppRepository(ThingDataFragment.this.getActivity().getApplication());
+            showItems(view, () -> appRepository.getStorageItemsByParentId(thing.getThingId())  );
+        }
+
+        private void showItems(View view, ItemsCollectionInterface itemsCollection) {
+            itemsCollection.getStorageItems().observe(ThingDataFragment.this.getViewLifecycleOwner(), (listStorageItems) -> {
+                if(listStorageItems.size() == 0) {
+                    Toast.makeText(getContext(), "List is empty", Toast.LENGTH_LONG).show();
+                } else {
+                    StringBuilder sb = new StringBuilder();
+
+                    for(StorageItem curStorageItem : listStorageItems) {
+
+                        sb.append("-----\n");
+                        sb.append("Name = " + curStorageItem.getName());
+                        sb.append("\n");
+                        sb.append("Quantity = " + Double.toString(curStorageItem.getQuantity()));
+                        sb.append("\n");
+                        sb.append("Unit = " + curStorageItem.getUnit());
+                        sb.append("-----\n");
+                    }
+
+                    Toast.makeText(getContext(), sb.toString(), Toast.LENGTH_LONG).show();
+                }
+            });
         }
     }
 }

@@ -154,8 +154,21 @@ public class ShowThingsListFragment extends Fragment {
                                 .navigate(action);
                     }
                     else if(showThingsListParameters.getActionType().equals("AddThingTo")) {
-                        AppRepository appRepository = new AppRepository(ShowThingsListFragment.this.getActivity().getApplication());
-                        appRepository.addQuantityToStorage(thing.getThingId(), showThingsListParameters.getSourceThing().getThingId(), showThingsListParameters.getQuantity());
+                        if(thing.getThingId().equals(showThingsListParameters.getSourceThing().getThingId())) {
+                            Toast.makeText(view.getContext(), "Error: apply to self", Toast.LENGTH_LONG).show();
+                        }
+                        else {
+
+                            AppRepository appRepository = new AppRepository(ShowThingsListFragment.this.getActivity().getApplication());
+                            appRepository.addQuantityToStorageByParentId(thing.getThingId(), showThingsListParameters.getSourceThing().getThingId(), showThingsListParameters.getQuantity());
+                        }/*
+                        NavDirections action = ShowThingsListFragmentDirections.actionShowThingsListFragmentSelf(
+                                true, "Browse things", "ViewThings", null, null, "0.0");
+                        NavHostFragment.findNavController(ShowThingsListFragment.this)
+                                .navigate(action);*/
+                        NavDirections action = ShowThingsListFragmentDirections.actionShowThingsListFragmentToThingDataFragment(thing);
+                        NavHostFragment.findNavController(ShowThingsListFragment.this)
+                                .navigate(action);
                     }
                     else {
                         Toast.makeText(view.getContext(), "Unknown action type", Toast.LENGTH_LONG).show();
