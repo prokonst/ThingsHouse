@@ -3,26 +3,75 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
+    app:startDestination="@id/firstFragment">
 
     <fragment
-        android:id="@+id/FirstFragment"
+        android:id="@+id/firstFragment"
         android:name="com.prokonst.thingshouse.FirstFragment"
         android:label="@string/first_fragment_label"
         tools:layout="@layout/fragment_first">
 
         <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
+            android:id="@+id/action_FirstFragment_to_ShowThingsListFragment"
+            app:destination="@id/showThingsListFragment" />
     </fragment>
     <fragment
-        android:id="@+id/SecondFragment"
+        android:id="@+id/showThingsListFragment"
         android:name="com.prokonst.thingshouse.ShowThingsListFragment"
-        android:label="@string/second_fragment_label"
+        android:label="@string/show_things_list_fragment_label"
         tools:layout="@layout/fragment_show_things_list">
 
+        <argument
+            android:name="IsClearFilter"
+            app:argType="boolean"/>
+
+        <argument
+            android:name="Title"
+            app:argType="string" />
+
+        <argument
+            android:name="ActionType"
+            app:argType="string" />
+
+        <argument
+            android:name="SourceThing"
+            app:argType="com.prokonst.thingshouse.model.Thing"
+            app:nullable="true" />
+
+        <argument
+            android:name="TargetThing"
+            app:argType="com.prokonst.thingshouse.model.Thing"
+            app:nullable="true" />
+
+
         <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+            android:id="@+id/action_ShowThingsListFragment_to_FirstFragment"
+            app:destination="@id/firstFragment" />
+        <action
+            android:id="@+id/action_ShowThingsListFragment_to_thingDataFragment"
+            app:destination="@id/thingDataFragment" />
+        <argument
+            android:name="Quantity"
+            app:argType="string"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_showThingsListFragment_self"
+            app:destination="@id/showThingsListFragment" />
+
+
+    </fragment>
+    <fragment
+        android:id="@+id/thingDataFragment"
+        android:name="com.prokonst.thingshouse.ThingDataFragment"
+        android:label="fragment_thing_data"
+        tools:layout="@layout/fragment_thing_data">
+        <argument
+            android:name="SelectedThing"
+            app:argType="com.prokonst.thingshouse.model.Thing" />
+        <action
+            android:id="@+id/action_thingDataFragment_to_SecondFragment"
+            app:destination="@id/showThingsListFragment"/>
+            <!--app:popUpTo="@+id/nav_graph"
+            app:popUpToInclusive="true"-->
     </fragment>
 </navigation>

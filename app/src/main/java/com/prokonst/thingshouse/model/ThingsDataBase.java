@@ -11,18 +11,20 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.prokonst.thingshouse.Utils;
 
-@Database(entities = {Thing.class}, version = 1)
+@Database(entities = {Thing.class, Storage.class}, version = 1)
 public abstract class ThingsDataBase extends RoomDatabase {
 
     private static ThingsDataBase instance;
 
     public abstract ThingDao getThingDao();
+    public abstract StorageDao getStorageDao();
 
     public static synchronized ThingsDataBase getInstance(Context context) {
 
         if(instance == null) {
             instance = Room.databaseBuilder(context.getApplicationContext(),
                     ThingsDataBase.class, "thingsDB")
+                    //.allowMainThreadQueries() //HACK
                     .fallbackToDestructiveMigration()
                     .addCallback(callback)
                     .build();
@@ -43,20 +45,34 @@ public abstract class ThingsDataBase extends RoomDatabase {
     private static class InitialDataAsyncTask extends AsyncTask<Void, Void, Void>{
 
         private ThingDao thingDao;
+        private StorageDao storageDao;
 
         public InitialDataAsyncTask(ThingsDataBase database) {
             thingDao = database.getThingDao();
+            storageDao = database.getStorageDao();
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
 
-            thingDao.insert(new Thing(Utils.generateUUIDStr(), "шт", "barCode1", "Test_Болт", ""));
-            thingDao.insert(new Thing(Utils.generateUUIDStr(), "шт", "barCode2", "Test_Гайка", ""));
-            thingDao.insert(new Thing(Utils.generateUUIDStr(), "шт", "barCode3", "Test_Шайба", ""));
-            thingDao.insert(new Thing(Utils.generateUUIDStr(), "шт", "barCode4", "Test_Гровер", ""));
-            thingDao.insert(new Thing(Utils.generateUUIDStr(), "шт", "barCode5", "Test_Стопор", ""));
+            Thing thing1 = new Thing("3D01C18A-6E2F-4E6F-AD8C-7BD429774DED", "шт", "barCode1", "Вещь 1", "");
+            thingDao.insert(thing1);
 
+            Thing thing2 = new Thing("0ACE3316-E3D4-4383-B9EA-EBFDB240400F", "шт", "barCode2", "Вещь 2", "");
+            thingDao.insert(thing2);
+
+            Thing box1 = new Thing("347C8DCE-93FB-43D0-A186-A77DA2F4B974", "шт", "barCode3", "Ящик 1", "");
+            thingDao.insert(box1);
+
+            Thing box2 = new Thing("41CDBB0C-8FF3-4D29-89D5-4F041BF32EB3", "шт", "barCode4", "Ящик 2", "");
+            thingDao.insert(box2);
+
+            Storage storage_thing1_in_box1 = new Storage("24F9466F-9FC1-49F6-8A0B-68BD15CE7BBC", box1.getThingId(), thing1.getThingId(), 3.0);
+            storageDao.insert(storage_thing1_in_box1);
+
+            Storage storage_thing2_in_box1 = new Storage("1CFA31CB-5D14-43F5-BB20-E1D1A5005ED3", box1.getThingId(), thing2.getThingId(), 5.0);
+            storageDao.insert(storage_thing2_in_box1);
+/*
             thingDao.insert(new Thing(Utils.generateUUIDStr(), "шт", "barCode11", "Test_Болт1", ""));
             thingDao.insert(new Thing(Utils.generateUUIDStr(), "шт", "barCode21", "Test_Гайка1", ""));
             thingDao.insert(new Thing(Utils.generateUUIDStr(), "шт", "barCode31", "Test_Шайба1", ""));
@@ -79,53 +95,8 @@ public abstract class ThingsDataBase extends RoomDatabase {
             thingDao.insert(new Thing(Utils.generateUUIDStr(), "шт", "barCode24", "Test_Гайка4", ""));
             thingDao.insert(new Thing(Utils.generateUUIDStr(), "шт", "barCode34", "Test_Шайба4", ""));
             thingDao.insert(new Thing(Utils.generateUUIDStr(), "шт", "barCode44", "Test_Гровер4", ""));
-            thingDao.insert(new Thing(Utils.generateUUIDStr(), "шт", "barCode54", "Test_Стопор4", ""));
+            thingDao.insert(new Thing(Utils.generateUUIDStr(), "шт", "barCode54", "Test_Стопор4", ""));*/
 
-
-            return null;
-        }
-    }
-
-    public static void AddTestThing(String name){
-        new AddTestThingAsyncTask(instance).execute(name);
-
-        return;
-    }
-
-    private static class AddTestThingAsyncTask extends AsyncTask<String, Void, Void>{
-
-        private ThingDao thingDao;
-
-        public AddTestThingAsyncTask(ThingsDataBase database) {
-            thingDao = database.getThingDao();
-        }
-
-        @Override
-        protected Void doInBackground(String... strings) {
-
-            thingDao.insert(new Thing(Utils.generateUUIDStr(), "шт", "barCode" + strings[0], strings[0], ""));
-            return null;
-        }
-    }
-
-    public static void UpdateThing(Thing thing){
-        new UpdateThingAsyncTask(instance).execute(thing);
-
-        return;
-    }
-
-    private static class UpdateThingAsyncTask extends AsyncTask<Thing, Void, Void>{
-
-        private ThingDao thingDao;
-
-        public UpdateThingAsyncTask(ThingsDataBase database) {
-            thingDao = database.getThingDao();
-        }
-
-        @Override
-        protected Void doInBackground(Thing... things) {
-
-            thingDao.update(things[0]);
 
             return null;
         }

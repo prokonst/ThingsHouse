@@ -4,22 +4,24 @@ import androidx.annotation.NonNull;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
 import androidx.room.ColumnInfo;
-import androidx.room.Entity;
 import androidx.room.Ignore;
-import androidx.room.Index;
-import androidx.room.PrimaryKey;
-
 
 import com.prokonst.thingshouse.Utils;
 
 import java.io.Serializable;
 
+public class StorageItem extends BaseObservable implements Serializable {
+    @ColumnInfo(name = "storage_id")
+    private String storageId;
 
-@Entity(tableName = "things", indices = {@Index(value = {"barCode"}, unique = true)})
-public class Thing extends BaseObservable implements Serializable {
+    @ColumnInfo(name = "parent_id")
+    private String parentId;
 
-    @PrimaryKey(autoGenerate = false)
-    @NonNull
+    @ColumnInfo(name = "child_id")
+    private String childId;
+
+    private double quantity;
+
     @ColumnInfo(name = "thing_id")
     private String thingId;
     private String unit;
@@ -30,17 +32,59 @@ public class Thing extends BaseObservable implements Serializable {
     @Ignore
     private String mainPhotoSrc;
 
-    @Ignore
-    public Thing() {
-    }
-
-    public Thing(String thingId, String unit, String barCode, String name, String mainPhotoId) {
+    public StorageItem(@NonNull String storageId, String parentId, String childId, double quantity,
+                       String thingId, String unit, String barCode, String name, String mainPhotoId) {
+        this.storageId = storageId;
+        this.parentId = parentId;
+        this.childId = childId;
+        this.quantity = quantity;
         this.thingId = thingId;
         this.unit = unit;
         this.barCode = barCode;
         this.name = name;
         this.mainPhotoId = mainPhotoId;
         this.mainPhotoSrc = Utils.getImagePreviewPath(mainPhotoId);
+    }
+
+    @Bindable
+    @NonNull
+    public String getStorageId() {
+        return storageId;
+    }
+
+    public void setStorageId(@NonNull String storageId) {
+        this.storageId = storageId;
+        notifyPropertyChanged(androidx.databinding.library.baseAdapters.BR.storageId);
+    }
+
+    @Bindable
+    public String getParentId() {
+        return parentId;
+    }
+
+    public void setParentId(String parentId) {
+        this.parentId = parentId;
+        notifyPropertyChanged(androidx.databinding.library.baseAdapters.BR.parentId);
+    }
+
+    @Bindable
+    public String getChildId() {
+        return childId;
+    }
+
+    public void setChildId(String childId) {
+        this.childId = childId;
+        notifyPropertyChanged(androidx.databinding.library.baseAdapters.BR.childId);
+    }
+
+    @Bindable
+    public double getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(double quantity) {
+        this.quantity = quantity;
+        notifyPropertyChanged(androidx.databinding.library.baseAdapters.BR.quantity);
     }
 
     @Bindable

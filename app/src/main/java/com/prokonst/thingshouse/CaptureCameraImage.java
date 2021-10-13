@@ -14,6 +14,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
+import com.prokonst.thingshouse.model.AppRepository;
 import com.prokonst.thingshouse.model.Thing;
 import com.prokonst.thingshouse.model.ThingsDataBase;
 
@@ -23,6 +24,8 @@ import java.io.IOException;
 public class CaptureCameraImage {
 
     private final String[] REQUIRED_PERMISSIONS = new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+
+    private AppRepository appRepository;
 
     private String mImageUUID;
     private Uri mOutputFileProviderUri;
@@ -54,6 +57,8 @@ public class CaptureCameraImage {
     public CaptureCameraImage(AppCompatActivity activity) {
         setmActivity(activity);
 
+        appRepository = new AppRepository(activity.getApplication());
+
         //Request For Premissions
         if(isNotAllPermissionsGranted()){
             ActivityCompat.requestPermissions(mActivity, REQUIRED_PERMISSIONS, 1000);
@@ -76,7 +81,7 @@ public class CaptureCameraImage {
                 (result) -> {
                     if(isCaptureImageFileExists() && mThing != null){
                         mThing.setMainPhotoId(mImageUUID);
-                        ThingsDataBase.UpdateThing(mThing);
+                        appRepository.updateThing(mThing);
                     }
                 });
     }

@@ -1,91 +1,157 @@
 package com.prokonst.thingshouse.model;
 
 import android.app.Application;
-import android.app.AsyncNotedAppOp;
-import android.os.AsyncTask;
-
 import androidx.lifecycle.LiveData;
+
+import com.prokonst.thingshouse.Utils;
 
 import java.util.List;
 
 public class AppRepository {
+
+    private  Application application;
     private ThingDao thingDao;
+    private StorageDao storageDao;
 
     private LiveData<List<Thing>> things;
 
     public AppRepository(Application application) {
+        this.application = application;
         ThingsDataBase database = ThingsDataBase.getInstance(application);
         thingDao = database.getThingDao();
+        storageDao = database.getStorageDao();
     }
+
+    //CRUD For Thing
 
     public LiveData<List<Thing>> getThings() {
         return thingDao.getAllThings();
     }
-
-    public LiveData<List<Thing>> getThings(String namePart) {
-        return thingDao.getThings(namePart);
-    }
+/*
+    public List<Thing> getThingsByBarCode(String barCode) {
+        return thingDao.getThingsByBarCode(barCode);
+    }*/
 
     public void insertThing(Thing thing) {
-        (new InsertThingAsyncTask(thingDao)).execute(thing);
-    }
-
-    private static  class InsertThingAsyncTask extends AsyncTask<Thing, Void, Void> {
-
-        private ThingDao thingDao;
-
-        public InsertThingAsyncTask(ThingDao thingDao) {
-            this.thingDao = thingDao;
-        }
-
-        @Override
-        protected Void doInBackground(Thing... things) {
-
-            thingDao.insert(things[0]);
-
-            return null;
-        }
+        (new AsyncTaskCUD(application,
+                () -> {
+                    thingDao.insert(thing);
+                    return null;
+                }
+        )).execute();
     }
 
     public void updateThing(Thing thing) {
-        (new UpdateThingAsyncTask(thingDao)).execute(thing);
+        (new AsyncTaskCUD(application,
+                () -> {
+                    thingDao.update(thing);
+                    return null;
+                }
+                )).execute();
     }
 
-    private static  class UpdateThingAsyncTask extends AsyncTask<Thing, Void, Void> {
-
-        private ThingDao thingDao;
-
-        public UpdateThingAsyncTask(ThingDao thingDao) {
-            this.thingDao = thingDao;
-        }
-
-        @Override
-        protected Void doInBackground(Thing... things) {
-
-            thingDao.update(things[0]);
-
-            return null;
-        }
-    }
 
     public void deleteThing(Thing thing) {
-        (new DeleteThingAsyncTask(thingDao)).execute(thing);
+        (new AsyncTaskCUD(application,
+                () -> {
+                    thingDao.delete(thing);
+                    return null;
+                }
+        )).execute();
     }
 
-    private static  class DeleteThingAsyncTask extends AsyncTask<Thing, Void, Void> {
 
-        private ThingDao thingDao;
+    //CRUD For Storage
 
-        public DeleteThingAsyncTask(ThingDao thingDao) {
-            this.thingDao = thingDao;
-        }
+    public LiveData<List<Storage>> getStorages() {
+        return storageDao.getAllStorages();
+    }
 
-        @Override
-        protected Void doInBackground(Thing... things) {
+    public LiveData<List<Storage>> getStoragesByParentId(String parentId) {
+        return storageDao.getStoragesByParentId(parentId);
+    }
 
-            thingDao.delete(things[0]);
+    public LiveData<List<Storage>> getStoragesByChildId(String childId) {
+        return storageDao.getStoragesByChildId(childId);
+    }
 
-            return null;
-        }
+    public LiveData<List<Delete_StorageWithThings>> getStoragesWithTingsByParentId(String parentId) {
+        return storageDao.getStoragesWithTingsByParentId(parentId);
+    }
+
+    public LiveData<List<Delete_StorageWithThings>> getStoragesWithTingsByChildId(String childId) {
+        return storageDao.getStoragesWithTingsByChildId(childId);
+    }
+
+    public LiveData<List<StorageItem>> getStorageItemsByParentId(String parentId) {
+        return storageDao.getStorageItemsByParentId(parentId);
+    }
+
+    public LiveData<List<StorageItem>> getStorageItemsByChildId(String childId) {
+        return storageDao.getStorageItemsByChildId(childId);
+    }
+
+    public void insertStorage(Storage storage) {
+        (new AsyncTaskCUD(application,
+                () -> {
+                    storageDao.insert(storage);
+                    return null;
+                }
+        )).execute();
+    }
+
+    public void updateStorage(Storage storage) {
+        (new AsyncTaskCUD(application,
+                () -> {
+                    storageDao.update(storage);
+                    return null;
+                }
+        )).execute();
+    }
+
+
+    public void deleteStorage(Storage storage) {
+        (new AsyncTaskCUD(application,
+                () -> {
+                    storageDao.delete(storage);
+                    return null;
+                }
+        )).execute();
+    }
+
+    public void addQuantityToStorageByParentId(String parentId, String childId, double quantity) {
+        (new AsyncTaskCUD(application,
+                () -> {
+                    Storage storage = storageDao.getStorage(parentId, childId);
+                    if(storage == null) {
+                        storage = new Storage(Utils.generateUUIDStr(), parentId, childId, quantity);
+                        storageDao.insert(storage);
+                    } else {
+                        storage.setQuantity(storage.getQuantity() + quantity);
+                        storageDao.update(storage);
+                    }
+                    return null;
+                }
+        )).execute();
+    }
+
+    public void addQuantityToStorageByBarcode(String barcode, String childId, double quantity) {
+        (new AsyncTaskCUD(application,
+                () -> {
+                    Thing parentThing = thingDao.getThingsByBarCode(barcode);
+                    if(parentThing == null)
+                        throw new Exception("Not found thing with barcode: " + barcode);
+
+                    Storage storage = storageDao.getStorage(parentThing.getThingId(), childId);
+                    if(storage == null) {
+                        storage = new Storage(Utils.generateUUIDStr(), parentThing.getThingId(), childId, quantity);
+                        storageDao.insert(storage);
+                    } else {
+                        storage.setQuantity(storage.getQuantity() + quantity);
+                        storageDao.update(storage);
+                    }
+                    return null;
+                }
+        )).execute();
     }
 }

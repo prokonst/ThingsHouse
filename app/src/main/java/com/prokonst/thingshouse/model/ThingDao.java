@@ -23,8 +23,11 @@ public interface ThingDao {
     //@Query("select * from things order by name")
     @Query("select * from things")
     LiveData<List<Thing>> getAllThings();
-
+/*
     //@Query("select * from things where name like '%' || :namePart || '%'  order by name")
     @Query("select * from things where name like '%' || :namePart || '%'")
-    LiveData<List<Thing>> getThings(String namePart);
+    LiveData<List<Thing>> getThings(String namePart);*/
+
+    @Query("select * from things where barCode = :barCode")
+    Thing getThingsByBarCode(String barCode);
 }

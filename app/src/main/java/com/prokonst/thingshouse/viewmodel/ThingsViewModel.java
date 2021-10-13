@@ -16,24 +16,29 @@ public class ThingsViewModel extends AndroidViewModel {
     private AppRepository appRepository;
     private LiveData<List<Thing>> things;
 
+    private Application application;
+
 
     public ThingsViewModel(@NonNull Application application) {
         super(application);
 
+        this.application = application;
         appRepository = new AppRepository(application);
-
-
     }
 
     public LiveData<List<Thing>> getThings() {
         things = appRepository.getThings();
         return things;
     }
-
+/*
     public LiveData<List<Thing>> getThings(String namePart) {
         things = appRepository.getThings(namePart);
         return things;
-    }
+    }*/
+/*
+    public List<Thing> getThingsByBarCode(String barCode) {
+        return appRepository.getThingsByBarCode(barCode);
+    }*/
 
     public void addNewThing(Thing thing){
         appRepository.insertThing(thing);
