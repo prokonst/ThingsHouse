@@ -27,6 +27,7 @@ import com.prokonst.thingshouse.model.AppRepository;
 import com.prokonst.thingshouse.model.Thing;
 import com.prokonst.thingshouse.tools.ScanBarCodeLauncher;
 import com.prokonst.thingshouse.tools.ShowThingsListParameters;
+import com.prokonst.thingshouse.viewmodel.ThingAdapter;
 import com.prokonst.thingshouse.viewmodel.ThingsViewModel;
 
 import java.util.ArrayList;

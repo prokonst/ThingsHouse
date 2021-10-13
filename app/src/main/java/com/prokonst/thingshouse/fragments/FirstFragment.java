@@ -1,4 +1,4 @@
-package com.prokonst.thingshouse;
+package com.prokonst.thingshouse.fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;

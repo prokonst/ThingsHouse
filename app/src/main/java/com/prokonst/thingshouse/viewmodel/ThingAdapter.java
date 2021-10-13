@@ -1,4 +1,4 @@
-package com.prokonst.thingshouse;
+package com.prokonst.thingshouse.viewmodel;
 
 import android.os.Build;
 import android.view.LayoutInflater;
@@ -11,6 +11,7 @@ import androidx.annotation.RequiresApi;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.prokonst.thingshouse.R;
 import com.prokonst.thingshouse.databinding.ThingListItemBinding;
 import com.prokonst.thingshouse.model.Thing;
 
