@@ -1,4 +1,4 @@
-package com.prokonst.thingshouse.model;
+package com.prokonst.thingshouse.model.dao;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
@@ -7,6 +7,10 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
+
+import com.prokonst.thingshouse.model.Delete_StorageWithThings;
+import com.prokonst.thingshouse.model.Storage;
+import com.prokonst.thingshouse.model.StorageItem;
 
 import java.util.List;
 

@@ -9,7 +9,8 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import com.prokonst.thingshouse.Utils;
+import com.prokonst.thingshouse.model.dao.StorageDao;
+import com.prokonst.thingshouse.model.dao.ThingDao;
 
 @Database(entities = {Thing.class, Storage.class}, version = 1)
 public abstract class ThingsDataBase extends RoomDatabase {
