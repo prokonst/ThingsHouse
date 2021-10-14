@@ -15,8 +15,7 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import com.prokonst.thingshouse.model.AppRepository;
-import com.prokonst.thingshouse.model.Thing;
-import com.prokonst.thingshouse.model.ThingsDataBase;
+import com.prokonst.thingshouse.model.tables.Thing;
 
 import java.io.File;
 import java.io.IOException;

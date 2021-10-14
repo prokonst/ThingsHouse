@@ -7,7 +7,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import com.prokonst.thingshouse.model.AppRepository;
-import com.prokonst.thingshouse.model.Thing;
+import com.prokonst.thingshouse.model.tables.Thing;
 
 import java.util.List;
 

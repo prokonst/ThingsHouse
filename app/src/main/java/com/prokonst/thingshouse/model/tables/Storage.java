@@ -1,4 +1,4 @@
-package com.prokonst.thingshouse.model;
+package com.prokonst.thingshouse.model.tables;
 
 import static androidx.room.ForeignKey.CASCADE;
 
@@ -12,6 +12,7 @@ import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 
+import com.prokonst.thingshouse.model.tables.Thing;
 
 import java.io.Serializable;
 

@@ -6,7 +6,7 @@
     <data>
         <variable
             name="thing"
-            type="com.prokonst.thingshouse.model.Thing" />
+            type="com.prokonst.thingshouse.model.tables.Thing" />
         <variable
             name="ckickHandlers"
             type="com.prokonst.thingshouse.ThingDataFragment.ThingDataClickHandlers" />

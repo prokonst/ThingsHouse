@@ -1,6 +1,6 @@
 package com.prokonst.thingshouse.tools;
 
-import com.prokonst.thingshouse.model.Thing;
+import com.prokonst.thingshouse.model.tables.Thing;
 
 public class ShowThingsListParameters {
     private boolean isClearFilter;

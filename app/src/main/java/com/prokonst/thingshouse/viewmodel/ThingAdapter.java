@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.prokonst.thingshouse.R;
 import com.prokonst.thingshouse.databinding.ThingListItemBinding;
-import com.prokonst.thingshouse.model.Thing;
+import com.prokonst.thingshouse.model.tables.Thing;
 
 import java.util.ArrayList;
 import java.util.Comparator;

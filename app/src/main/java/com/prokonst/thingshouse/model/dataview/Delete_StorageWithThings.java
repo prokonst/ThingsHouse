@@ -1,4 +1,4 @@
-package com.prokonst.thingshouse.model;
+package com.prokonst.thingshouse.model.dataview;
 
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
@@ -6,6 +6,7 @@ import androidx.room.ColumnInfo;
 import androidx.room.Relation;
 
 
+import com.prokonst.thingshouse.model.tables.Thing;
 
 import java.io.Serializable;
 

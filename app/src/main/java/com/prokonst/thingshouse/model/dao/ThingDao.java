@@ -7,7 +7,7 @@ import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import com.prokonst.thingshouse.model.Thing;
+import com.prokonst.thingshouse.model.tables.Thing;
 
 import java.util.List;
 

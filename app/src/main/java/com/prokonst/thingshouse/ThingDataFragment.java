@@ -23,8 +23,8 @@ import android.widget.Toast;
 
 import com.prokonst.thingshouse.databinding.FragmentThingDataBinding;
 import com.prokonst.thingshouse.model.AppRepository;
-import com.prokonst.thingshouse.model.StorageItem;
-import com.prokonst.thingshouse.model.Thing;
+import com.prokonst.thingshouse.model.dataview.StorageItem;
+import com.prokonst.thingshouse.model.tables.Thing;
 import com.prokonst.thingshouse.tools.ItemsCollectionInterface;
 import com.prokonst.thingshouse.tools.ScanBarCodeLauncher;
 import com.prokonst.thingshouse.viewmodel.ThingsViewModel;

@@ -35,12 +35,12 @@
 
         <argument
             android:name="SourceThing"
-            app:argType="com.prokonst.thingshouse.model.Thing"
+            app:argType="com.prokonst.thingshouse.model.tables.Thing"
             app:nullable="true" />
 
         <argument
             android:name="TargetThing"
-            app:argType="com.prokonst.thingshouse.model.Thing"
+            app:argType="com.prokonst.thingshouse.model.tables.Thing"
             app:nullable="true" />
 
 
@@ -67,7 +67,7 @@
         tools:layout="@layout/fragment_thing_data">
         <argument
             android:name="SelectedThing"
-            app:argType="com.prokonst.thingshouse.model.Thing" />
+            app:argType="com.prokonst.thingshouse.model.tables.Thing" />
         <action
             android:id="@+id/action_thingDataFragment_to_SecondFragment"
             app:destination="@id/showThingsListFragment"/>

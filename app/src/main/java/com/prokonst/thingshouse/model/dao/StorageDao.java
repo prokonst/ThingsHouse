@@ -8,9 +8,9 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
 
-import com.prokonst.thingshouse.model.Delete_StorageWithThings;
-import com.prokonst.thingshouse.model.Storage;
-import com.prokonst.thingshouse.model.StorageItem;
+import com.prokonst.thingshouse.model.dataview.Delete_StorageWithThings;
+import com.prokonst.thingshouse.model.tables.Storage;
+import com.prokonst.thingshouse.model.dataview.StorageItem;
 
 import java.util.List;
 

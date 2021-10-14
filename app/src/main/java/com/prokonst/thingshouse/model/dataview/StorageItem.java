@@ -1,4 +1,4 @@
-package com.prokonst.thingshouse.model;
+package com.prokonst.thingshouse.model.dataview;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.BaseObservable;

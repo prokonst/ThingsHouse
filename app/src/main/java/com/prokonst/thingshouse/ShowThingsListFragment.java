@@ -24,7 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.prokonst.thingshouse.databinding.FragmentShowThingsListBinding;
 import com.prokonst.thingshouse.model.AppRepository;
-import com.prokonst.thingshouse.model.Thing;
+import com.prokonst.thingshouse.model.tables.Thing;
 import com.prokonst.thingshouse.tools.ScanBarCodeLauncher;
 import com.prokonst.thingshouse.tools.ShowThingsListParameters;
 import com.prokonst.thingshouse.viewmodel.ThingAdapter;
