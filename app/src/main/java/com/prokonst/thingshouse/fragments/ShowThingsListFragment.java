@@ -1,5 +1,6 @@
 package com.prokonst.thingshouse.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -73,8 +75,9 @@ public class ShowThingsListFragment extends Fragment {
             .setTargetThing(args.getTargetThing())
             .setQuantity(args.getQuantity());
 
-        if(showThingsListParameters.getIsClearFilter())
+        if(showThingsListParameters.getIsClearFilter()) {
             filter = "";
+        }
 
         setTitle(showThingsListParameters.getTitle());
 
@@ -120,7 +123,6 @@ public class ShowThingsListFragment extends Fragment {
         );
 
         textInputEditText = fragmentShowThingsListBinding.getRoot().findViewById(R.id.textInputEditText);
-        textInputEditText.setText(filter);
 
         return fragmentShowThingsListBinding.getRoot();
 
@@ -129,7 +131,6 @@ public class ShowThingsListFragment extends Fragment {
     private void setTitle(String title) {
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle(title);
     }
-
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -164,14 +165,14 @@ public class ShowThingsListFragment extends Fragment {
 
                             AppRepository appRepository = new AppRepository(ShowThingsListFragment.this.getActivity().getApplication());
                             appRepository.addQuantityToStorageByParentId(thing.getThingId(), showThingsListParameters.getSourceThing().getThingId(), showThingsListParameters.getQuantity());
-                        }/*
-                        NavDirections action = ShowThingsListFragmentDirections.actionShowThingsListFragmentSelf(
-                                true, "Browse things", "ViewThings", null, null, "0.0");
-                        NavHostFragment.findNavController(ShowThingsListFragment.this)
-                                .navigate(action);*/
+                        }
+                        NavController navController = NavHostFragment.findNavController(ShowThingsListFragment.this);
+
+                        navController.popBackStack(R.id.thingDataFragment, true);
+
                         NavDirections action = ShowThingsListFragmentDirections.actionShowThingsListFragmentToThingDataFragment(showThingsListParameters.getSourceThing());
-                        NavHostFragment.findNavController(ShowThingsListFragment.this)
-                                .navigate(action);
+                        navController.navigate(action);
+
                     }
                     else {
                         Toast.makeText(view.getContext(), "Unknown action type", Toast.LENGTH_LONG).show();
@@ -189,6 +190,8 @@ public class ShowThingsListFragment extends Fragment {
                 thingAdapter.getFilter().filter(filter);
             }
         });
+
+        textInputEditText.setText(filter);
     }
 
     @Override
@@ -196,6 +199,8 @@ public class ShowThingsListFragment extends Fragment {
         super.onDestroyView();
         fragmentShowThingsListBinding = null;
     }
+
+
 
     private void applyFilter(String newFilter){
         filter = newFilter;

@@ -166,7 +166,7 @@ public class ThingDataFragment extends Fragment {
                     .setCancelable(false)
                     .setPositiveButton("Delete ", (dialogBox, id) -> {
                         thingsViewModel.deleteThing(thing);
-                        NavDirections action = ThingDataFragmentDirections.actionThingDataFragmentToSecondFragment(
+                        NavDirections action = ThingDataFragmentDirections.actionThingDataFragmentToShowThingListFragment(
                                 true, "Browse things", "ViewThings", null, null, null);
                         NavHostFragment.findNavController(ThingDataFragment.this)
                                 .navigate(action);
@@ -188,7 +188,7 @@ public class ThingDataFragment extends Fragment {
                     (newValue, actionNameKey) -> {
                         if(actionNameKey.equals("Select")) {
 
-                            NavDirections action = ThingDataFragmentDirections.actionThingDataFragmentToSecondFragment(
+                            NavDirections action = ThingDataFragmentDirections.actionThingDataFragmentToShowThingListFragment(
                                     true, "Select storage for: " + thing.getName(), "AddThingTo", thing, null, newValue);
                             NavHostFragment.findNavController(ThingDataFragment.this)
                                     .navigate(action);
