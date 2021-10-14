@@ -126,7 +126,10 @@ public class ThingDataFragment extends Fragment {
     }
 
     private void setTitleActionBar(){
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Edit " + thing.getName());
+        AppCompatActivity appCompatActivity = (AppCompatActivity)getActivity();
+        if(appCompatActivity != null) {
+            appCompatActivity.getSupportActionBar().setTitle("Edit " + thing.getName());
+        }
     }
 
 

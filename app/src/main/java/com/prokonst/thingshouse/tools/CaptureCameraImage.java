@@ -10,10 +10,10 @@ import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
+import androidx.fragment.app.FragmentActivity;
 
 import com.prokonst.thingshouse.BuildConfig;
 import com.prokonst.thingshouse.model.AppRepository;
@@ -33,14 +33,14 @@ public class CaptureCameraImage {
     private Uri mOutputFileUri;
     private File mImageFile;
 
-    private AppCompatActivity mActivity;
+    private FragmentActivity mActivity;
     Thing mThing;
 
     private ActivityResultLauncher<Intent> startCaptureImageActivityResultLauncher;
 
     private static CaptureCameraImage captureCameraImage = null;
 
-    public static void setCaptureCameraImage(AppCompatActivity activity) {
+    public static void setCaptureCameraImage(FragmentActivity activity) {
         if(captureCameraImage == null){
             captureCameraImage = new CaptureCameraImage(activity);
         }
@@ -48,12 +48,6 @@ public class CaptureCameraImage {
             captureCameraImage.setmActivity(activity);
         }
     }
-/*
-    public static void registerResultLauncher(ActivityResultLauncher<Intent> launcher) {
-        if(captureCameraImage != null){
-            captureCameraImage = new CaptureCameraImage(activity);
-        }
-    }*/
 
 
     public static CaptureCameraImage getCaptureCameraImage(){
@@ -62,7 +56,7 @@ public class CaptureCameraImage {
     }
 
 
-    public CaptureCameraImage(AppCompatActivity activity) {
+    public CaptureCameraImage(FragmentActivity activity) {
         setmActivity(activity);
 
         appRepository = new AppRepository(activity.getApplication());
@@ -81,7 +75,7 @@ public class CaptureCameraImage {
 
     }
 
-    public void setmActivity(AppCompatActivity mActivity) {
+    public void setmActivity(FragmentActivity mActivity) {
         this.mActivity = mActivity;
 
         startCaptureImageActivityResultLauncher = mActivity.registerForActivityResult(
