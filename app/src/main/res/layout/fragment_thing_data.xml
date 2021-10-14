@@ -9,13 +9,13 @@
             type="com.prokonst.thingshouse.model.tables.Thing" />
         <variable
             name="ckickHandlers"
-            type="com.prokonst.thingshouse.ThingDataFragment.ThingDataClickHandlers" />
+            type="com.prokonst.thingshouse.fragments.ThingDataFragment.ThingDataClickHandlers" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ThingDataFragment">
+        tools:context=".fragments.ThingDataFragment">
 
         <TextView
             android:id="@+id/nameTextView"

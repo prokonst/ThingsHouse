@@ -6,7 +6,7 @@
     <data>
         <variable
             name="thingsListClickHandlers"
-            type="com.prokonst.thingshouse.ShowThingsListFragment.ThingsListClickHandlers" />
+            type="com.prokonst.thingshouse.fragments.ShowThingsListFragment.ThingsListClickHandlers" />
     </data>
 
 
@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".ShowThingsListFragment">
+        tools:context=".fragments.ShowThingsListFragment">
 
 
         <androidx.recyclerview.widget.RecyclerView

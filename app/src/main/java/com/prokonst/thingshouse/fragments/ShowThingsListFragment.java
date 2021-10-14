@@ -1,4 +1,4 @@
-package com.prokonst.thingshouse;
+package com.prokonst.thingshouse.fragments;
 
 import android.content.Intent;
 import android.os.Build;
@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textfield.TextInputEditText;
+import com.prokonst.thingshouse.R;
 import com.prokonst.thingshouse.databinding.FragmentShowThingsListBinding;
 import com.prokonst.thingshouse.model.AppRepository;
 import com.prokonst.thingshouse.model.tables.Thing;
