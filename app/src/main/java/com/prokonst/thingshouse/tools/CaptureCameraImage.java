@@ -2,6 +2,7 @@ package com.prokonst.thingshouse.tools;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.provider.MediaStore;
@@ -47,6 +48,13 @@ public class CaptureCameraImage {
             captureCameraImage.setmActivity(activity);
         }
     }
+/*
+    public static void registerResultLauncher(ActivityResultLauncher<Intent> launcher) {
+        if(captureCameraImage != null){
+            captureCameraImage = new CaptureCameraImage(activity);
+        }
+    }*/
+
 
     public static CaptureCameraImage getCaptureCameraImage(){
 
@@ -116,6 +124,7 @@ public class CaptureCameraImage {
         try {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             intent.putExtra(MediaStore.EXTRA_OUTPUT, mOutputFileProviderUri);
+            intent.putExtra(MediaStore.EXTRA_SCREEN_ORIENTATION, ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             startCaptureImageActivityResultLauncher.launch(intent);
         }
         catch (Exception ex){
