@@ -217,8 +217,8 @@ public class ShowThingsListFragment extends Fragment {
                 Toast.makeText(ShowThingsListFragment.this.getContext(), "Input new name", Toast.LENGTH_LONG).show();
                 return;
             }
-
-            Thing newThing = new Thing(Utils.generateUUIDStr(), "шт", "<" + newName + ">", newName, "");
+            String newThingId = Utils.generateUUIDStr();
+            Thing newThing = new Thing(newThingId, "шт", newThingId, newName, "");
             thingsViewModel.addNewThing(newThing);
             applyFilter(newName);
 
