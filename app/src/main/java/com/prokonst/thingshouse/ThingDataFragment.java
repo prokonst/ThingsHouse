@@ -22,6 +22,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.prokonst.thingshouse.databinding.FragmentThingDataBinding;
+import com.prokonst.thingshouse.dialog.AddThingToStorageDialog;
+import com.prokonst.thingshouse.dialog.ChangeThingValueDialog;
 import com.prokonst.thingshouse.model.AppRepository;
 import com.prokonst.thingshouse.model.dataview.StorageItem;
 import com.prokonst.thingshouse.model.tables.Thing;

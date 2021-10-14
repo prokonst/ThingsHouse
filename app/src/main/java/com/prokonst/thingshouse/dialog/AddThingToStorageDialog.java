@@ -1,19 +1,15 @@
-package com.prokonst.thingshouse;
+package com.prokonst.thingshouse.dialog;
 
         import android.app.AlertDialog;
         import android.content.Context;
         import android.content.DialogInterface;
-        import android.text.TextUtils;
         import android.view.LayoutInflater;
         import android.view.View;
         import android.widget.EditText;
         import android.widget.TextView;
         import android.widget.Toast;
 
-        import androidx.navigation.NavDirections;
-        import androidx.navigation.fragment.NavHostFragment;
-
-        import java.util.Locale;
+        import com.prokonst.thingshouse.R;
 
 public class AddThingToStorageDialog {
 

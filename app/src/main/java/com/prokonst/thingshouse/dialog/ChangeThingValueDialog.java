@@ -1,14 +1,15 @@
-package com.prokonst.thingshouse;
+package com.prokonst.thingshouse.dialog;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.prokonst.thingshouse.R;
 
 import java.util.Locale;
 

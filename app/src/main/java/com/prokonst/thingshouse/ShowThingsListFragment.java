@@ -167,7 +167,7 @@ public class ShowThingsListFragment extends Fragment {
                                 true, "Browse things", "ViewThings", null, null, "0.0");
                         NavHostFragment.findNavController(ShowThingsListFragment.this)
                                 .navigate(action);*/
-                        NavDirections action = ShowThingsListFragmentDirections.actionShowThingsListFragmentToThingDataFragment(thing);
+                        NavDirections action = ShowThingsListFragmentDirections.actionShowThingsListFragmentToThingDataFragment(showThingsListParameters.getSourceThing());
                         NavHostFragment.findNavController(ShowThingsListFragment.this)
                                 .navigate(action);
                     }

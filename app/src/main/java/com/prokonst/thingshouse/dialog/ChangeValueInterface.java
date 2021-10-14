@@ -1,4 +1,4 @@
-package com.prokonst.thingshouse;
+package com.prokonst.thingshouse.dialog;
 
 public interface ChangeValueInterface {
 
