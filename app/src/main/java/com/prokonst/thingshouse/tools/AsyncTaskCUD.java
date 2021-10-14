@@ -1,11 +1,12 @@
-package com.prokonst.thingshouse.model;
+package com.prokonst.thingshouse.tools;
 
-import android.app.AlertDialog;
 import android.app.Application;
 import android.database.sqlite.SQLiteConstraintException;
 import android.os.AsyncTask;
 import android.view.Gravity;
 import android.widget.Toast;
+
+import com.prokonst.thingshouse.tools.DoInBackgroundInterface;
 
 public class AsyncTaskCUD extends AsyncTask<Void, Void, Void> {
     private boolean onPostExecuteCalled = false;

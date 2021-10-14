@@ -10,6 +10,7 @@ import com.prokonst.thingshouse.model.dataview.Delete_StorageWithThings;
 import com.prokonst.thingshouse.model.dataview.StorageItem;
 import com.prokonst.thingshouse.model.tables.Storage;
 import com.prokonst.thingshouse.model.tables.Thing;
+import com.prokonst.thingshouse.tools.AsyncTaskCUD;
 
 import java.util.List;
 
