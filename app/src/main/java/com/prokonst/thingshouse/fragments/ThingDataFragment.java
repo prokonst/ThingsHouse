@@ -21,7 +21,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.prokonst.thingshouse.CaptureCameraImage;
+import com.prokonst.thingshouse.tools.CaptureCameraImage;
 import com.prokonst.thingshouse.R;
 import com.prokonst.thingshouse.databinding.FragmentThingDataBinding;
 import com.prokonst.thingshouse.dialog.AddThingToStorageDialog;

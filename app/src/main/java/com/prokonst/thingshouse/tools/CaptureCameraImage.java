@@ -1,4 +1,4 @@
-package com.prokonst.thingshouse;
+package com.prokonst.thingshouse.tools;
 
 import android.Manifest;
 import android.content.Intent;
@@ -14,9 +14,9 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
+import com.prokonst.thingshouse.BuildConfig;
 import com.prokonst.thingshouse.model.AppRepository;
 import com.prokonst.thingshouse.model.tables.Thing;
-import com.prokonst.thingshouse.tools.Utils;
 
 import java.io.File;
 import java.io.IOException;

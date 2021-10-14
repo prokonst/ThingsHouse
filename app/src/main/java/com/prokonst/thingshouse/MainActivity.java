@@ -14,6 +14,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.prokonst.thingshouse.databinding.ActivityMainBinding;
+import com.prokonst.thingshouse.tools.CaptureCameraImage;
 
 import android.view.Menu;
 import android.view.MenuItem;
