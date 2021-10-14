@@ -6,7 +6,7 @@ import androidx.databinding.Bindable;
 import androidx.room.ColumnInfo;
 import androidx.room.Ignore;
 
-import com.prokonst.thingshouse.Utils;
+import com.prokonst.thingshouse.tools.Utils;
 
 import java.io.Serializable;
 

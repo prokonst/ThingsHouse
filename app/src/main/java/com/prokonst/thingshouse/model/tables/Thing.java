@@ -10,7 +10,7 @@ import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 
-import com.prokonst.thingshouse.Utils;
+import com.prokonst.thingshouse.tools.Utils;
 
 import java.io.Serializable;
 

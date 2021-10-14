@@ -3,7 +3,7 @@ package com.prokonst.thingshouse.model;
 import android.app.Application;
 import androidx.lifecycle.LiveData;
 
-import com.prokonst.thingshouse.Utils;
+import com.prokonst.thingshouse.tools.Utils;
 import com.prokonst.thingshouse.model.dao.StorageDao;
 import com.prokonst.thingshouse.model.dao.ThingDao;
 import com.prokonst.thingshouse.model.dataview.Delete_StorageWithThings;

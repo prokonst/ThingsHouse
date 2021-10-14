@@ -1,4 +1,4 @@
-package com.prokonst.thingshouse;
+package com.prokonst.thingshouse.tools;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -7,8 +7,7 @@ import android.media.ExifInterface;
 import android.os.Environment;
 import android.util.Log;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentActivity;
+import com.prokonst.thingshouse.MainActivity;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -26,7 +25,7 @@ public class Utils {
         String appFolderPath = Environment.getExternalStorageDirectory().toString()
                 + "/Android/media/"
                 //+ activity.getApplicationContext().getPackageName()
-                + Utils.class.getPackage().getName()
+                + MainActivity.class.getPackage().getName()
                 + "/Images";
 
         return  appFolderPath;
