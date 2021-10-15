@@ -96,9 +96,9 @@ public class ShowThingsListFragment extends Fragment {
 
         fragmentShowThingsListBinding = FragmentShowThingsListBinding.inflate(inflater, container, false);
 
-        thingsViewModel = new ViewModelProvider
-                .AndroidViewModelFactory(getActivity().getApplication())
-                .create(ThingsViewModel.class);
+        thingsViewModel = new ViewModelProvider(this).get(ThingsViewModel.class);
+                //.AndroidViewModelFactory(getActivity().getApplication())
+                //.create();
 
         thingsListClickHandlers = new ThingsListClickHandlers();
         fragmentShowThingsListBinding.setThingsListClickHandlers(thingsListClickHandlers);
