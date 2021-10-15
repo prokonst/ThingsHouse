@@ -30,15 +30,6 @@ public class ThingsViewModel extends AndroidViewModel {
         things = appRepository.getThings();
         return things;
     }
-/*
-    public LiveData<List<Thing>> getThings(String namePart) {
-        things = appRepository.getThings(namePart);
-        return things;
-    }*/
-/*
-    public List<Thing> getThingsByBarCode(String barCode) {
-        return appRepository.getThingsByBarCode(barCode);
-    }*/
 
     public void addNewThing(Thing thing){
         appRepository.insertThing(thing);

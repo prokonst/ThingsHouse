@@ -6,11 +6,12 @@ import androidx.databinding.Bindable;
 import androidx.room.ColumnInfo;
 import androidx.room.Ignore;
 
+import com.prokonst.thingshouse.model.tables.Storage;
 import com.prokonst.thingshouse.tools.Utils;
 
 import java.io.Serializable;
 
-public class StorageItem extends BaseObservable implements Serializable {
+public class StorageRecord extends BaseObservable implements Serializable {
     @ColumnInfo(name = "storage_id")
     private String storageId;
 
@@ -32,8 +33,8 @@ public class StorageItem extends BaseObservable implements Serializable {
     @Ignore
     private String mainPhotoSrc;
 
-    public StorageItem(@NonNull String storageId, String parentId, String childId, double quantity,
-                       String thingId, String unit, String barCode, String name, String mainPhotoId) {
+    public StorageRecord(@NonNull String storageId, String parentId, String childId, double quantity,
+                         String thingId, String unit, String barCode, String name, String mainPhotoId) {
         this.storageId = storageId;
         this.parentId = parentId;
         this.childId = childId;
@@ -44,6 +45,12 @@ public class StorageItem extends BaseObservable implements Serializable {
         this.name = name;
         this.mainPhotoId = mainPhotoId;
         this.mainPhotoSrc = Utils.getImagePreviewPath(mainPhotoId);
+    }
+
+    public Storage createStorage() {
+        Storage storage = new Storage(this.storageId, this.parentId, this.childId, this.quantity);
+
+        return storage;
     }
 
     @Bindable

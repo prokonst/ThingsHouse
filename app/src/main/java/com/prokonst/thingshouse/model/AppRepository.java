@@ -3,11 +3,11 @@ package com.prokonst.thingshouse.model;
 import android.app.Application;
 import androidx.lifecycle.LiveData;
 
+import com.prokonst.thingshouse.model.dataview.StorageRecord;
 import com.prokonst.thingshouse.tools.Utils;
 import com.prokonst.thingshouse.model.dao.StorageDao;
 import com.prokonst.thingshouse.model.dao.ThingDao;
 import com.prokonst.thingshouse.model.dataview.Delete_StorageWithThings;
-import com.prokonst.thingshouse.model.dataview.StorageItem;
 import com.prokonst.thingshouse.model.tables.Storage;
 import com.prokonst.thingshouse.model.tables.Thing;
 import com.prokonst.thingshouse.tools.AsyncTaskCUD;
@@ -90,12 +90,12 @@ public class AppRepository {
         return storageDao.getStoragesWithTingsByChildId(childId);
     }
 
-    public LiveData<List<StorageItem>> getStorageItemsByParentId(String parentId) {
-        return storageDao.getStorageItemsByParentId(parentId);
+    public LiveData<List<StorageRecord>> getStorageRecordsByParentId(String parentId) {
+        return storageDao.getStorageRecordsByParentId(parentId);
     }
 
-    public LiveData<List<StorageItem>> getStorageItemsByChildId(String childId) {
-        return storageDao.getStorageItemsByChildId(childId);
+    public LiveData<List<StorageRecord>> getStorageRecordsByChildId(String childId) {
+        return storageDao.getStorageRecordsByChildId(childId);
     }
 
     public void insertStorage(Storage storage) {

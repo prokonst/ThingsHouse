@@ -22,13 +22,13 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.prokonst.thingshouse.model.dataview.StorageRecord;
 import com.prokonst.thingshouse.tools.CaptureCameraImage;
 import com.prokonst.thingshouse.R;
 import com.prokonst.thingshouse.databinding.FragmentThingDataBinding;
 import com.prokonst.thingshouse.dialog.AddThingToStorageDialog;
 import com.prokonst.thingshouse.dialog.ChangeThingValueDialog;
 import com.prokonst.thingshouse.model.AppRepository;
-import com.prokonst.thingshouse.model.dataview.StorageItem;
 import com.prokonst.thingshouse.model.tables.Thing;
 import com.prokonst.thingshouse.tools.ItemsCollectionInterface;
 import com.prokonst.thingshouse.tools.ScanBarCodeLauncher;
@@ -211,11 +211,11 @@ public class ThingDataFragment extends Fragment {
         }
         public void onWhereUsed(View view) {
             AppRepository appRepository = new AppRepository(ThingDataFragment.this.getActivity().getApplication());
-            showItems(view, () ->  appRepository.getStorageItemsByChildId(thing.getThingId())  );
+            showItems(view, () ->  appRepository.getStorageRecordsByChildId(thing.getThingId())  );
         }
         public void onItems(View view) {
             AppRepository appRepository = new AppRepository(ThingDataFragment.this.getActivity().getApplication());
-            showItems(view, () -> appRepository.getStorageItemsByParentId(thing.getThingId())  );
+            showItems(view, () -> appRepository.getStorageRecordsByParentId(thing.getThingId())  );
         }
 
         private void showItems(View view, ItemsCollectionInterface itemsCollection) {
@@ -225,14 +225,14 @@ public class ThingDataFragment extends Fragment {
                 } else {
                     StringBuilder sb = new StringBuilder();
 
-                    for(StorageItem curStorageItem : listStorageItems) {
+                    for(StorageRecord curStorageRecord : listStorageItems) {
 
                         sb.append("-----\n");
-                        sb.append("Name = " + curStorageItem.getName());
+                        sb.append("Name = " + curStorageRecord.getName());
                         sb.append("\n");
-                        sb.append("Quantity = " + Double.toString(curStorageItem.getQuantity()));
+                        sb.append("Quantity = " + Double.toString(curStorageRecord.getQuantity()));
                         sb.append("\n");
-                        sb.append("Unit = " + curStorageItem.getUnit());
+                        sb.append("Unit = " + curStorageRecord.getUnit());
                         sb.append("-----\n");
                     }
 

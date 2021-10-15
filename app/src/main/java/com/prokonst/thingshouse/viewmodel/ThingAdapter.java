@@ -12,7 +12,7 @@ import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.prokonst.thingshouse.R;
-import com.prokonst.thingshouse.databinding.ThingListItemBinding;
+import com.prokonst.thingshouse.databinding.ItemThingListBinding;
 import com.prokonst.thingshouse.model.tables.Thing;
 
 import java.util.ArrayList;
@@ -29,18 +29,18 @@ public class ThingAdapter extends RecyclerView.Adapter<ThingAdapter.ThingViewHol
     @Override
     public ThingViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        ThingListItemBinding thingListItemBinding = DataBindingUtil.inflate(
-                LayoutInflater.from(parent.getContext()), R.layout.thing_list_item,
+        ItemThingListBinding itemThingListBinding = DataBindingUtil.inflate(
+                LayoutInflater.from(parent.getContext()), R.layout.item_thing_list,
                 parent, false
         );
 
-        return new ThingViewHolder(thingListItemBinding);
+        return new ThingViewHolder(itemThingListBinding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ThingViewHolder holder, int position) {
         Thing thing = thingArrayListFiltered.get(position);
-        holder.thingListItemBinding.setThing(thing);
+        holder.itemThingListBinding.setThing(thing);
     }
 
     @Override
@@ -86,13 +86,13 @@ public class ThingAdapter extends RecyclerView.Adapter<ThingAdapter.ThingViewHol
 
     class ThingViewHolder extends RecyclerView.ViewHolder {
 
-        ThingListItemBinding thingListItemBinding;
+        ItemThingListBinding itemThingListBinding;
 
-        public ThingViewHolder(@NonNull ThingListItemBinding thingListItemBinding) {
-            super(thingListItemBinding.getRoot());
+        public ThingViewHolder(@NonNull ItemThingListBinding itemThingListBinding) {
+            super(itemThingListBinding.getRoot());
 
-            this.thingListItemBinding = thingListItemBinding;
-            thingListItemBinding.getRoot().setOnClickListener( (view) -> {
+            this.itemThingListBinding = itemThingListBinding;
+            itemThingListBinding.getRoot().setOnClickListener( (view) -> {
                     int position = getAdapterPosition();
                     if(onItemClickListener != null && position != RecyclerView.NO_POSITION) {
                         onItemClickListener.onItemClick(thingArrayListFiltered.get(position));
