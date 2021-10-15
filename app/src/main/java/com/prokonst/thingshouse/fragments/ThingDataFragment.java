@@ -9,6 +9,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -127,9 +128,14 @@ public class ThingDataFragment extends Fragment {
 
     private void setTitleActionBar(){
         AppCompatActivity appCompatActivity = (AppCompatActivity)getActivity();
-        if(appCompatActivity != null) {
-            appCompatActivity.getSupportActionBar().setTitle("Edit " + thing.getName());
-        }
+        if(appCompatActivity == null)
+            return;
+
+        ActionBar actionBar = appCompatActivity.getSupportActionBar();
+        if(actionBar == null)
+            return;
+
+        actionBar.setTitle("Edit " + thing.getName());
     }
 
 

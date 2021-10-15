@@ -50,7 +50,7 @@ public class ShowThingsListFragment extends Fragment {
 
     private TextInputEditText textInputEditText;
 
-    private static String filter = "";
+    private String filter = "";
     private ShowThingsListParameters showThingsListParameters;
 
     private ActivityResultLauncher<Intent> startBarCodeScannerActivityResultLauncher;
