@@ -5,110 +5,105 @@
     
     <data>
         <variable
-            name="storageRecord"
-            type="com.prokonst.thingshouse.model.dataview.StorageRecord" />
+            name="storageRecordItemProvider"
+            type="com.prokonst.thingshouse.viewmodel.StorageRecordItemProvider" />
     </data>
-    
-    <androidx.cardview.widget.CardView
+
+    <com.chauthai.swipereveallayout.SwipeRevealLayout
+        android:id="@+id/swipelayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="3dp"
-        app:cardCornerRadius="4dp">
+        app:dragEdge="right"
+        app:mode="same_level"
+        app:flingVelocity="@integer/material_motion_duration_short_1">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/editTextView"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:layout_margin="8dp"
+                android:onClick="@{storageRecordItemProvider::clearQuantity}"
+                android:text="CLEAR" />
+
+        </LinearLayout>
+
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp">
+            android:layout_margin="3dp"
+            android:onClick="@{storageRecordItemProvider::showThing}"
+            app:cardCornerRadius="4dp">
 
-            <TextView
-                android:id="@+id/nameTextView"
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="ThingName"
-                android:text="@{storageRecord.name}"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:padding="8dp">
 
-            <ImageView
-                android:id="@+id/mainPhotoImageView"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:src="@{storageRecord.mainPhotoSrc}"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/nameTextView" />
+                <TextView
+                    android:id="@+id/nameTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="ThingName"
+                    android:text="@{storageRecordItemProvider.storageRecord.name}"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/barCodeTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="BarCode"
-                android:text="@{storageRecord.barCode}"
-                android:textSize="10sp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/mainPhotoImageView" />
+                <ImageView
+                    android:id="@+id/mainPhotoImageView"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:src="@{storageRecordItemProvider.storageRecord.mainPhotoSrc}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/nameTextView" />
 
-            <TextView
-                android:id="@+id/quantityTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="Quantity"
-                android:text="@{Double.toString(storageRecord.quantity)}"
-                android:textSize="16sp"
-                android:layout_marginLeft="8dp"
-                app:layout_constraintBottom_toBottomOf="@+id/mainPhotoImageView"
-                app:layout_constraintStart_toEndOf="@+id/mainPhotoImageView"
-                app:layout_constraintTop_toTopOf="@+id/mainPhotoImageView" />
+                <TextView
+                    android:id="@+id/barCodeTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="BarCode"
+                    android:text="@{storageRecordItemProvider.storageRecord.barCode}"
+                    android:textSize="10sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/mainPhotoImageView" />
 
-            <TextView
-                android:id="@+id/unitTextView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:hint="Unit"
-                android:text="@{storageRecord.unit}"
-                android:textSize="16sp"
-                android:layout_marginLeft="8dp"
-                app:layout_constraintBottom_toBottomOf="@+id/quantityTextView"
-                app:layout_constraintStart_toEndOf="@+id/quantityTextView"
-                app:layout_constraintTop_toTopOf="@+id/quantityTextView" />
+                <TextView
+                    android:id="@+id/quantityTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="Quantity"
+                    android:text="@{Double.toString(storageRecordItemProvider.storageRecord.quantity)}"
+                    android:textSize="16sp"
+                    android:layout_marginLeft="8dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/mainPhotoImageView"
+                    app:layout_constraintStart_toEndOf="@+id/mainPhotoImageView"
+                    app:layout_constraintTop_toTopOf="@+id/mainPhotoImageView" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-        <!--
-        <LinearLayout
-            android:orientation="vertical"
-            android:padding="8dp"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+                <TextView
+                    android:id="@+id/unitTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:hint="Unit"
+                    android:text="@{storageRecordItemProvider.storageRecord.unit}"
+                    android:textSize="16sp"
+                    android:layout_marginLeft="8dp"
+                    app:layout_constraintBottom_toBottomOf="@+id/quantityTextView"
+                    app:layout_constraintStart_toEndOf="@+id/quantityTextView"
+                    app:layout_constraintTop_toTopOf="@+id/quantityTextView" />
 
-            <TextView
-                android:id="@+id/nameTextView"
-                android:text="@{storageRecord.name}"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-            <TextView
-                android:id="@+id/unitTextView"
-                android:text="@{storageRecord.unit}"
-                android:textSize="10sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
-            <ImageView
-                android:id="@+id/mainPhotoImageView"
-                android:layout_width="150dp"
-                android:layout_height="150dp"
-                android:src="@{storageRecord.mainPhotoSrc}"
-                />
-            <TextView
-                android:id="@+id/barCodeTextView"
-                android:text="@{storageRecord.barCode}"
-                android:textSize="10sp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-        </LinearLayout>-->
+        </androidx.cardview.widget.CardView>
 
-    </androidx.cardview.widget.CardView>
+
+    </com.chauthai.swipereveallayout.SwipeRevealLayout>
+    
+
 
 </layout>

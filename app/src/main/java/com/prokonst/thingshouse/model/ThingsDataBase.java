@@ -14,7 +14,7 @@ import com.prokonst.thingshouse.model.dao.ThingDao;
 import com.prokonst.thingshouse.model.tables.Storage;
 import com.prokonst.thingshouse.model.tables.Thing;
 
-@Database(entities = {Thing.class, Storage.class}, version = 1)
+@Database(entities = {Thing.class, Storage.class}, version = 1, exportSchema = false)
 public abstract class ThingsDataBase extends RoomDatabase {
 
     private static ThingsDataBase instance;

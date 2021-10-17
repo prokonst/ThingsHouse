@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.prokonst.thingshouse.R;
 import com.prokonst.thingshouse.databinding.ItemStoragerecordListBinding;
+import com.prokonst.thingshouse.model.AppRepository;
 import com.prokonst.thingshouse.model.dataview.StorageRecord;
 
 import java.util.ArrayList;
@@ -21,9 +22,14 @@ import java.util.Comparator;
 public class StorageRecordAdapter extends RecyclerView.Adapter<StorageRecordAdapter.StorageRecordViewHolder>
         implements Filterable {
 
-    private OnItemClickListener onItemClickListener;
+    private AppRepository appRepository;
+
     private ArrayList<StorageRecord> storageRecordArrayList = new ArrayList<>();
     private ArrayList<StorageRecord> storageRecordArrayListFiltered = new ArrayList<>();
+
+    public StorageRecordAdapter(AppRepository appRepository) {
+        this.appRepository = appRepository;
+    }
 
     @NonNull
     @Override
@@ -40,7 +46,7 @@ public class StorageRecordAdapter extends RecyclerView.Adapter<StorageRecordAdap
     @Override
     public void onBindViewHolder(@NonNull StorageRecordViewHolder holder, int position) {
         StorageRecord storageRecord = storageRecordArrayListFiltered.get(position);
-        holder.itemStorageRecordListBinding.setStorageRecord(storageRecord);
+        holder.itemStorageRecordListBinding.setStorageRecordItemProvider(new StorageRecordItemProvider(appRepository, storageRecord));
     }
 
     @Override
@@ -92,24 +98,8 @@ public class StorageRecordAdapter extends RecyclerView.Adapter<StorageRecordAdap
             super(itemStorageRecordListBinding.getRoot());
 
             this.itemStorageRecordListBinding = itemStorageRecordListBinding;
-            itemStorageRecordListBinding.getRoot().setOnClickListener( (view) -> {
-                int position = getAdapterPosition();
-                if(onItemClickListener != null && position != RecyclerView.NO_POSITION) {
-                    onItemClickListener.onItemClick(storageRecordArrayListFiltered.get(position));
-                }
-            });
         }
     }
-
-    public interface OnItemClickListener {
-        void onItemClick(StorageRecord storageRecord);
-    }
-
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
-    }
-
-
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void setStorageRecordArrayList(ArrayList<StorageRecord> storageRecordArrayList) {

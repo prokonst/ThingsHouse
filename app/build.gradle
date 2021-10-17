@@ -67,4 +67,7 @@ dependencies {
 
     //For scanBarCode
     implementation 'com.journeyapps:zxing-android-embedded:3.4.0'
+
+    //For swipe
+    implementation 'com.chauthai.swipereveallayout:swipe-reveal-layout:1.4.1'
 }

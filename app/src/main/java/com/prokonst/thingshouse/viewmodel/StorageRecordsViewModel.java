@@ -26,6 +26,10 @@ public class StorageRecordsViewModel extends AndroidViewModel {
         appRepository = new AppRepository(application);
     }
 
+    public AppRepository getAppRepository() {
+        return appRepository;
+    }
+
     public LiveData<List<StorageRecord>> getStorageRecordsByParentId(String parentId) {
         storageRecords = appRepository.getStorageRecordsByParentId(parentId);
         return storageRecords;

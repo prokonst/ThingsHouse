@@ -72,7 +72,7 @@ public class ShowStorageRecordsFragment extends Fragment {
         storageRecordRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         storageRecordRecyclerView.setHasFixedSize(true);
 
-        storageRecordAdapter = new StorageRecordAdapter();
+        storageRecordAdapter = new StorageRecordAdapter(storageRecordsViewModel.getAppRepository());
         storageRecordRecyclerView.setAdapter(storageRecordAdapter);
 
         LiveData<List<StorageRecord>> storageRecords;
@@ -85,30 +85,6 @@ public class ShowStorageRecordsFragment extends Fragment {
             Toast.makeText(this.getContext(), "Unknown report type: " + fragmentInputParams.getReportType(), Toast.LENGTH_SHORT).show();
             return;
         }
-
-        storageRecordAdapter.setOnItemClickListener(
-                (storageRecord) -> {
-                    NavDirections action = ShowStorageRecordsFragmentDirections
-                            .actionShowStorageRecordsFragmentToThingDataFragment(storageRecord.createThing());
-                    NavHostFragment.findNavController(ShowStorageRecordsFragment.this)
-                            .navigate(action);
-                }
-        );
-
-//        ItemTouchHelper.SimpleCallback itemTouchHelperSimpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
-//            @Override
-//            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
-//                return false;
-//            }
-//
-//            @Override
-//            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
-//                Toast.makeText(ShowStorageRecordsFragment.this.getContext(), "" + direction, Toast.LENGTH_SHORT).show();
-//            }
-//        };
-//
-//        new ItemTouchHelper(itemTouchHelperSimpleCallback).attachToRecyclerView(storageRecordRecyclerView);
-
 
         storageRecords.observe(this.getViewLifecycleOwner(), new Observer<List<StorageRecord>>() {
                 @Override
