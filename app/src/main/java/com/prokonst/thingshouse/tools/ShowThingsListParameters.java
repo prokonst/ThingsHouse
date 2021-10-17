@@ -2,7 +2,9 @@ package com.prokonst.thingshouse.tools;
 
 import com.prokonst.thingshouse.model.tables.Thing;
 
-public class ShowThingsListParameters {
+import java.io.Serializable;
+
+public class ShowThingsListParameters implements Serializable {
     private boolean isClearFilter;
     private String title;
     private String actionType;
@@ -17,6 +19,16 @@ public class ShowThingsListParameters {
         this.sourceThing = null;
         this.targetThing = null;
         this.quantity = 0;
+    }
+
+    public ShowThingsListParameters(boolean isClearFilter, String title, String actionType,
+                                    Thing sourceThing, Thing targetThing, double quantity) {
+        this.isClearFilter = isClearFilter;
+        this.title = title;
+        this.actionType = actionType;
+        this.sourceThing = sourceThing;
+        this.targetThing = targetThing;
+        this.quantity = quantity;
     }
 
     public boolean getIsClearFilter() {

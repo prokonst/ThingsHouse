@@ -11,6 +11,7 @@ import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.prokonst.thingshouse.databinding.FragmentFirstBinding;
+import com.prokonst.thingshouse.tools.ShowThingsListParameters;
 
 public class FirstFragment extends Fragment {
 
@@ -35,7 +36,8 @@ public class FirstFragment extends Fragment {
             public void onClick(View view) {
 
                 NavDirections action = FirstFragmentDirections.actionFirstFragmentToShowThingsListFragment(
-                        false, "Browse things", "ViewThings", null, null, null);
+                        new ShowThingsListParameters(false, "Browse things",
+                                "ViewThings", null, null, 0) );
                 NavHostFragment.findNavController(FirstFragment.this)
                         .navigate(action);
             }

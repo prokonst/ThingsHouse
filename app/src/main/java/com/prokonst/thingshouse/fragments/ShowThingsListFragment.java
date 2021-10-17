@@ -67,13 +67,7 @@ public class ShowThingsListFragment extends Fragment {
     ) {
 
         ShowThingsListFragmentArgs args = ShowThingsListFragmentArgs.fromBundle(getArguments());
-        showThingsListParameters = (new ShowThingsListParameters())
-            .setIsClearFilter(args.getIsClearFilter())
-            .setTitle(args.getTitle())
-            .setActionType(args.getActionType())
-            .setSourceThing(args.getSourceThing())
-            .setTargetThing(args.getTargetThing())
-            .setQuantity(args.getQuantity());
+        showThingsListParameters = args.getShowThingsListParameters();
 
         if(showThingsListParameters.getIsClearFilter()) {
             filter = "";

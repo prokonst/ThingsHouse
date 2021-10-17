@@ -22,27 +22,8 @@
         tools:layout="@layout/fragment_show_things_list">
 
         <argument
-            android:name="IsClearFilter"
-            app:argType="boolean"/>
-
-        <argument
-            android:name="Title"
-            app:argType="string" />
-
-        <argument
-            android:name="ActionType"
-            app:argType="string" />
-
-        <argument
-            android:name="SourceThing"
-            app:argType="com.prokonst.thingshouse.model.tables.Thing"
-            app:nullable="true" />
-
-        <argument
-            android:name="TargetThing"
-            app:argType="com.prokonst.thingshouse.model.tables.Thing"
-            app:nullable="true" />
-
+            android:name="ShowThingsListParameters"
+            app:argType="com.prokonst.thingshouse.tools.ShowThingsListParameters"/>
 
         <action
             android:id="@+id/action_ShowThingsListFragment_to_FirstFragment"
@@ -50,10 +31,6 @@
         <action
             android:id="@+id/action_ShowThingsListFragment_to_thingDataFragment"
             app:destination="@id/thingDataFragment"/>
-        <argument
-            android:name="Quantity"
-            app:argType="string"
-            app:nullable="true" />
         <action
             android:id="@+id/action_showThingsListFragment_self"
             app:destination="@id/showThingsListFragment" />

@@ -32,6 +32,7 @@ import com.prokonst.thingshouse.model.AppRepository;
 import com.prokonst.thingshouse.model.tables.Thing;
 import com.prokonst.thingshouse.tools.ItemsCollectionInterface;
 import com.prokonst.thingshouse.tools.ScanBarCodeLauncher;
+import com.prokonst.thingshouse.tools.ShowThingsListParameters;
 import com.prokonst.thingshouse.viewmodel.ThingsViewModel;
 
 
@@ -173,7 +174,8 @@ public class ThingDataFragment extends Fragment {
                     .setPositiveButton("Delete ", (dialogBox, id) -> {
                         thingsViewModel.deleteThing(thing);
                         NavDirections action = ThingDataFragmentDirections.actionThingDataFragmentToShowThingListFragment(
-                                true, "Browse things", "ViewThings", null, null, null);
+                                new ShowThingsListParameters(true, "Browse things",
+                                        "ViewThings", null, null, 0) );
                         NavHostFragment.findNavController(ThingDataFragment.this)
                                 .navigate(action);
                     })
@@ -195,7 +197,9 @@ public class ThingDataFragment extends Fragment {
                         if(actionNameKey.equals("Select")) {
 
                             NavDirections action = ThingDataFragmentDirections.actionThingDataFragmentToShowThingListFragment(
-                                    true, "Select storage for: " + thing.getName(), "AddThingTo", thing, null, newValue);
+                                    new ShowThingsListParameters(
+                                    true, "Select storage for: " + thing.getName(),
+                                    "AddThingTo", thing, null, Double.parseDouble(newValue)) );
                             NavHostFragment.findNavController(ThingDataFragment.this)
                                     .navigate(action);
                         } else if(actionNameKey.equals("Scan")) {
