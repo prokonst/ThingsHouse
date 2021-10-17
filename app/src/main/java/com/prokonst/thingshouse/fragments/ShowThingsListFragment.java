@@ -75,10 +75,10 @@ public class ShowThingsListFragment extends Fragment {
 
         setTitle(showThingsListParameters.getTitle());
 
-        if(showThingsListParameters.getActionType().equals("ViewThings")) {
+        if(showThingsListParameters.getActionType() == ShowThingsListParameters.ActionType.ViewThings) {
 
         }
-        else if(showThingsListParameters.getActionType().equals("AddThingTo")) {
+        else if(showThingsListParameters.getActionType() == ShowThingsListParameters.ActionType.AddThingTo) {
 
         }
         else {
@@ -146,12 +146,12 @@ public class ShowThingsListFragment extends Fragment {
 
         thingAdapter.setOnItemClickListener(
                 (thing) -> {
-                    if(showThingsListParameters.getActionType().equals("ViewThings")) {
+                    if(showThingsListParameters.getActionType() == ShowThingsListParameters.ActionType.ViewThings) {
                         NavDirections action = ShowThingsListFragmentDirections.actionShowThingsListFragmentToThingDataFragment(thing);
                         NavHostFragment.findNavController(ShowThingsListFragment.this)
                                 .navigate(action);
                     }
-                    else if(showThingsListParameters.getActionType().equals("AddThingTo")) {
+                    else if(showThingsListParameters.getActionType() == ShowThingsListParameters.ActionType.AddThingTo) {
                         if(thing.getThingId().equals(showThingsListParameters.getSourceThing().getThingId())) {
                             Toast.makeText(view.getContext(), "Error: apply to self", Toast.LENGTH_LONG).show();
                         }

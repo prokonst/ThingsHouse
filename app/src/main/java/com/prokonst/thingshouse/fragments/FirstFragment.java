@@ -37,7 +37,7 @@ public class FirstFragment extends Fragment {
 
                 NavDirections action = FirstFragmentDirections.actionFirstFragmentToShowThingsListFragment(
                         new ShowThingsListParameters(false, "Browse things",
-                                "ViewThings", null, null, 0) );
+                                ShowThingsListParameters.ActionType.ViewThings, null, null, 0) );
                 NavHostFragment.findNavController(FirstFragment.this)
                         .navigate(action);
             }

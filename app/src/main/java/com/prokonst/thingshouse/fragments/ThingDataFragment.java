@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.prokonst.thingshouse.dialog.ChangeValueInterface;
 import com.prokonst.thingshouse.model.dataview.StorageRecord;
 import com.prokonst.thingshouse.tools.CaptureCameraImage;
 import com.prokonst.thingshouse.R;
@@ -175,7 +176,7 @@ public class ThingDataFragment extends Fragment {
                         thingsViewModel.deleteThing(thing);
                         NavDirections action = ThingDataFragmentDirections.actionThingDataFragmentToShowThingListFragment(
                                 new ShowThingsListParameters(true, "Browse things",
-                                        "ViewThings", null, null, 0) );
+                                        ShowThingsListParameters.ActionType.ViewThings, null, null, 0) );
                         NavHostFragment.findNavController(ThingDataFragment.this)
                                 .navigate(action);
                     })
@@ -193,21 +194,21 @@ public class ThingDataFragment extends Fragment {
 
             (new AddThingToStorageDialog(ThingDataFragment.this.getActivity(),
                     () -> "1",
-                    (newValue, actionNameKey) -> {
-                        if(actionNameKey.equals("Select")) {
+                    (newValue, actionType) -> {
+                        if(actionType == ChangeValueInterface.ActionType.Select) {
 
                             NavDirections action = ThingDataFragmentDirections.actionThingDataFragmentToShowThingListFragment(
                                     new ShowThingsListParameters(
                                     true, "Select storage for: " + thing.getName(),
-                                    "AddThingTo", thing, null, Double.parseDouble(newValue)) );
+                                    ShowThingsListParameters.ActionType.AddThingTo, thing, null, Double.parseDouble(newValue)) );
                             NavHostFragment.findNavController(ThingDataFragment.this)
                                     .navigate(action);
-                        } else if(actionNameKey.equals("Scan")) {
+                        } else if(actionType == ChangeValueInterface.ActionType.Scan) {
                             currentQuantity = Double.parseDouble(newValue);
                             ScanBarCodeLauncher.startScanBarCodeLauncher(ThingDataFragment.this.getActivity(), scanForAddActivityResultLauncher);
                         }
                         else {
-                            Toast.makeText(getContext(), "Unknown ActionNameKey: " + actionNameKey, Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), "Unknown ActionType: " + actionType, Toast.LENGTH_LONG).show();
                         }
 
                     }

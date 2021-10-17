@@ -7,7 +7,7 @@ import java.io.Serializable;
 public class ShowThingsListParameters implements Serializable {
     private boolean isClearFilter;
     private String title;
-    private String actionType;
+    private ActionType actionType;
     private Thing sourceThing;
     private Thing targetThing;
     private double quantity;
@@ -15,13 +15,13 @@ public class ShowThingsListParameters implements Serializable {
     public ShowThingsListParameters() {
         this.isClearFilter = false;
         this.title = "Unknown title";
-        this.actionType = "Unknown action type";
+        this.actionType = ActionType.Unknown;
         this.sourceThing = null;
         this.targetThing = null;
         this.quantity = 0;
     }
 
-    public ShowThingsListParameters(boolean isClearFilter, String title, String actionType,
+    public ShowThingsListParameters(boolean isClearFilter, String title, ActionType actionType,
                                     Thing sourceThing, Thing targetThing, double quantity) {
         this.isClearFilter = isClearFilter;
         this.title = title;
@@ -49,11 +49,11 @@ public class ShowThingsListParameters implements Serializable {
         return this;
     }
 
-    public String getActionType() {
+    public ActionType getActionType() {
         return this.actionType;
     }
 
-    public ShowThingsListParameters setActionType(String actionType) {
+    public ShowThingsListParameters setActionType(ActionType actionType) {
         this.actionType = actionType;
         return this;
     }
@@ -88,5 +88,11 @@ public class ShowThingsListParameters implements Serializable {
             this.quantity = 0;
         }
         return this;
+    }
+
+    public enum ActionType implements Serializable{
+        ViewThings,
+        AddThingTo,
+        Unknown
     }
 }

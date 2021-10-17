@@ -41,10 +41,10 @@ public class AddThingToStorageDialog {
                 .setView(viewEditThing)
                 .setCancelable(false)
                 .setPositiveButton("Select to", (dialogBox, id) -> {
-                    onClickButton(dialogBox, "Select");
+                    onClickButton(dialogBox, ChangeValueInterface.ActionType.Select);
                 })
                 .setNegativeButton("Scan to", (dialogBox, id) -> {
-                    onClickButton(dialogBox, "Scan");
+                    onClickButton(dialogBox, ChangeValueInterface.ActionType.Scan);
                 })
                 .setNeutralButton("Cancel", (dialogBox, id) -> {
                     dialogBox.dismiss();
@@ -55,13 +55,13 @@ public class AddThingToStorageDialog {
         alertDialog.show();
     }
 
-    private void onClickButton(DialogInterface dialogBox, String actionNameKey) {
+    private void onClickButton(DialogInterface dialogBox, ChangeValueInterface.ActionType actionType) {
         String newValue = nameEditText.getText().toString().trim();
         try {
             newValue = newValue.replace(',', '.');
             double newValDouble = Double.parseDouble(newValue);
             dialogBox.dismiss();
-            changeValueCallback.onChangeValue(newValue, actionNameKey);
+            changeValueCallback.onChangeValue(newValue, actionType);
         } catch (Exception ex) {
             Toast.makeText(context, "Enter numeric", Toast.LENGTH_LONG).show();
         }
