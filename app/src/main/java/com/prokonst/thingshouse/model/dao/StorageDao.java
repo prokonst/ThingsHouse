@@ -8,7 +8,6 @@ import androidx.room.Query;
 import androidx.room.Transaction;
 import androidx.room.Update;
 
-import com.prokonst.thingshouse.model.dataview.Delete_StorageWithThings;
 import com.prokonst.thingshouse.model.dataview.StorageRecord;
 import com.prokonst.thingshouse.model.tables.Storage;
 
@@ -33,14 +32,6 @@ public interface StorageDao {
 
     @Query("select * from storages where child_id = :childId")
     LiveData<List<Storage>> getStoragesByChildId(String childId);
-
-    @Transaction
-    @Query("select * from storages where parent_id = :parentId")
-    LiveData<List<Delete_StorageWithThings>> getStoragesWithTingsByParentId(String parentId);
-
-    @Transaction
-    @Query("select * from storages where child_id = :childId")
-    LiveData<List<Delete_StorageWithThings>> getStoragesWithTingsByChildId(String childId);
 
     @Query("select * from storages where parent_id = :parentId and child_id = :childId")
     Storage getStorage(String parentId, String childId);

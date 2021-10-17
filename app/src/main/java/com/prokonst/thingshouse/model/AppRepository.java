@@ -8,7 +8,6 @@ import com.prokonst.thingshouse.tools.ShowThingsListParameters;
 import com.prokonst.thingshouse.tools.Utils;
 import com.prokonst.thingshouse.model.dao.StorageDao;
 import com.prokonst.thingshouse.model.dao.ThingDao;
-import com.prokonst.thingshouse.model.dataview.Delete_StorageWithThings;
 import com.prokonst.thingshouse.model.tables.Storage;
 import com.prokonst.thingshouse.model.tables.Thing;
 import com.prokonst.thingshouse.tools.AsyncTaskCUD;
@@ -81,14 +80,6 @@ public class AppRepository {
 
     public LiveData<List<Storage>> getStoragesByChildId(String childId) {
         return storageDao.getStoragesByChildId(childId);
-    }
-
-    public LiveData<List<Delete_StorageWithThings>> getStoragesWithTingsByParentId(String parentId) {
-        return storageDao.getStoragesWithTingsByParentId(parentId);
-    }
-
-    public LiveData<List<Delete_StorageWithThings>> getStoragesWithTingsByChildId(String childId) {
-        return storageDao.getStoragesWithTingsByChildId(childId);
     }
 
     public LiveData<List<StorageRecord>> getStorageRecordsByParentId(String parentId) {
