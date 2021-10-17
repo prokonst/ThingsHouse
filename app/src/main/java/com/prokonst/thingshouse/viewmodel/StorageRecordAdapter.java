@@ -109,6 +109,8 @@ public class StorageRecordAdapter extends RecyclerView.Adapter<StorageRecordAdap
         this.onItemClickListener = onItemClickListener;
     }
 
+
+
     @RequiresApi(api = Build.VERSION_CODES.N)
     public void setStorageRecordArrayList(ArrayList<StorageRecord> storageRecordArrayList) {
         this.storageRecordArrayList = storageRecordArrayList;

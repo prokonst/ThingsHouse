@@ -14,6 +14,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -92,6 +94,21 @@ public class ShowStorageRecordsFragment extends Fragment {
                             .navigate(action);
                 }
         );
+
+//        ItemTouchHelper.SimpleCallback itemTouchHelperSimpleCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+//            @Override
+//            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+//                return false;
+//            }
+//
+//            @Override
+//            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+//                Toast.makeText(ShowStorageRecordsFragment.this.getContext(), "" + direction, Toast.LENGTH_SHORT).show();
+//            }
+//        };
+//
+//        new ItemTouchHelper(itemTouchHelperSimpleCallback).attachToRecyclerView(storageRecordRecyclerView);
+
 
         storageRecords.observe(this.getViewLifecycleOwner(), new Observer<List<StorageRecord>>() {
                 @Override
