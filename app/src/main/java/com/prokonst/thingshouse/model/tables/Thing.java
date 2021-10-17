@@ -43,6 +43,14 @@ public class Thing extends BaseObservable implements Serializable {
         this.mainPhotoSrc = Utils.getImagePreviewPath(mainPhotoId);
     }
 
+    private Thing(@NonNull String thingId) {
+        this.thingId = thingId;
+    }
+
+    public static Thing createPlugThing(String thingId) {
+        return new Thing(thingId);
+    }
+
     @Bindable
     public String getThingId() {
         return thingId;

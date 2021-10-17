@@ -145,24 +145,24 @@ public class ThingDataFragment extends Fragment {
     public class ThingDataClickHandlers {
 
         public void onChangeNameClicked(View view) {
-            (new ChangeThingValueDialog(ThingDataFragment.this.getActivity(), "Name",
+            new ChangeThingValueDialog(ThingDataFragment.this.getActivity(), "Edit thing", "Name",
                     () -> thing.getName(),
                     (newValue) -> {
                         thing.setName(newValue);
                         thingsViewModel.updateThing(thing);
                         setTitleActionBar();
                     }
-            )).show();
+            ).show();
         }
 
         public void onChangeUnitClicked(View view) {
-            (new ChangeThingValueDialog(ThingDataFragment.this.getActivity(), "Unit",
+            new ChangeThingValueDialog(ThingDataFragment.this.getActivity(),"Edit thing", "Unit",
                     () -> thing.getUnit(),
                     (newValue) -> {
                         thing.setUnit(newValue);
                         thingsViewModel.updateThing(thing);
                     }
-            )).show();
+            ).show();
         }
 
         public void onChangePhoto(View view) {

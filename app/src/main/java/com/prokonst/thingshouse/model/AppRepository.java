@@ -145,7 +145,7 @@ public class AppRepository {
     public void addQuantityToStorageByBarcode(String barcode, String childId, double quantity) {
         (new AsyncTaskCUD(application,
                 () -> {
-                    Thing parentThing = thingDao.getThingsByBarCode(barcode);
+                    Thing parentThing = thingDao.getThingByBarCode(barcode);
                     if(parentThing == null)
                         throw new Exception("Not found thing with barcode: " + barcode);
 
@@ -157,6 +157,34 @@ public class AppRepository {
                         storage.setQuantity(storage.getQuantity() + quantity);
                         storageDao.update(storage);
                     }
+                    return null;
+                }
+        )).execute();
+    }
+
+    public void moveStorageByBarcode(String barcode, StorageRecord storageRecord) {
+        (new AsyncTaskCUD(application,
+                () -> {
+                    Thing newParentThing = thingDao.getThingByBarCode(barcode);
+                    if(newParentThing == null)
+                        throw new Exception("Not found thing with barcode: " + barcode);
+
+                    Thing oldParentThing = thingDao.getThingById(storageRecord.getParentId());
+                    if(newParentThing.getThingId().equals(oldParentThing.getThingId()))
+                        throw new Exception("Is moving to the same parent");
+
+                    Storage storage = storageDao.getStorage(newParentThing.getThingId(), storageRecord.getChildId());
+                    if(storage == null) {
+                        storage = new Storage(Utils.generateUUIDStr(), newParentThing.getThingId(), storageRecord.getChildId(), storageRecord.getQuantity());
+                        storageDao.insert(storage);
+                    } else {
+                        storage.setQuantity(storage.getQuantity() + storageRecord.getQuantity());
+                        storageDao.update(storage);
+                    }
+
+                    storageRecord.setQuantity(0);
+                    storageDao.update(storageRecord.createStorage());
+
                     return null;
                 }
         )).execute();

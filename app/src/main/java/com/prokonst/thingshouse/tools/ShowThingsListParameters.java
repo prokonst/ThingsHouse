@@ -49,6 +49,11 @@ public class ShowThingsListParameters implements Serializable {
     public enum ActionType implements Serializable{
         ViewThings,
         AddThingTo,
+        MoveTo,
         Unknown
+    }
+
+    public interface ThingIdInterface {
+        public String getThingId();
     }
 }

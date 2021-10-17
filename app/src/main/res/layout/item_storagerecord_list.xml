@@ -4,8 +4,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     
     <data>
+        <import type="com.prokonst.thingshouse.viewmodel.StorageRecordsViewModel"/>
+
         <variable
-            name="storageRecordItemProvider"
+            name="StorageRecordItemProvider"
             type="com.prokonst.thingshouse.viewmodel.StorageRecordItemProvider" />
     </data>
 
@@ -14,29 +16,70 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:dragEdge="right"
-        app:mode="same_level"
-        app:flingVelocity="@integer/material_motion_duration_short_1">
+        app:mode="same_level">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/editTextView"
-                android:layout_width="100dp"
+            <LinearLayout
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_margin="8dp"
-                android:onClick="@{storageRecordItemProvider::clearQuantity}"
-                android:text="CLEAR" />
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/moveScanButton"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="8dp"
+                    android:onClick="@{StorageRecordItemProvider::moveScan}"
+                    android:text="Move\nSCAN" />
+
+                <Button
+                    android:id="@+id/moveSelectButton"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="8dp"
+                    android:onClick="@{StorageRecordItemProvider::moveSelect}"
+                    android:text="Move\nSELECT" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/clearQtyButton"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="8dp"
+                    android:onClick="@{StorageRecordItemProvider::clearQuantity}"
+                    android:text="CLEAR" />
+
+                <Button
+                    android:id="@+id/changeQtyButton"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_margin="8dp"
+                    android:onClick="@{StorageRecordItemProvider::changeQuantity}"
+                    android:text="CHANGE" />
+
+            </LinearLayout>
 
         </LinearLayout>
+
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="3dp"
-            android:onClick="@{storageRecordItemProvider::showThing}"
+            android:onClick="@{StorageRecordItemProvider::showThing}"
             app:cardCornerRadius="4dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -49,7 +92,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:hint="ThingName"
-                    android:text="@{storageRecordItemProvider.storageRecord.name}"
+                    android:text="@{StorageRecordItemProvider.storageRecord.name}"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     app:layout_constraintStart_toStartOf="parent"
@@ -59,7 +102,7 @@
                     android:id="@+id/mainPhotoImageView"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
-                    android:src="@{storageRecordItemProvider.storageRecord.mainPhotoSrc}"
+                    android:src="@{StorageRecordItemProvider.storageRecord.mainPhotoSrc}"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/nameTextView" />
 
@@ -68,7 +111,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:hint="BarCode"
-                    android:text="@{storageRecordItemProvider.storageRecord.barCode}"
+                    android:text="@{StorageRecordItemProvider.storageRecord.barCode}"
                     android:textSize="10sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/mainPhotoImageView" />
@@ -78,7 +121,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:hint="Quantity"
-                    android:text="@{Double.toString(storageRecordItemProvider.storageRecord.quantity)}"
+                    android:text="@{Double.toString(StorageRecordItemProvider.storageRecord.quantity)}"
                     android:textSize="16sp"
                     android:layout_marginLeft="8dp"
                     app:layout_constraintBottom_toBottomOf="@+id/mainPhotoImageView"
@@ -90,7 +133,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:hint="Unit"
-                    android:text="@{storageRecordItemProvider.storageRecord.unit}"
+                    android:text="@{StorageRecordItemProvider.storageRecord.unit}"
                     android:textSize="16sp"
                     android:layout_marginLeft="8dp"
                     app:layout_constraintBottom_toBottomOf="@+id/quantityTextView"

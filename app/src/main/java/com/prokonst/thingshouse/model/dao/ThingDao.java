@@ -31,5 +31,8 @@ public interface ThingDao {
     LiveData<List<Thing>> getThings(String namePart);*/
 
     @Query("select * from things where barCode = :barCode")
-    Thing getThingsByBarCode(String barCode);
+    Thing getThingByBarCode(String barCode);
+
+    @Query("select * from things where thing_id = :thingId")
+    Thing getThingById(String thingId);
 }

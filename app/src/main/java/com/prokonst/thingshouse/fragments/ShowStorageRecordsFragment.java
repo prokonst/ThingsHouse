@@ -1,11 +1,14 @@
 package com.prokonst.thingshouse.fragments;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -25,7 +28,9 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.prokonst.thingshouse.databinding.FragmentShowStorageRecordsBinding;
+import com.prokonst.thingshouse.model.AppRepository;
 import com.prokonst.thingshouse.model.dataview.StorageRecord;
+import com.prokonst.thingshouse.tools.ScanBarCodeLauncher;
 import com.prokonst.thingshouse.tools.ShowStorageRecordsParameters;
 import com.prokonst.thingshouse.viewmodel.StorageRecordAdapter;
 import com.prokonst.thingshouse.viewmodel.StorageRecordsViewModel;
@@ -42,6 +47,9 @@ public class ShowStorageRecordsFragment extends Fragment {
     private StorageRecordAdapter storageRecordAdapter;
 
     private ShowStorageRecordsParameters fragmentInputParams;
+
+    ActivityResultLauncher<Intent> scanForMoveActivityResultLauncher;
+    private StorageRecord currentStorageRecord;
 
     public static ShowStorageRecordsFragment newInstance() {
         return new ShowStorageRecordsFragment();
@@ -60,6 +68,31 @@ public class ShowStorageRecordsFragment extends Fragment {
                 .get(StorageRecordsViewModel.class);
 
         setTitleActionBar();
+
+        scanForMoveActivityResultLauncher =  this.registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                (result) -> {
+
+                    try {
+                        String barCode = ScanBarCodeLauncher.getBarCode(result);
+                        if (barCode != null && currentStorageRecord != null) {
+                            if(barCode.equals(currentStorageRecord.getBarCode())) {
+                                Toast.makeText(this.getContext(), "Error: apply to self", Toast.LENGTH_LONG).show();
+                            }
+                            else {
+                                AppRepository appRepository = new AppRepository(ShowStorageRecordsFragment.this.getActivity().getApplication());
+                                appRepository.moveStorageByBarcode(barCode, currentStorageRecord);
+
+                            }
+                        } else {
+                            Toast.makeText(this.getContext(), "BarCodeNotScanned", Toast.LENGTH_SHORT).show();
+                        }
+                    }catch (Exception ex) {
+                        Toast.makeText(this.getContext(), "Error: " + ex.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+        );
 
         return fragmentShowStorageRecordsBinding.getRoot();
     }
@@ -97,6 +130,11 @@ public class ShowStorageRecordsFragment extends Fragment {
                 }
             });
 
+    }
+
+    public ActivityResultLauncher<Intent> getScanForMoveActivityResultLauncher(StorageRecord storageRecord) {
+        this.currentStorageRecord = storageRecord;
+        return scanForMoveActivityResultLauncher;
     }
 
     private void setTitleActionBar(){

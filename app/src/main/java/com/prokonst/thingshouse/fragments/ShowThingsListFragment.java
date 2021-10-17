@@ -80,6 +80,9 @@ public class ShowThingsListFragment extends Fragment {
         else if(fragmentInputParams.getActionType() == ShowThingsListParameters.ActionType.AddThingTo) {
 
         }
+        else if(fragmentInputParams.getActionType() == ShowThingsListParameters.ActionType.MoveTo) {
+
+        }
         else {
             setTitle("Unknown action type");
         }
@@ -144,20 +147,23 @@ public class ShowThingsListFragment extends Fragment {
         thingRecyclerView.setAdapter(thingAdapter);
 
         thingAdapter.setOnItemClickListener(
-                (thing) -> {
+                (selectedThing) -> {
+                    AppRepository appRepository = new AppRepository(ShowThingsListFragment.this.getActivity().getApplication());
+
                     if(fragmentInputParams.getActionType() == ShowThingsListParameters.ActionType.ViewThings) {
-                        NavDirections action = ShowThingsListFragmentDirections.actionShowThingsListFragmentToThingDataFragment(thing);
+                        NavDirections action = ShowThingsListFragmentDirections.actionShowThingsListFragmentToThingDataFragment(selectedThing);
                         NavHostFragment.findNavController(ShowThingsListFragment.this)
                                 .navigate(action);
                     }
                     else if(fragmentInputParams.getActionType() == ShowThingsListParameters.ActionType.AddThingTo) {
-                        if(thing.getThingId().equals(fragmentInputParams.getSourceThing().getThingId())) {
+                        Thing newParentThing = selectedThing;
+                        Thing movingThing = fragmentInputParams.getSourceThing();
+
+                        if(newParentThing.getThingId().equals(movingThing.getThingId())) {
                             Toast.makeText(view.getContext(), "Error: apply to self", Toast.LENGTH_LONG).show();
                         }
                         else {
-
-                            AppRepository appRepository = new AppRepository(ShowThingsListFragment.this.getActivity().getApplication());
-                            appRepository.addQuantityToStorageByParentId(thing.getThingId(), fragmentInputParams.getSourceThing().getThingId(), fragmentInputParams.getQuantity());
+                            appRepository.addQuantityToStorageByParentId(newParentThing.getThingId(), movingThing.getThingId(), fragmentInputParams.getQuantity());
                         }
                         NavController navController = NavHostFragment.findNavController(ShowThingsListFragment.this);
 
@@ -168,8 +174,10 @@ public class ShowThingsListFragment extends Fragment {
                         NavDirections action = ShowThingsListFragmentDirections.actionShowThingsListFragmentToThingDataFragment(fragmentInputParams.getSourceThing());
                         navController.navigate(action);
 
-                    }
-                    else {
+                    }else if(fragmentInputParams.getActionType() == ShowThingsListParameters.ActionType.MoveTo) {
+
+
+                    } else {
                         Toast.makeText(view.getContext(), "Unknown action type", Toast.LENGTH_LONG).show();
                     }
                  });
