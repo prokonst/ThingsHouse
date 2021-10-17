@@ -1,6 +1,5 @@
 package com.prokonst.thingshouse.fragments;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -51,7 +50,7 @@ public class ShowThingsListFragment extends Fragment {
     private TextInputEditText textInputEditText;
 
     private String filter = "";
-    private ShowThingsListParameters showThingsListParameters;
+    private ShowThingsListParameters fragmentInputParams;
 
     private ActivityResultLauncher<Intent> startBarCodeScannerActivityResultLauncher;
 
@@ -67,18 +66,18 @@ public class ShowThingsListFragment extends Fragment {
     ) {
 
         ShowThingsListFragmentArgs args = ShowThingsListFragmentArgs.fromBundle(getArguments());
-        showThingsListParameters = args.getShowThingsListParameters();
+        fragmentInputParams = args.getShowThingsListParameters();
 
-        if(showThingsListParameters.getIsClearFilter()) {
+        if(fragmentInputParams.getIsClearFilter()) {
             filter = "";
         }
 
-        setTitle(showThingsListParameters.getTitle());
+        setTitle(fragmentInputParams.getTitle());
 
-        if(showThingsListParameters.getActionType() == ShowThingsListParameters.ActionType.ViewThings) {
+        if(fragmentInputParams.getActionType() == ShowThingsListParameters.ActionType.ViewThings) {
 
         }
-        else if(showThingsListParameters.getActionType() == ShowThingsListParameters.ActionType.AddThingTo) {
+        else if(fragmentInputParams.getActionType() == ShowThingsListParameters.ActionType.AddThingTo) {
 
         }
         else {
@@ -146,25 +145,27 @@ public class ShowThingsListFragment extends Fragment {
 
         thingAdapter.setOnItemClickListener(
                 (thing) -> {
-                    if(showThingsListParameters.getActionType() == ShowThingsListParameters.ActionType.ViewThings) {
+                    if(fragmentInputParams.getActionType() == ShowThingsListParameters.ActionType.ViewThings) {
                         NavDirections action = ShowThingsListFragmentDirections.actionShowThingsListFragmentToThingDataFragment(thing);
                         NavHostFragment.findNavController(ShowThingsListFragment.this)
                                 .navigate(action);
                     }
-                    else if(showThingsListParameters.getActionType() == ShowThingsListParameters.ActionType.AddThingTo) {
-                        if(thing.getThingId().equals(showThingsListParameters.getSourceThing().getThingId())) {
+                    else if(fragmentInputParams.getActionType() == ShowThingsListParameters.ActionType.AddThingTo) {
+                        if(thing.getThingId().equals(fragmentInputParams.getSourceThing().getThingId())) {
                             Toast.makeText(view.getContext(), "Error: apply to self", Toast.LENGTH_LONG).show();
                         }
                         else {
 
                             AppRepository appRepository = new AppRepository(ShowThingsListFragment.this.getActivity().getApplication());
-                            appRepository.addQuantityToStorageByParentId(thing.getThingId(), showThingsListParameters.getSourceThing().getThingId(), showThingsListParameters.getQuantity());
+                            appRepository.addQuantityToStorageByParentId(thing.getThingId(), fragmentInputParams.getSourceThing().getThingId(), fragmentInputParams.getQuantity());
                         }
                         NavController navController = NavHostFragment.findNavController(ShowThingsListFragment.this);
 
-                        navController.popBackStack(R.id.thingDataFragment, true);
+                        // Do not working. When have many actions we are have exceptions
+                        // Moving to nav_graph
+                        // navController.popBackStack(R.id.thingDataFragment, true);
 
-                        NavDirections action = ShowThingsListFragmentDirections.actionShowThingsListFragmentToThingDataFragment(showThingsListParameters.getSourceThing());
+                        NavDirections action = ShowThingsListFragmentDirections.actionShowThingsListFragmentToThingDataFragment(fragmentInputParams.getSourceThing());
                         navController.navigate(action);
 
                     }

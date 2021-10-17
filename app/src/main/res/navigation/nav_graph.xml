@@ -30,7 +30,9 @@
             app:destination="@id/firstFragment" />
         <action
             android:id="@+id/action_ShowThingsListFragment_to_thingDataFragment"
-            app:destination="@id/thingDataFragment"/>
+            app:destination="@id/thingDataFragment"
+            app:popUpTo="@id/thingDataFragment"
+            app:popUpToInclusive="true"/>
         <action
             android:id="@+id/action_showThingsListFragment_self"
             app:destination="@id/showThingsListFragment" />
@@ -48,7 +50,21 @@
         <action
             android:id="@+id/action_thingDataFragment_to_ShowThingListFragment"
             app:destination="@id/showThingsListFragment"/>
+        <action
+            android:id="@+id/action_thingDataFragment_to_showStorageRecordsFragment"
+            app:destination="@id/showStorageRecordsFragment" />
 
 
+    </fragment>
+    <fragment
+        android:id="@+id/showStorageRecordsFragment"
+        android:name="com.prokonst.thingshouse.fragments.ShowStorageRecordsFragment"
+        android:label="ShowStorageRecordsFragment" >
+        <argument
+            android:name="ShowStorageRecordsParameters"
+            app:argType="com.prokonst.thingshouse.tools.ShowStorageRecordsParameters" />
+        <action
+            android:id="@+id/action_showStorageRecordsFragment_to_thingDataFragment"
+            app:destination="@id/thingDataFragment" />
     </fragment>
 </navigation>

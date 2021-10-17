@@ -33,6 +33,7 @@ import com.prokonst.thingshouse.model.AppRepository;
 import com.prokonst.thingshouse.model.tables.Thing;
 import com.prokonst.thingshouse.tools.ItemsCollectionInterface;
 import com.prokonst.thingshouse.tools.ScanBarCodeLauncher;
+import com.prokonst.thingshouse.tools.ShowStorageRecordsParameters;
 import com.prokonst.thingshouse.tools.ShowThingsListParameters;
 import com.prokonst.thingshouse.viewmodel.ThingsViewModel;
 
@@ -215,12 +216,20 @@ public class ThingDataFragment extends Fragment {
             )).show();
         }
         public void onWhereUsed(View view) {
-            AppRepository appRepository = new AppRepository(ThingDataFragment.this.getActivity().getApplication());
-            showItems(view, () ->  appRepository.getStorageRecordsByChildId(thing.getThingId())  );
+//            AppRepository appRepository = new AppRepository(ThingDataFragment.this.getActivity().getApplication());
+//            showItems(view, () ->  appRepository.getStorageRecordsByChildId(thing.getThingId())  );
+            NavDirections action = ThingDataFragmentDirections.actionThingDataFragmentToShowStorageRecordsFragment(
+                    new ShowStorageRecordsParameters(thing, ShowStorageRecordsParameters.ReportType.WhereUsed));
+            NavHostFragment.findNavController(ThingDataFragment.this).navigate(action);
+
         }
         public void onItems(View view) {
-            AppRepository appRepository = new AppRepository(ThingDataFragment.this.getActivity().getApplication());
-            showItems(view, () -> appRepository.getStorageRecordsByParentId(thing.getThingId())  );
+//            AppRepository appRepository = new AppRepository(ThingDataFragment.this.getActivity().getApplication());
+//            showItems(view, () -> appRepository.getStorageRecordsByParentId(thing.getThingId())  );
+            NavDirections action = ThingDataFragmentDirections.actionThingDataFragmentToShowStorageRecordsFragment(
+                    new ShowStorageRecordsParameters(thing, ShowStorageRecordsParameters.ReportType.SelfItems));
+            NavHostFragment.findNavController(ThingDataFragment.this).navigate(action);
+
         }
 
         private void showItems(View view, ItemsCollectionInterface itemsCollection) {

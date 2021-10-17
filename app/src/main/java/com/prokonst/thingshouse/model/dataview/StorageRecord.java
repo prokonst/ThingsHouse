@@ -7,6 +7,7 @@ import androidx.room.ColumnInfo;
 import androidx.room.Ignore;
 
 import com.prokonst.thingshouse.model.tables.Storage;
+import com.prokonst.thingshouse.model.tables.Thing;
 import com.prokonst.thingshouse.tools.Utils;
 
 import java.io.Serializable;
@@ -51,6 +52,11 @@ public class StorageRecord extends BaseObservable implements Serializable {
         Storage storage = new Storage(this.storageId, this.parentId, this.childId, this.quantity);
 
         return storage;
+    }
+
+    public Thing createThing() {
+        Thing thing = new Thing(thingId, unit, barCode, name, mainPhotoId);
+        return thing;
     }
 
     @Bindable
