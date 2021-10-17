@@ -8,12 +8,12 @@ public class ShowThingsListParameters implements Serializable {
     private boolean isClearFilter;
     private String title;
     private ActionType actionType;
-    private Thing sourceThing;
-    private Thing targetThing;
+    private ThingIdInterface sourceThing;
+    private ThingIdInterface targetThing;
     private double quantity;
 
     public ShowThingsListParameters(boolean isClearFilter, String title, ActionType actionType,
-                                    Thing sourceThing, Thing targetThing, double quantity) {
+                                    ThingIdInterface sourceThing, ThingIdInterface targetThing, double quantity) {
         this.isClearFilter = isClearFilter;
         this.title = title;
         this.actionType = actionType;
@@ -34,11 +34,11 @@ public class ShowThingsListParameters implements Serializable {
         return this.actionType;
     }
 
-    public Thing getSourceThing() {
+    public ThingIdInterface getSourceThing() {
         return this.sourceThing;
     }
 
-    public Thing getTargetThing() {
+    public ThingIdInterface getTargetThing() {
         return this.targetThing;
     }
 

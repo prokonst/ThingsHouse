@@ -30,9 +30,12 @@
             app:destination="@id/firstFragment" />
         <action
             android:id="@+id/action_ShowThingsListFragment_to_thingDataFragment"
+            app:destination="@id/thingDataFragment"/>
+        <!--<action
+            android:id="@+id/action_ShowThingsListFragment_to_thingDataFragment"
             app:destination="@id/thingDataFragment"
             app:popUpTo="@id/thingDataFragment"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true"/>-->
         <action
             android:id="@+id/action_showThingsListFragment_self"
             app:destination="@id/showThingsListFragment" />

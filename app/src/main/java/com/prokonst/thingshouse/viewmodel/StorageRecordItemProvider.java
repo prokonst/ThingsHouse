@@ -41,10 +41,10 @@ public class StorageRecordItemProvider implements Serializable {
 
     public void moveSelect(View view) {
         NavDirections action = ShowStorageRecordsFragmentDirections.actionShowStorageRecordsFragmentToShowThingsListFragment(
-                new ShowThingsListParameters(true, "Select new storage for: " + storageRecord.getName(),
+                new ShowThingsListParameters(true, "Select new storage",
                         ShowThingsListParameters.ActionType.MoveTo,
-                        Thing.createPlugThing(storageRecord.getParentId()),
-                        storageRecord.createThing(),
+                        () -> storageRecord.getChildId(),
+                        () -> storageRecord.getParentId(),
                         storageRecord.getQuantity()));
 
         Navigation.findNavController(view)

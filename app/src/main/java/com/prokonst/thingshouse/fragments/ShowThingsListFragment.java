@@ -19,6 +19,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -149,6 +151,8 @@ public class ShowThingsListFragment extends Fragment {
         thingAdapter.setOnItemClickListener(
                 (selectedThing) -> {
                     AppRepository appRepository = new AppRepository(ShowThingsListFragment.this.getActivity().getApplication());
+                    NavController navController = NavHostFragment.findNavController(ShowThingsListFragment.this);
+                    AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
 
                     if(fragmentInputParams.getActionType() == ShowThingsListParameters.ActionType.ViewThings) {
                         NavDirections action = ShowThingsListFragmentDirections.actionShowThingsListFragmentToThingDataFragment(selectedThing);
@@ -156,8 +160,8 @@ public class ShowThingsListFragment extends Fragment {
                                 .navigate(action);
                     }
                     else if(fragmentInputParams.getActionType() == ShowThingsListParameters.ActionType.AddThingTo) {
-                        Thing newParentThing = selectedThing;
-                        Thing movingThing = fragmentInputParams.getSourceThing();
+                        ShowThingsListParameters.ThingIdInterface newParentThing = selectedThing;
+                        ShowThingsListParameters.ThingIdInterface movingThing = fragmentInputParams.getSourceThing();
 
                         if(newParentThing.getThingId().equals(movingThing.getThingId())) {
                             Toast.makeText(view.getContext(), "Error: apply to self", Toast.LENGTH_LONG).show();
@@ -165,17 +169,24 @@ public class ShowThingsListFragment extends Fragment {
                         else {
                             appRepository.addQuantityToStorageByParentId(newParentThing.getThingId(), movingThing.getThingId(), fragmentInputParams.getQuantity());
                         }
-                        NavController navController = NavHostFragment.findNavController(ShowThingsListFragment.this);
-
                         // Do not working. When have many actions we are have exceptions
                         // Moving to nav_graph
                         // navController.popBackStack(R.id.thingDataFragment, true);
 
-                        NavDirections action = ShowThingsListFragmentDirections.actionShowThingsListFragmentToThingDataFragment(fragmentInputParams.getSourceThing());
-                        navController.navigate(action);
+                        //NavDirections action = ShowThingsListFragmentDirections.actionShowThingsListFragmentToThingDataFragment((Thing) fragmentInputParams.getSourceThing());
+                        //navController.navigate(action);
+
+                        NavigationUI.navigateUp(navController, appBarConfiguration);
 
                     }else if(fragmentInputParams.getActionType() == ShowThingsListParameters.ActionType.MoveTo) {
 
+                        ShowThingsListParameters.ThingIdInterface newParentThing = selectedThing;
+                        ShowThingsListParameters.ThingIdInterface movingThing = fragmentInputParams.getSourceThing();
+                        ShowThingsListParameters.ThingIdInterface oldParentThing = fragmentInputParams.getTargetThing();
+
+                        appRepository.moveStorage(oldParentThing, movingThing, newParentThing);
+
+                        NavigationUI.navigateUp(navController, appBarConfiguration);
 
                     } else {
                         Toast.makeText(view.getContext(), "Unknown action type", Toast.LENGTH_LONG).show();

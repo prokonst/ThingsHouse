@@ -81,7 +81,8 @@ public class ShowStorageRecordsFragment extends Fragment {
                             }
                             else {
                                 AppRepository appRepository = new AppRepository(ShowStorageRecordsFragment.this.getActivity().getApplication());
-                                appRepository.moveStorageByBarcode(barCode, currentStorageRecord);
+                                appRepository.moveStorageByBarcode(barCode,
+                                        currentStorageRecord);
 
                             }
                         } else {

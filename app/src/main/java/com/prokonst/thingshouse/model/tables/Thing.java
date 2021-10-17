@@ -10,13 +10,14 @@ import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 
+import com.prokonst.thingshouse.tools.ShowThingsListParameters;
 import com.prokonst.thingshouse.tools.Utils;
 
 import java.io.Serializable;
 
 
 @Entity(tableName = "things", indices = {@Index(value = {"barCode"}, unique = true)})
-public class Thing extends BaseObservable implements Serializable {
+public class Thing extends BaseObservable implements Serializable, ShowThingsListParameters.ThingIdInterface {
 
     @PrimaryKey(autoGenerate = false)
     @NonNull

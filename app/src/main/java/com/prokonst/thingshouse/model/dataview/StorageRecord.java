@@ -8,11 +8,12 @@ import androidx.room.Ignore;
 
 import com.prokonst.thingshouse.model.tables.Storage;
 import com.prokonst.thingshouse.model.tables.Thing;
+import com.prokonst.thingshouse.tools.ShowThingsListParameters;
 import com.prokonst.thingshouse.tools.Utils;
 
 import java.io.Serializable;
 
-public class StorageRecord extends BaseObservable implements Serializable {
+public class StorageRecord extends BaseObservable implements Serializable, ShowThingsListParameters.ThingIdInterface {
     @ColumnInfo(name = "storage_id")
     private String storageId;
 

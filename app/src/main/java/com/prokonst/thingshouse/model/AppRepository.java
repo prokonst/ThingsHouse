@@ -4,6 +4,7 @@ import android.app.Application;
 import androidx.lifecycle.LiveData;
 
 import com.prokonst.thingshouse.model.dataview.StorageRecord;
+import com.prokonst.thingshouse.tools.ShowThingsListParameters;
 import com.prokonst.thingshouse.tools.Utils;
 import com.prokonst.thingshouse.model.dao.StorageDao;
 import com.prokonst.thingshouse.model.dao.ThingDao;
@@ -169,24 +170,56 @@ public class AppRepository {
                     if(newParentThing == null)
                         throw new Exception("Not found thing with barcode: " + barcode);
 
-                    Thing oldParentThing = thingDao.getThingById(storageRecord.getParentId());
-                    if(newParentThing.getThingId().equals(oldParentThing.getThingId()))
-                        throw new Exception("Is moving to the same parent");
-
-                    Storage storage = storageDao.getStorage(newParentThing.getThingId(), storageRecord.getChildId());
-                    if(storage == null) {
-                        storage = new Storage(Utils.generateUUIDStr(), newParentThing.getThingId(), storageRecord.getChildId(), storageRecord.getQuantity());
-                        storageDao.insert(storage);
-                    } else {
-                        storage.setQuantity(storage.getQuantity() + storageRecord.getQuantity());
-                        storageDao.update(storage);
-                    }
-
-                    storageRecord.setQuantity(0);
-                    storageDao.update(storageRecord.createStorage());
+                    moveStorage(storageRecord.getParentId(),
+                            storageRecord.getChildId(),
+                            newParentThing.getThingId());
 
                     return null;
                 }
         )).execute();
+    }
+
+    public void moveStorage(ShowThingsListParameters.ThingIdInterface oldParentThing,
+                            ShowThingsListParameters.ThingIdInterface movingThing,
+                            ShowThingsListParameters.ThingIdInterface newParentThing) {
+        (new AsyncTaskCUD(application,
+                () -> {
+                    moveStorage(oldParentThing.getThingId(),
+                            movingThing.getThingId(),
+                            newParentThing.getThingId());
+
+                    return null;
+                }
+        )).execute();
+    }
+
+    private void moveStorage(String oldParentThingId,
+                             String movingThingId,
+                             String newParentThingId) throws Exception {
+
+        if(newParentThingId.equals(oldParentThingId))
+            throw new Exception("Is moving to the same parent");
+
+        if(newParentThingId.equals(movingThingId))
+            throw new Exception("Error: apply to self");
+
+        Storage oldStorage = storageDao.getStorage(oldParentThingId, movingThingId);
+        if(oldStorage == null)
+            throw new Exception("oldStorage is NULL" + oldParentThingId + "/" + movingThingId);
+
+        if(oldStorage.getQuantity() == 0.0)
+            throw new Exception("Moving quantity is 0.0");
+
+        Storage newStorage = storageDao.getStorage(newParentThingId, movingThingId);
+        if(newStorage == null) {
+            newStorage = new Storage(Utils.generateUUIDStr(), newParentThingId, movingThingId, oldStorage.getQuantity());
+            storageDao.insert(newStorage);
+        } else {
+            newStorage.setQuantity(newStorage.getQuantity() + oldStorage.getQuantity());
+            storageDao.update(newStorage);
+        }
+
+        oldStorage.setQuantity(0);
+        storageDao.update(oldStorage);
     }
 }
