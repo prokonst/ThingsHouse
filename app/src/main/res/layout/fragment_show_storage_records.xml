@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".fragments.ShowStorageRecordsFragment">
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="8dp"/>
+<!--
+        <Button
+            android:id="@+id/button_ScanBarCode"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:onClick="@{thingsListClickHandlers::onScanClicked}"
+            android:text="Scan"
+            app:layout_constraintBottom_toTopOf="@+id/button_add"
+            tools:layout_editor_absoluteX="0dp" />
+
+        <Button
+            android:id="@+id/button_add"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="@{thingsListClickHandlers::onAddClicked}"
+            android:text="Add"
+            app:layout_constraintBottom_toTopOf="@+id/button_second"
+            tools:layout_editor_absoluteX="16dp" />
+
+        <Button
+            android:id="@+id/button_second"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/previous"
+            app:layout_constraintBottom_toBottomOf="parent"
+            tools:layout_editor_absoluteX="0dp" />
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/textInputEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Input here name or barcode"
+            android:onTextChanged="@{thingsListClickHandlers::onTextChanged}"
+            app:layout_constraintBottom_toTopOf="@+id/button_ScanBarCode" />
+
+-->
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
