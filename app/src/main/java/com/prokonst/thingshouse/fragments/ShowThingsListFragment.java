@@ -47,7 +47,7 @@ public class ShowThingsListFragment extends Fragment {
     private RecyclerView thingRecyclerView;
     private ThingAdapter thingAdapter;
 
-    private ThingsListClickHandlers thingsListClickHandlers;
+    //private ThingsListClickHandlers thingsListClickHandlers;
 
     private TextInputEditText textInputEditText;
 
@@ -89,19 +89,11 @@ public class ShowThingsListFragment extends Fragment {
             setTitle("Unknown action type");
         }
 
-
-
+        thingsViewModel = new ViewModelProvider(this).get(ThingsViewModel.class);
+        //.AndroidViewModelFactory(getActivity().getApplication())
+        //.create();
 
         fragmentShowThingsListBinding = FragmentShowThingsListBinding.inflate(inflater, container, false);
-
-        thingsViewModel = new ViewModelProvider(this).get(ThingsViewModel.class);
-                //.AndroidViewModelFactory(getActivity().getApplication())
-                //.create();
-
-        thingsListClickHandlers = new ThingsListClickHandlers();
-        fragmentShowThingsListBinding.setThingsListClickHandlers(thingsListClickHandlers);
-
-
 
         startBarCodeScannerActivityResultLauncher = ShowThingsListFragment.this.registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -132,6 +124,8 @@ public class ShowThingsListFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        fragmentShowThingsListBinding.setThingsListClickHandlers(new ThingsListClickHandlers());
 
         fragmentShowThingsListBinding.buttonSecond.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -169,12 +163,6 @@ public class ShowThingsListFragment extends Fragment {
                         else {
                             appRepository.addQuantityToStorageByParentId(newParentThing.getThingId(), movingThing.getThingId(), fragmentInputParams.getQuantity());
                         }
-                        // Do not working. When have many actions we are have exceptions
-                        // Moving to nav_graph
-                        // navController.popBackStack(R.id.thingDataFragment, true);
-
-                        //NavDirections action = ShowThingsListFragmentDirections.actionShowThingsListFragmentToThingDataFragment((Thing) fragmentInputParams.getSourceThing());
-                        //navController.navigate(action);
 
                         NavigationUI.navigateUp(navController, appBarConfiguration);
 

@@ -31,6 +31,10 @@ public class AppRepository {
 
     //CRUD For Thing
 
+    public LiveData<Thing> getThingById(String thingId) {
+        return thingDao.getThingById(thingId);
+    }
+
     public LiveData<List<Thing>> getThings() {
         return thingDao.getAllThings();
     }

@@ -26,6 +26,12 @@ public class ThingsViewModel extends AndroidViewModel {
         appRepository = new AppRepository(application);
     }
 
+
+    public LiveData<Thing> getThingById(String thingId) {
+
+        return appRepository.getThingById(thingId);
+    }
+
     public LiveData<List<Thing>> getThings() {
         things = appRepository.getThings();
         return things;
