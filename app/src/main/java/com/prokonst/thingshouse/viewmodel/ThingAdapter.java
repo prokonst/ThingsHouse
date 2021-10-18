@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.prokonst.thingshouse.R;
 import com.prokonst.thingshouse.databinding.ItemThingListBinding;
+import com.prokonst.thingshouse.model.AppRepository;
 import com.prokonst.thingshouse.model.tables.Thing;
 
 import java.util.ArrayList;
@@ -21,9 +22,14 @@ import java.util.Comparator;
 public class ThingAdapter extends RecyclerView.Adapter<ThingAdapter.ThingViewHolder>
         implements Filterable {
 
-    private OnItemClickListener onItemClickListener;
+    private AppRepository appRepository;
+
     private ArrayList<Thing> thingArrayList = new ArrayList<>();
     private ArrayList<Thing> thingArrayListFiltered = new ArrayList<>();
+
+    public ThingAdapter(AppRepository appRepository) {
+        this.appRepository = appRepository;
+    }
 
     @NonNull
     @Override
@@ -40,7 +46,7 @@ public class ThingAdapter extends RecyclerView.Adapter<ThingAdapter.ThingViewHol
     @Override
     public void onBindViewHolder(@NonNull ThingViewHolder holder, int position) {
         Thing thing = thingArrayListFiltered.get(position);
-        holder.itemThingListBinding.setThing(thing);
+        holder.itemThingListBinding.setThingItemProvider(new ThingItemProvider(thing, appRepository));
     }
 
     @Override
@@ -92,21 +98,7 @@ public class ThingAdapter extends RecyclerView.Adapter<ThingAdapter.ThingViewHol
             super(itemThingListBinding.getRoot());
 
             this.itemThingListBinding = itemThingListBinding;
-            itemThingListBinding.getRoot().setOnClickListener( (view) -> {
-                    int position = getAdapterPosition();
-                    if(onItemClickListener != null && position != RecyclerView.NO_POSITION) {
-                        onItemClickListener.onItemClick(thingArrayListFiltered.get(position));
-                    }
-                });
         }
-    }
-
-    public interface OnItemClickListener {
-        void onItemClick(Thing thing);
-    }
-
-    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
-        this.onItemClickListener = onItemClickListener;
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)

@@ -18,6 +18,7 @@ public interface ChangeValueInterface {
 
     public enum ActionType implements Serializable {
         Select,
-        Scan
+        Scan,
+        Unknown
     }
 }

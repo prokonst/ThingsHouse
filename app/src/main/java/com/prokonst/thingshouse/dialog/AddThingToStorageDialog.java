@@ -17,10 +17,12 @@ public class AddThingToStorageDialog {
     private ChangeValueInterface.GetValueCallback<String> getValueCallback;
     private ChangeValueInterface.ChangeValueCallbackWithAction<String> changeValueCallback;
     private EditText nameEditText;
+    private ButtonsType buttonsType;
 
-    public AddThingToStorageDialog(Context context,
+    public AddThingToStorageDialog(Context context, ButtonsType buttonsType,
                                   ChangeValueInterface.GetValueCallback<String> getValueCallback,
                                   ChangeValueInterface.ChangeValueCallbackWithAction<String> changeValueCallback) {
+        this.buttonsType = buttonsType;
         this.context = context;
         this.getValueCallback = getValueCallback;
         this.changeValueCallback = changeValueCallback;
@@ -37,21 +39,29 @@ public class AddThingToStorageDialog {
         nameEditText = viewEditThing.findViewById(R.id.nameEditText);
         nameEditText.setText(getValueCallback.onGetValue());
 
-        final AlertDialog alertDialog = (new AlertDialog.Builder(context))
+        final AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context)
                 .setView(viewEditThing)
-                .setCancelable(false)
-                .setPositiveButton("Select to", (dialogBox, id) -> {
-                    onClickButton(dialogBox, ChangeValueInterface.ActionType.Select);
-                })
-                .setNegativeButton("Scan to", (dialogBox, id) -> {
-                    onClickButton(dialogBox, ChangeValueInterface.ActionType.Scan);
-                })
-                .setNeutralButton("Cancel", (dialogBox, id) -> {
-                    dialogBox.dismiss();
-                    Toast.makeText(context, "Command cancelled by user", Toast.LENGTH_LONG).show();
-                })
-                .create();
+                .setCancelable(false);
+        if(this.buttonsType == ButtonsType.ScanAndSelect) {
+            alertDialogBuilder.setPositiveButton("Select to", (dialogBox, id) -> {
+                                    onClickButton(dialogBox, ChangeValueInterface.ActionType.Select);
+                                })
+                                .setNegativeButton("Scan to", (dialogBox, id) -> {
+                                    onClickButton(dialogBox, ChangeValueInterface.ActionType.Scan);
+                                });
+        }
+        else if(this.buttonsType == ButtonsType.Ok) {
+            alertDialogBuilder.setPositiveButton("Ok", (dialogBox, id) -> {
+                                                    onClickButton(dialogBox, ChangeValueInterface.ActionType.Unknown);
+                                                });
+        }
 
+        alertDialogBuilder.setNeutralButton("Cancel", (dialogBox, id) -> {
+                                dialogBox.dismiss();
+                                Toast.makeText(context, "Command cancelled by user", Toast.LENGTH_LONG).show();
+                            });
+
+        final AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }
 
@@ -65,5 +75,10 @@ public class AddThingToStorageDialog {
         } catch (Exception ex) {
             Toast.makeText(context, "Enter numeric", Toast.LENGTH_LONG).show();
         }
+    }
+
+    public enum ButtonsType {
+        ScanAndSelect,
+        Ok
     }
 }

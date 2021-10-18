@@ -47,6 +47,9 @@ public class ShowThingsListFragment extends Fragment {
     private RecyclerView thingRecyclerView;
     private ThingAdapter thingAdapter;
 
+    private Thing currentThing;
+    private double currentQuantity;
+
     //private ThingsListClickHandlers thingsListClickHandlers;
 
     private TextInputEditText textInputEditText;
@@ -55,6 +58,11 @@ public class ShowThingsListFragment extends Fragment {
     private ShowThingsListParameters fragmentInputParams;
 
     private ActivityResultLauncher<Intent> startBarCodeScannerActivityResultLauncher;
+    private ActivityResultLauncher<Intent> scanForAddActivityResultLauncher;
+
+    public ShowThingsListParameters getFragmentInputParams() {
+        return fragmentInputParams;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -112,10 +120,39 @@ public class ShowThingsListFragment extends Fragment {
                 }
         );
 
+        scanForAddActivityResultLauncher =  ShowThingsListFragment.this.registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                (result) -> {
+
+                    try {
+                        String barCode = ScanBarCodeLauncher.getBarCode(result);
+                        if (barCode != null && currentThing != null) {
+                            if(barCode.equals(currentThing.getBarCode())) {
+                                Toast.makeText(getContext(), "Error: apply to self", Toast.LENGTH_LONG).show();
+                            } else {
+                                AppRepository appRepository = new AppRepository(ShowThingsListFragment.this.getActivity().getApplication());
+                                appRepository.addQuantityToStorageByBarcode(barCode, currentThing.getThingId(), currentQuantity);
+                            }
+                        } else {
+                            Toast.makeText(ShowThingsListFragment.this.getActivity(), "BarCodeNotScanned", Toast.LENGTH_SHORT).show();
+                        }
+                    }catch (Exception ex) {
+                        Toast.makeText(ShowThingsListFragment.this.getActivity(), "Error: " + ex.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+
         textInputEditText = fragmentShowThingsListBinding.getRoot().findViewById(R.id.textInputEditText);
 
         return fragmentShowThingsListBinding.getRoot();
 
+    }
+
+    public ActivityResultLauncher<Intent> getScanForAddActivityResultLauncher(Thing thing, double quantity) {
+        this.currentThing = thing;
+        this.currentQuantity = quantity;
+
+        return scanForAddActivityResultLauncher;
     }
 
     private void setTitle(String title) {
@@ -139,48 +176,8 @@ public class ShowThingsListFragment extends Fragment {
         thingRecyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         thingRecyclerView.setHasFixedSize(true);
 
-        thingAdapter = new ThingAdapter();
+        thingAdapter = new ThingAdapter(thingsViewModel.getAppRepository());
         thingRecyclerView.setAdapter(thingAdapter);
-
-        thingAdapter.setOnItemClickListener(
-                (selectedThing) -> {
-                    AppRepository appRepository = new AppRepository(ShowThingsListFragment.this.getActivity().getApplication());
-                    NavController navController = NavHostFragment.findNavController(ShowThingsListFragment.this);
-                    AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
-
-                    if(fragmentInputParams.getActionType() == ShowThingsListParameters.ActionType.ViewThings) {
-                        NavDirections action = ShowThingsListFragmentDirections.actionShowThingsListFragmentToThingDataFragment(selectedThing);
-                        NavHostFragment.findNavController(ShowThingsListFragment.this)
-                                .navigate(action);
-                    }
-                    else if(fragmentInputParams.getActionType() == ShowThingsListParameters.ActionType.AddThingTo) {
-                        ShowThingsListParameters.ThingIdInterface newParentThing = selectedThing;
-                        ShowThingsListParameters.ThingIdInterface movingThing = fragmentInputParams.getSourceThing();
-
-                        if(newParentThing.getThingId().equals(movingThing.getThingId())) {
-                            Toast.makeText(view.getContext(), "Error: apply to self", Toast.LENGTH_LONG).show();
-                        }
-                        else {
-                            appRepository.addQuantityToStorageByParentId(newParentThing.getThingId(), movingThing.getThingId(), fragmentInputParams.getQuantity());
-                        }
-
-                        NavigationUI.navigateUp(navController, appBarConfiguration);
-
-                    }else if(fragmentInputParams.getActionType() == ShowThingsListParameters.ActionType.MoveTo) {
-
-                        ShowThingsListParameters.ThingIdInterface newParentThing = selectedThing;
-                        ShowThingsListParameters.ThingIdInterface movingThing = fragmentInputParams.getSourceThing();
-                        ShowThingsListParameters.ThingIdInterface oldParentThing = fragmentInputParams.getTargetThing();
-
-                        appRepository.moveStorage(oldParentThing, movingThing, newParentThing);
-
-                        NavigationUI.navigateUp(navController, appBarConfiguration);
-
-                    } else {
-                        Toast.makeText(view.getContext(), "Unknown action type", Toast.LENGTH_LONG).show();
-                    }
-                 });
-
 
         thingsViewModel.getThings(/*namePart*/).observe(this.getViewLifecycleOwner(), new Observer<List<Thing>>() {
             @Override

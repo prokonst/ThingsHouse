@@ -208,7 +208,7 @@ public class ThingDataFragment extends Fragment {
         }
         public void onAddTo(View view) {
 
-            (new AddThingToStorageDialog(ThingDataFragment.this.getActivity(),
+            (new AddThingToStorageDialog(ThingDataFragment.this.getActivity(), AddThingToStorageDialog.ButtonsType.ScanAndSelect,
                     () -> "1",
                     (newValue, actionType) -> {
                         if(actionType == ChangeValueInterface.ActionType.Select) {
