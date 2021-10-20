@@ -247,6 +247,11 @@ public class ThingDataFragment extends Fragment {
 
         }
 
+        public void onShowPhoto(View view) {
+            NavDirections action = ThingDataFragmentDirections.actionThingDataFragmentToShowPhotoFragment(thing);
+            NavHostFragment.findNavController(ThingDataFragment.this).navigate(action);
+        }
+
         private void showItems(View view, ItemsCollectionInterface itemsCollection) {
             itemsCollection.getStorageItems().observe(ThingDataFragment.this.getViewLifecycleOwner(), (listStorageItems) -> {
                 if(listStorageItems.size() == 0) {

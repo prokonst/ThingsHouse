@@ -56,6 +56,9 @@
         <action
             android:id="@+id/action_thingDataFragment_to_showStorageRecordsFragment"
             app:destination="@id/showStorageRecordsFragment" />
+        <action
+            android:id="@+id/action_thingDataFragment_to_showPhotoFragment"
+            app:destination="@id/showPhotoFragment" />
 
 
     </fragment>
@@ -72,5 +75,14 @@
         <action
             android:id="@+id/action_showStorageRecordsFragment_to_showThingsListFragment"
             app:destination="@id/showThingsListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/showPhotoFragment"
+        android:name="com.prokonst.thingshouse.fragments.ShowPhotoFragment"
+        android:label="fragment_show_photo"
+        tools:layout="@layout/fragment_show_photo">
+        <argument
+            android:name="SelectedThing"
+            app:argType="com.prokonst.thingshouse.model.tables.Thing" />
     </fragment>
 </navigation>
