@@ -10,6 +10,7 @@ import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 
+import com.prokonst.thingshouse.BR;
 import com.prokonst.thingshouse.tools.ShowThingsListParameters;
 import com.prokonst.thingshouse.tools.Utils;
 
@@ -29,7 +30,10 @@ public class Thing extends BaseObservable implements Serializable, ShowThingsLis
     private String mainPhotoId;
 
     @Ignore
-    private String mainPhotoSrc;
+    private String mainPhotoBaseSrc;
+    @Ignore
+    private String mainPhotoPrevSrc;
+
 
     @Ignore
     public Thing() {
@@ -41,16 +45,14 @@ public class Thing extends BaseObservable implements Serializable, ShowThingsLis
         this.barCode = barCode;
         this.name = name;
         this.mainPhotoId = mainPhotoId;
-        this.mainPhotoSrc = Utils.getImagePreviewPath(mainPhotoId);
+        this.mainPhotoBaseSrc = Utils.getImageBasePath(mainPhotoId);
+        this.mainPhotoPrevSrc = Utils.getImagePreviewPath(mainPhotoId);
     }
 
     private Thing(@NonNull String thingId) {
         this.thingId = thingId;
     }
 
-    public static Thing createPlugThing(String thingId) {
-        return new Thing(thingId);
-    }
 
     @Bindable
     public String getThingId() {
@@ -101,15 +103,27 @@ public class Thing extends BaseObservable implements Serializable, ShowThingsLis
         this.mainPhotoId = mainPhotoId;
         notifyPropertyChanged(androidx.databinding.library.baseAdapters.BR.mainPhotoId);
 
-        setMainPhotoSrc(Utils.getImagePreviewPath(this.mainPhotoId));
+        setMainPhotoBaseSrc(Utils.getImageBasePath(this.mainPhotoId));
+        setMainPhotoPrevSrc(Utils.getImagePreviewPath(this.mainPhotoId));
     }
 
     @Bindable
-    public String getMainPhotoSrc() {
-        return mainPhotoSrc;
+    public String getMainPhotoBaseSrc() {
+        return mainPhotoBaseSrc;
     }
-    public void setMainPhotoSrc(String mainPhotoSrc) {
-        this.mainPhotoSrc = mainPhotoSrc;
-        notifyPropertyChanged(androidx.databinding.library.baseAdapters.BR.mainPhotoSrc);
+
+    public void setMainPhotoBaseSrc(String mainPhotoBaseSrc) {
+        this.mainPhotoBaseSrc = mainPhotoBaseSrc;
+        notifyPropertyChanged(BR.mainPhotoBaseSrc);
     }
+
+    @Bindable
+    public String getMainPhotoPrevSrc() {
+        return mainPhotoPrevSrc;
+    }
+    public void setMainPhotoPrevSrc(String mainPhotoPrevSrc) {
+        this.mainPhotoPrevSrc = mainPhotoPrevSrc;
+        notifyPropertyChanged(BR.mainPhotoPrevSrc);
+    }
+
 }

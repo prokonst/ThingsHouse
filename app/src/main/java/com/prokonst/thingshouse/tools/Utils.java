@@ -31,24 +31,41 @@ public class Utils {
         return  appFolderPath;
     }
 
+    private static final String ORIG_SUFF = "";
+    private static final String BASE_SUFF = "_base";
+    private static final String PREV_SUFF = "_prev";
+    private static final int BASE_RESOLUTION = 1280;
+    private static final int PREV_RESOLUTION = 400;
+
+    public static String getImageBasePath(String strUUID){
+        return  getImagePath(strUUID, ORIG_SUFF, BASE_SUFF, BASE_RESOLUTION);
+    }
+
     public static String getImagePreviewPath(String strUUID){
+
+        //For create BASE img
+        getImageBasePath(strUUID);
+
+        return  getImagePath(strUUID, BASE_SUFF, PREV_SUFF, PREV_RESOLUTION);
+    }
+
+    private static String getImagePath(String strUUID, String baseSuff, String resSuff, int resolution){
         if(strUUID.isEmpty())
             return "";
 
-        String pathPreview = getBatchDirectoryPath() + "/" + strUUID + "_prev.jpg";
-        File filePreview = new File(pathPreview);
+        String pathResult = getBatchDirectoryPath() + "/" + strUUID + resSuff + ".jpg";
+        File filePreview = new File(pathResult);
         if(filePreview.exists())
-            return pathPreview;
+            return pathResult;
 
-        String pathOrig = getBatchDirectoryPath() + "/" + strUUID + ".jpg";
-        File fileOrig = new File(pathOrig);
+        String pathBase = getBatchDirectoryPath() + "/" + strUUID + baseSuff + ".jpg";
+        File fileOrig = new File(pathBase);
         if(!fileOrig.exists())
             return "";
 
-        Bitmap resizedBitmap = resizeBitmap(pathOrig, 400, 400);
+        Bitmap resizedBitmap = resizeBitmap(pathBase, resolution, resolution);
 
-
-        int rotation = getExifRotateDegree(pathOrig);
+        int rotation = getExifRotateDegree(pathBase);
 
         Matrix matrix = new Matrix();
         matrix.setRotate((float)rotation, resizedBitmap.getWidth(), resizedBitmap.getHeight());
@@ -56,11 +73,11 @@ public class Utils {
         Bitmap rotatedBitmap = Bitmap.createBitmap(resizedBitmap, 0, 0, resizedBitmap.getWidth(), resizedBitmap.getHeight(),
                 matrix, true);
 
-        try (FileOutputStream out = new FileOutputStream(pathPreview)) {
+        try (FileOutputStream out = new FileOutputStream(pathResult)) {
             rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, 72, out);
-            return pathPreview;
+            return pathResult;
         } catch (IOException e) {
-            return pathOrig;
+            return pathBase;
         }
     }
 

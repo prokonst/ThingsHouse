@@ -3,6 +3,7 @@ package com.prokonst.thingshouse.model.dataview;
 import androidx.annotation.NonNull;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
+import androidx.databinding.library.baseAdapters.BR;
 import androidx.room.ColumnInfo;
 import androidx.room.Ignore;
 
@@ -33,7 +34,7 @@ public class StorageRecord extends BaseObservable implements Serializable, ShowT
     private String mainPhotoId;
 
     @Ignore
-    private String mainPhotoSrc;
+    private String mainPhotoPrevSrc;
 
     public StorageRecord(@NonNull String storageId, String parentId, String childId, double quantity,
                          String thingId, String unit, String barCode, String name, String mainPhotoId) {
@@ -46,7 +47,7 @@ public class StorageRecord extends BaseObservable implements Serializable, ShowT
         this.barCode = barCode;
         this.name = name;
         this.mainPhotoId = mainPhotoId;
-        this.mainPhotoSrc = Utils.getImagePreviewPath(mainPhotoId);
+        this.mainPhotoPrevSrc = Utils.getImagePreviewPath(mainPhotoId);
     }
 
     public Storage createStorage() {
@@ -150,15 +151,15 @@ public class StorageRecord extends BaseObservable implements Serializable, ShowT
         this.mainPhotoId = mainPhotoId;
         notifyPropertyChanged(androidx.databinding.library.baseAdapters.BR.mainPhotoId);
 
-        setMainPhotoSrc(Utils.getImagePreviewPath(this.mainPhotoId));
+        setMainPhotoPrevSrc(Utils.getImagePreviewPath(this.mainPhotoId));
     }
 
     @Bindable
-    public String getMainPhotoSrc() {
-        return mainPhotoSrc;
+    public String getMainPhotoPrevSrc() {
+        return mainPhotoPrevSrc;
     }
-    public void setMainPhotoSrc(String mainPhotoSrc) {
-        this.mainPhotoSrc = mainPhotoSrc;
-        notifyPropertyChanged(androidx.databinding.library.baseAdapters.BR.mainPhotoSrc);
+    public void setMainPhotoPrevSrc(String mainPhotoPrevSrc) {
+        this.mainPhotoPrevSrc = mainPhotoPrevSrc;
+        notifyPropertyChanged(BR.mainPhotoPrevSrc);
     }
 }

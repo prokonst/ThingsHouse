@@ -72,7 +72,7 @@
                     android:id="@+id/mainPhotoImageView"
                     android:layout_width="150dp"
                     android:layout_height="150dp"
-                    android:src="@{thingItemProvider.thing.mainPhotoSrc}"
+                    android:src="@{thingItemProvider.thing.mainPhotoPrevSrc}"
                     />
                 <TextView
                     android:id="@+id/barCodeTextView"
