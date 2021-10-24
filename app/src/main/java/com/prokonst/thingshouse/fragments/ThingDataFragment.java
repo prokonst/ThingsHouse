@@ -3,7 +3,6 @@ package com.prokonst.thingshouse.fragments;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.database.sqlite.SQLiteConstraintException;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -21,16 +20,14 @@ import androidx.navigation.fragment.NavHostFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.prokonst.thingshouse.dialog.ChangeValueInterface;
 import com.prokonst.thingshouse.model.dataview.StorageRecord;
 import com.prokonst.thingshouse.tools.CaptureCameraImage;
-import com.prokonst.thingshouse.R;
 import com.prokonst.thingshouse.databinding.FragmentThingDataBinding;
 import com.prokonst.thingshouse.dialog.AddThingToStorageDialog;
-import com.prokonst.thingshouse.dialog.ChangeThingValueDialog;
+import com.prokonst.thingshouse.dialog.InputStringValueDialog;
 import com.prokonst.thingshouse.model.AppRepository;
 import com.prokonst.thingshouse.model.tables.Thing;
 import com.prokonst.thingshouse.tools.ItemsCollectionInterface;
@@ -38,10 +35,6 @@ import com.prokonst.thingshouse.tools.ScanBarCodeLauncher;
 import com.prokonst.thingshouse.tools.ShowStorageRecordsParameters;
 import com.prokonst.thingshouse.tools.ShowThingsListParameters;
 import com.prokonst.thingshouse.viewmodel.ThingsViewModel;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Observable;
 
 
 public class ThingDataFragment extends Fragment {
@@ -106,7 +99,7 @@ public class ThingDataFragment extends Fragment {
                             if(barCode.equals(thing.getBarCode())) {
                                 Toast.makeText(getContext(), "Error: apply to self", Toast.LENGTH_LONG).show();
                             } else {
-                                AppRepository appRepository = new AppRepository(ThingDataFragment.this.getActivity().getApplication());
+                                AppRepository appRepository = AppRepository.getInstance(ThingDataFragment.this.getActivity().getApplication());
                                 appRepository.addQuantityToStorageByBarcode(barCode, thing.getThingId(), currentQuantity);
                             }
                         } else {
@@ -160,7 +153,7 @@ public class ThingDataFragment extends Fragment {
     public class ThingDataClickHandlers {
 
         public void onChangeNameClicked(View view) {
-            new ChangeThingValueDialog(ThingDataFragment.this.getActivity(), "Edit thing", "Name",
+            new InputStringValueDialog(ThingDataFragment.this.getActivity(), "Edit thing", "Name", false,
                     () -> thing.getName(),
                     (newValue) -> {
                         thing.setName(newValue);
@@ -171,7 +164,7 @@ public class ThingDataFragment extends Fragment {
         }
 
         public void onChangeUnitClicked(View view) {
-            new ChangeThingValueDialog(ThingDataFragment.this.getActivity(),"Edit thing", "Unit",
+            new InputStringValueDialog(ThingDataFragment.this.getActivity(),"Edit thing", "Unit", false,
                     () -> thing.getUnit(),
                     (newValue) -> {
                         thing.setUnit(newValue);
@@ -190,7 +183,7 @@ public class ThingDataFragment extends Fragment {
                     .setCancelable(false)
                     .setPositiveButton("Delete ", (dialogBox, id) -> {
                         thingsViewModel.deleteThing(thing);
-                        NavDirections action = ThingDataFragmentDirections.actionThingDataFragmentToShowThingListFragment(
+                        NavDirections action = (NavDirections) ThingDataFragmentDirections.actionThingDataFragmentToShowThingListFragment(
                                 new ShowThingsListParameters(true, "Browse things",
                                         ShowThingsListParameters.ActionType.ViewThings, null, null, 0) );
                         NavHostFragment.findNavController(ThingDataFragment.this)
@@ -213,7 +206,7 @@ public class ThingDataFragment extends Fragment {
                     (newValue, actionType) -> {
                         if(actionType == ChangeValueInterface.ActionType.Select) {
 
-                            NavDirections action = ThingDataFragmentDirections.actionThingDataFragmentToShowThingListFragment(
+                            NavDirections action = (NavDirections) ThingDataFragmentDirections.actionThingDataFragmentToShowThingListFragment(
                                     new ShowThingsListParameters(
                                     true, "Select storage for: " + thing.getName(),
                                     ShowThingsListParameters.ActionType.AddThingTo, thing, null, Double.parseDouble(newValue)) );
@@ -233,7 +226,7 @@ public class ThingDataFragment extends Fragment {
         public void onWhereUsed(View view) {
 //            AppRepository appRepository = new AppRepository(ThingDataFragment.this.getActivity().getApplication());
 //            showItems(view, () ->  appRepository.getStorageRecordsByChildId(thing.getThingId())  );
-            NavDirections action = ThingDataFragmentDirections.actionThingDataFragmentToShowStorageRecordsFragment(
+            NavDirections action = (NavDirections) ThingDataFragmentDirections.actionThingDataFragmentToShowStorageRecordsFragment(
                     new ShowStorageRecordsParameters(thing, ShowStorageRecordsParameters.ReportType.WhereUsed));
             NavHostFragment.findNavController(ThingDataFragment.this).navigate(action);
 
@@ -241,14 +234,14 @@ public class ThingDataFragment extends Fragment {
         public void onItems(View view) {
 //            AppRepository appRepository = new AppRepository(ThingDataFragment.this.getActivity().getApplication());
 //            showItems(view, () -> appRepository.getStorageRecordsByParentId(thing.getThingId())  );
-            NavDirections action = ThingDataFragmentDirections.actionThingDataFragmentToShowStorageRecordsFragment(
+            NavDirections action = (NavDirections) ThingDataFragmentDirections.actionThingDataFragmentToShowStorageRecordsFragment(
                     new ShowStorageRecordsParameters(thing, ShowStorageRecordsParameters.ReportType.SelfItems));
             NavHostFragment.findNavController(ThingDataFragment.this).navigate(action);
 
         }
 
         public void onShowPhoto(View view) {
-            NavDirections action = ThingDataFragmentDirections.actionThingDataFragmentToShowPhotoFragment(thing);
+            NavDirections action = (NavDirections) ThingDataFragmentDirections.actionThingDataFragmentToShowPhotoFragment(thing);
             NavHostFragment.findNavController(ThingDataFragment.this).navigate(action);
         }
 

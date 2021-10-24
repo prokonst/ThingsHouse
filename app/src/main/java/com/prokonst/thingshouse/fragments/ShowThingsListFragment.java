@@ -130,7 +130,7 @@ public class ShowThingsListFragment extends Fragment {
                             if(barCode.equals(currentThing.getBarCode())) {
                                 Toast.makeText(getContext(), "Error: apply to self", Toast.LENGTH_LONG).show();
                             } else {
-                                AppRepository appRepository = new AppRepository(ShowThingsListFragment.this.getActivity().getApplication());
+                                AppRepository appRepository = AppRepository.getInstance(ShowThingsListFragment.this.getActivity().getApplication());
                                 appRepository.addQuantityToStorageByBarcode(barCode, currentThing.getThingId(), currentQuantity);
                             }
                         } else {

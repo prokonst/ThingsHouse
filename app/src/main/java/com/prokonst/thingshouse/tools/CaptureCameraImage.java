@@ -59,7 +59,7 @@ public class CaptureCameraImage {
     public CaptureCameraImage(FragmentActivity activity) {
         setmActivity(activity);
 
-        appRepository = new AppRepository(activity.getApplication());
+        appRepository = AppRepository.getInstance(activity.getApplication());
 
         //Request For Premissions
         if(isNotAllPermissionsGranted()){

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "47298124900",
+    "project_id": "prokonstthingshouse",
+    "storage_bucket": "prokonstthingshouse.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:47298124900:android:9ffe525d63b9d0482b9371",
+        "android_client_info": {
+          "package_name": "com.prokonst.thingshouse"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "47298124900-l3vnuj1simbcr54j37efsr6fi2b86ckq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.prokonst.thingshouse",
+            "certificate_hash": "21e5d81f04d8db29441477269b5daca3fa34f9d3"
+          }
+        },
+        {
+          "client_id": "47298124900-olrpvcr4c00oa13m3qq68gqs39c50gss.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDjGkS-L1sQAZJR96yssBeJWAZOnXqe5Pc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "47298124900-olrpvcr4c00oa13m3qq68gqs39c50gss.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

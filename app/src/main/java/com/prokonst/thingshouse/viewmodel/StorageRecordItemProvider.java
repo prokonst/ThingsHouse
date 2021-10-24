@@ -1,25 +1,17 @@
 package com.prokonst.thingshouse.viewmodel;
 
-import android.content.Intent;
 import android.view.View;
-import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.fragment.app.FragmentContainerView;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.prokonst.thingshouse.dialog.ChangeThingValueDialog;
+import com.prokonst.thingshouse.dialog.InputStringValueDialog;
 import com.prokonst.thingshouse.fragments.ShowStorageRecordsFragment;
 import com.prokonst.thingshouse.fragments.ShowStorageRecordsFragmentDirections;
-import com.prokonst.thingshouse.fragments.ThingDataFragment;
 import com.prokonst.thingshouse.model.AppRepository;
 import com.prokonst.thingshouse.model.dataview.StorageRecord;
-import com.prokonst.thingshouse.model.tables.Thing;
 import com.prokonst.thingshouse.tools.ScanBarCodeLauncher;
 import com.prokonst.thingshouse.tools.ShowThingsListParameters;
 
@@ -73,7 +65,7 @@ public class StorageRecordItemProvider implements Serializable {
     }
 
     public void changeQuantity(View view) {
-        new ChangeThingValueDialog(view.getContext(), "Edit item storage", "Quantity",
+        new InputStringValueDialog(view.getContext(), "Edit item storage", "Quantity", false,
                 () -> Double.toString(storageRecord.getQuantity()),
                 (newValue) -> {
                     try {

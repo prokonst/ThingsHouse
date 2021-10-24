@@ -80,7 +80,7 @@ public class ShowStorageRecordsFragment extends Fragment {
                                 Toast.makeText(this.getContext(), "Error: apply to self", Toast.LENGTH_LONG).show();
                             }
                             else {
-                                AppRepository appRepository = new AppRepository(ShowStorageRecordsFragment.this.getActivity().getApplication());
+                                AppRepository appRepository = AppRepository.getInstance(ShowStorageRecordsFragment.this.getActivity().getApplication());
                                 appRepository.moveStorageByBarcode(barCode,
                                         currentStorageRecord);
 

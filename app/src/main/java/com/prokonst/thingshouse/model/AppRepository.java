@@ -16,13 +16,22 @@ import java.util.List;
 
 public class AppRepository {
 
+    private static AppRepository appRepository;
+
     private  Application application;
     private ThingDao thingDao;
     private StorageDao storageDao;
 
     private LiveData<List<Thing>> things;
 
-    public AppRepository(Application application) {
+    public static AppRepository getInstance(Application application) {
+        if(AppRepository.appRepository == null)
+            AppRepository.appRepository = new AppRepository(application);
+
+        return AppRepository.appRepository;
+    }
+
+    private AppRepository(Application application) {
         this.application = application;
         ThingsDataBase database = ThingsDataBase.getInstance(application);
         thingDao = database.getThingDao();

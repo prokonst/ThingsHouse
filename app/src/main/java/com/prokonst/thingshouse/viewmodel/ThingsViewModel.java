@@ -23,7 +23,7 @@ public class ThingsViewModel extends AndroidViewModel {
         super(application);
 
         this.application = application;
-        appRepository = new AppRepository(application);
+        appRepository = AppRepository.getInstance(application);
     }
 
     public AppRepository getAppRepository() {
