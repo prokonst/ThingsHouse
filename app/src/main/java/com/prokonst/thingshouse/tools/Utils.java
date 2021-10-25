@@ -24,7 +24,7 @@ public class Utils {
         return UUID.randomUUID().toString().toLowerCase();
     }
 
-    private static String getBatchDirectoryPath() {
+    public static String getBatchDirectoryPath() {
         //String appFolderPath = Environment.getExternalStorageDirectory().toString() + "/DCIM/CaptureImage";
         String appFolderPath = Environment.getExternalStorageDirectory().toString()
                 + "/Android/media/"
