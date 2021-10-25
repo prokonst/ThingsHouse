@@ -3,14 +3,14 @@ package com.prokonst.thingshouse.model.tables;
 import androidx.annotation.NonNull;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
+import androidx.databinding.library.baseAdapters.BR;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-
-import com.prokonst.thingshouse.BR;
+import com.google.firebase.database.Exclude;
 import com.prokonst.thingshouse.tools.ShowThingsListParameters;
 import com.prokonst.thingshouse.tools.Utils;
 
@@ -23,14 +23,17 @@ public class Thing extends BaseObservable implements Serializable, ShowThingsLis
     @PrimaryKey(autoGenerate = false)
     @NonNull
     @ColumnInfo(name = "thing_id")
-    private String thingId;
+    private String id;
     private String unit;
     private String barCode;
     private String name;
     private String mainPhotoId;
 
+    @Exclude
     @Ignore
     private String mainPhotoBaseSrc;
+
+    @Exclude
     @Ignore
     private String mainPhotoPrevSrc;
 
@@ -39,8 +42,8 @@ public class Thing extends BaseObservable implements Serializable, ShowThingsLis
     public Thing() {
     }
 
-    public Thing(String thingId, String unit, String barCode, String name, String mainPhotoId) {
-        this.thingId = thingId;
+    public Thing(String id, String unit, String barCode, String name, String mainPhotoId) {
+        this.id = id;
         this.unit = unit;
         this.barCode = barCode;
         this.name = name;
@@ -49,19 +52,24 @@ public class Thing extends BaseObservable implements Serializable, ShowThingsLis
         this.mainPhotoPrevSrc = Utils.getImagePreviewPath(mainPhotoId);
     }
 
-    private Thing(@NonNull String thingId) {
-        this.thingId = thingId;
+    private Thing(@NonNull String id) {
+        this.id = id;
     }
 
 
     @Bindable
-    public String getThingId() {
-        return thingId;
+    public String getId() {
+        return id;
     }
 
-    public void setThingId(String thingId) {
-        this.thingId = thingId;
-        notifyPropertyChanged(androidx.databinding.library.baseAdapters.BR.thingId);
+    public void setId(String id) {
+        this.id = id;
+        notifyPropertyChanged(androidx.databinding.library.baseAdapters.BR.id);
+    }
+
+    @Exclude
+    public String getThingId() {
+        return id;
     }
 
     @Bindable
@@ -107,20 +115,23 @@ public class Thing extends BaseObservable implements Serializable, ShowThingsLis
         setMainPhotoPrevSrc(Utils.getImagePreviewPath(this.mainPhotoId));
     }
 
+    @Exclude
     @Bindable
     public String getMainPhotoBaseSrc() {
         return mainPhotoBaseSrc;
     }
-
+    @Exclude
     public void setMainPhotoBaseSrc(String mainPhotoBaseSrc) {
         this.mainPhotoBaseSrc = mainPhotoBaseSrc;
         notifyPropertyChanged(BR.mainPhotoBaseSrc);
     }
 
+    @Exclude
     @Bindable
     public String getMainPhotoPrevSrc() {
         return mainPhotoPrevSrc;
     }
+    @Exclude
     public void setMainPhotoPrevSrc(String mainPhotoPrevSrc) {
         this.mainPhotoPrevSrc = mainPhotoPrevSrc;
         notifyPropertyChanged(BR.mainPhotoPrevSrc);

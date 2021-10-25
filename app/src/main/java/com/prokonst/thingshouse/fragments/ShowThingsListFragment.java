@@ -16,11 +16,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
-import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -131,7 +127,7 @@ public class ShowThingsListFragment extends Fragment {
                                 Toast.makeText(getContext(), "Error: apply to self", Toast.LENGTH_LONG).show();
                             } else {
                                 AppRepository appRepository = AppRepository.getInstance(ShowThingsListFragment.this.getActivity().getApplication());
-                                appRepository.addQuantityToStorageByBarcode(barCode, currentThing.getThingId(), currentQuantity);
+                                appRepository.addQuantityToStorageByBarcode(barCode, currentThing.getId(), currentQuantity);
                             }
                         } else {
                             Toast.makeText(ShowThingsListFragment.this.getActivity(), "BarCodeNotScanned", Toast.LENGTH_SHORT).show();

@@ -12,8 +12,6 @@ import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
 
-import com.prokonst.thingshouse.model.tables.Thing;
-
 import java.io.Serializable;
 
 @Entity(tableName = "storages",
@@ -30,7 +28,7 @@ public class Storage extends BaseObservable implements Serializable {
     @PrimaryKey(autoGenerate = false)
     @NonNull
     @ColumnInfo(name = "storage_id")
-    private String storageId;
+    private String id;
 
     @ColumnInfo(name = "parent_id")
     private String parentId;
@@ -40,8 +38,8 @@ public class Storage extends BaseObservable implements Serializable {
 
     private double quantity;
 
-    public Storage(@NonNull String storageId, String parentId, String childId, double quantity) {
-        this.storageId = storageId;
+    public Storage(@NonNull String id, String parentId, String childId, double quantity) {
+        this.id = id;
         this.parentId = parentId;
         this.childId = childId;
         this.quantity = quantity;
@@ -49,12 +47,12 @@ public class Storage extends BaseObservable implements Serializable {
 
     @Bindable
     @NonNull
-    public String getStorageId() {
-        return storageId;
+    public String getId() {
+        return id;
     }
 
-    public void setStorageId(@NonNull String storageId) {
-        this.storageId = storageId;
+    public void setId(@NonNull String id) {
+        this.id = id;
         notifyPropertyChanged(androidx.databinding.library.baseAdapters.BR.storageId);
     }
 

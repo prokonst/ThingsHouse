@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.prokonst.thingshouse.R;
 import com.prokonst.thingshouse.databinding.FragmentShowPhotoBinding;
 import com.prokonst.thingshouse.model.tables.Thing;
 import com.prokonst.thingshouse.viewmodel.ThingsViewModel;
@@ -31,7 +30,7 @@ public class ShowPhotoFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        thingId = ShowPhotoFragmentArgs.fromBundle(getArguments()).getSelectedThing().getThingId();
+        thingId = ShowPhotoFragmentArgs.fromBundle(getArguments()).getSelectedThing().getId();
     }
 
     @Override

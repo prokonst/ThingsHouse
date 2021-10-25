@@ -11,11 +11,8 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.prokonst.thingshouse.dialog.AddThingToStorageDialog;
-import com.prokonst.thingshouse.dialog.ChangeValueInterface;
 import com.prokonst.thingshouse.fragments.ShowThingsListFragment;
 import com.prokonst.thingshouse.fragments.ShowThingsListFragmentDirections;
-import com.prokonst.thingshouse.fragments.ThingDataFragment;
-import com.prokonst.thingshouse.fragments.ThingDataFragmentDirections;
 import com.prokonst.thingshouse.model.AppRepository;
 import com.prokonst.thingshouse.model.tables.Thing;
 import com.prokonst.thingshouse.tools.ScanBarCodeLauncher;

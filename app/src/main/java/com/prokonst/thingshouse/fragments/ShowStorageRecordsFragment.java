@@ -15,10 +15,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.NavDirections;
-import androidx.navigation.fragment.NavHostFragment;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -111,9 +107,9 @@ public class ShowStorageRecordsFragment extends Fragment {
 
         LiveData<List<StorageRecord>> storageRecords;
         if(fragmentInputParams.getReportType() == ShowStorageRecordsParameters.ReportType.WhereUsed) {
-            storageRecords = storageRecordsViewModel.getStorageRecordsByChildId(fragmentInputParams.getSourceThing().getThingId());
+            storageRecords = storageRecordsViewModel.getStorageRecordsByChildId(fragmentInputParams.getSourceThing().getId());
         } else if (fragmentInputParams.getReportType() == ShowStorageRecordsParameters.ReportType.SelfItems) {
-            storageRecords = storageRecordsViewModel.getStorageRecordsByParentId(fragmentInputParams.getSourceThing().getThingId());
+            storageRecords = storageRecordsViewModel.getStorageRecordsByParentId(fragmentInputParams.getSourceThing().getId());
         }
         else {
             Toast.makeText(this.getContext(), "Unknown report type: " + fragmentInputParams.getReportType(), Toast.LENGTH_SHORT).show();

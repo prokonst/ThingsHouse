@@ -70,7 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:hint="id"
-            android:text="@{thing.thingId}"
+            android:text="@{thing.id}"
             android:textSize="12sp"
             app:layout_constraintTop_toBottomOf="@+id/barCodeTextView" />
 
@@ -133,6 +133,15 @@
             android:onClick="@{ckickHandlers::onShowPhoto}"
             android:text="Photo"
             app:layout_constraintBottom_toBottomOf="@+id/mainPhotoImageView"
+            app:layout_constraintStart_toEndOf="@+id/mainPhotoImageView" />
+
+        <Button
+            android:id="@+id/buttonTest"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="@{ckickHandlers::onTest}"
+            android:text="Test"
+            app:layout_constraintBottom_toTopOf="@+id/buttonShowPhoto"
             app:layout_constraintStart_toEndOf="@+id/mainPhotoImageView" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

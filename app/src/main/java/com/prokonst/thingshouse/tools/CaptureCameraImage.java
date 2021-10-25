@@ -110,10 +110,7 @@ public class CaptureCameraImage {
 
         mOutputFileUri = Uri.fromFile(mImageFile);
 
-        mOutputFileProviderUri = FileProvider.getUriForFile(
-                mActivity,
-                BuildConfig.APPLICATION_ID + "." + mActivity.getLocalClassName() + ".provider",
-                mImageFile);
+        mOutputFileProviderUri = Utils.getFileProviderUri(mActivity, mImageFile);
 
         try {
             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);

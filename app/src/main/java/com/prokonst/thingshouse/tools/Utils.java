@@ -1,11 +1,15 @@
 package com.prokonst.thingshouse.tools;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
+import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
+
+import androidx.core.content.FileProvider;
 
 import com.prokonst.thingshouse.MainActivity;
 
@@ -17,7 +21,7 @@ import java.util.UUID;
 public class Utils {
 
     public static String generateUUIDStr() {
-        return UUID.randomUUID().toString().toUpperCase();
+        return UUID.randomUUID().toString().toLowerCase();
     }
 
     private static String getBatchDirectoryPath() {
@@ -47,6 +51,10 @@ public class Utils {
         getImageBasePath(strUUID);
 
         return  getImagePath(strUUID, BASE_SUFF, PREV_SUFF, PREV_RESOLUTION);
+    }
+
+    public static String getBaseImageFileName(String strUUID) {
+        return strUUID.toLowerCase() + BASE_SUFF + ".jpg";
     }
 
     private static String getImagePath(String strUUID, String baseSuff, String resSuff, int resolution){
@@ -126,5 +134,17 @@ public class Utils {
         }
 
         return appFolderPath;
+    }
+
+    public static Uri getFileProviderUri(Context context, File file) {
+        return FileProvider.getUriForFile(
+                context,
+                MainActivity.class.getName() + ".provider",
+                file);
+    }
+
+    public static Uri getFileProviderUri(Context context, String filePath) {
+        File file = new File(filePath);
+        return Utils.getFileProviderUri(context, file);
     }
 }

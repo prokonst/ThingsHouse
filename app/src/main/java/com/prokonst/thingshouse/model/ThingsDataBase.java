@@ -75,11 +75,11 @@ public abstract class ThingsDataBase extends RoomDatabase {
             thingDao.insert(box2);
 
             String idS1 = "24F9466F-9FC1-49F6-8A0B-68BD15CE7BBC";
-            Storage storage_thing1_in_box1 = new Storage(idS1, box1.getThingId(), thing1.getThingId(), 3.0);
+            Storage storage_thing1_in_box1 = new Storage(idS1, box1.getId(), thing1.getId(), 3.0);
             storageDao.insert(storage_thing1_in_box1);
 
             String idS2 = "1CFA31CB-5D14-43F5-BB20-E1D1A5005ED3";
-            Storage storage_thing2_in_box1 = new Storage(idS2, box1.getThingId(), thing2.getThingId(), 5.0);
+            Storage storage_thing2_in_box1 = new Storage(idS2, box1.getId(), thing2.getId(), 5.0);
             storageDao.insert(storage_thing2_in_box1);
 
             return null;

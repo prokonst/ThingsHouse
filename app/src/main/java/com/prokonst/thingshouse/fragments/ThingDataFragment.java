@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.prokonst.thingshouse.dialog.ChangeValueInterface;
+import com.prokonst.thingshouse.model.ThingsFireBase;
 import com.prokonst.thingshouse.model.dataview.StorageRecord;
 import com.prokonst.thingshouse.tools.CaptureCameraImage;
 import com.prokonst.thingshouse.databinding.FragmentThingDataBinding;
@@ -52,7 +53,7 @@ public class ThingDataFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        thingId = ThingDataFragmentArgs.fromBundle(getArguments()).getSelectedThing().getThingId();
+        thingId = ThingDataFragmentArgs.fromBundle(getArguments()).getSelectedThing().getId();
     }
 
     @Override
@@ -100,7 +101,7 @@ public class ThingDataFragment extends Fragment {
                                 Toast.makeText(getContext(), "Error: apply to self", Toast.LENGTH_LONG).show();
                             } else {
                                 AppRepository appRepository = AppRepository.getInstance(ThingDataFragment.this.getActivity().getApplication());
-                                appRepository.addQuantityToStorageByBarcode(barCode, thing.getThingId(), currentQuantity);
+                                appRepository.addQuantityToStorageByBarcode(barCode, thing.getId(), currentQuantity);
                             }
                         } else {
                             Toast.makeText(ThingDataFragment.this.getActivity(), "BarCodeNotScanned", Toast.LENGTH_SHORT).show();
@@ -175,6 +176,10 @@ public class ThingDataFragment extends Fragment {
 
         public void onChangePhoto(View view) {
             CaptureCameraImage.getCaptureCameraImage().capture(thing);
+        }
+
+        public void onTest(View view) {
+            ThingsFireBase.getInstance().writeThing(thing, view.getContext());
         }
 
         public void onDeleteThing(View view) {

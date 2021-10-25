@@ -154,9 +154,9 @@ public class AppRepository {
                     if(parentThing == null)
                         throw new Exception("Not found thing with barcode: " + barcode);
 
-                    Storage storage = storageDao.getStorage(parentThing.getThingId(), childId);
+                    Storage storage = storageDao.getStorage(parentThing.getId(), childId);
                     if(storage == null) {
-                        storage = new Storage(Utils.generateUUIDStr(), parentThing.getThingId(), childId, quantity);
+                        storage = new Storage(Utils.generateUUIDStr(), parentThing.getId(), childId, quantity);
                         storageDao.insert(storage);
                     } else {
                         storage.setQuantity(storage.getQuantity() + quantity);
@@ -176,7 +176,7 @@ public class AppRepository {
 
                     moveStorage(storageRecord.getParentId(),
                             storageRecord.getChildId(),
-                            newParentThing.getThingId());
+                            newParentThing.getId());
 
                     return null;
                 }

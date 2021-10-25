@@ -16,6 +16,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.google.firebase.auth.FirebaseUser;
 import com.prokonst.thingshouse.databinding.FragmentFirstBinding;
 import com.prokonst.thingshouse.model.Authorization;
+import com.prokonst.thingshouse.model.ThingsFireBase;
 import com.prokonst.thingshouse.tools.ShowThingsListParameters;
 
 public class FirstFragment extends Fragment {
@@ -67,7 +68,9 @@ public class FirstFragment extends Fragment {
         });
 
         binding.testButton.setOnClickListener((v) -> {
-            Toast.makeText(this.getContext(), "" + Authorization.getCurrentUser().getEmail(), Toast.LENGTH_SHORT).show();
+            //ThingsFireBase.getInstance().createUserNode();
+
+            Toast.makeText(this.getContext(), "Ok", Toast.LENGTH_SHORT).show();
             return;
         });
 

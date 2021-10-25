@@ -69,7 +69,7 @@ public class StorageRecord extends BaseObservable implements Serializable, ShowT
 
     public void setStorageId(@NonNull String storageId) {
         this.storageId = storageId;
-        notifyPropertyChanged(androidx.databinding.library.baseAdapters.BR.storageId);
+        notifyPropertyChanged(BR.storageId);
     }
 
     @Bindable
@@ -79,7 +79,7 @@ public class StorageRecord extends BaseObservable implements Serializable, ShowT
 
     public void setParentId(String parentId) {
         this.parentId = parentId;
-        notifyPropertyChanged(androidx.databinding.library.baseAdapters.BR.parentId);
+        notifyPropertyChanged(BR.parentId);
     }
 
     @Bindable
@@ -89,7 +89,7 @@ public class StorageRecord extends BaseObservable implements Serializable, ShowT
 
     public void setChildId(String childId) {
         this.childId = childId;
-        notifyPropertyChanged(androidx.databinding.library.baseAdapters.BR.childId);
+        notifyPropertyChanged(BR.childId);
     }
 
     @Bindable
@@ -99,7 +99,7 @@ public class StorageRecord extends BaseObservable implements Serializable, ShowT
 
     public void setQuantity(double quantity) {
         this.quantity = quantity;
-        notifyPropertyChanged(androidx.databinding.library.baseAdapters.BR.quantity);
+        notifyPropertyChanged(BR.quantity);
     }
 
     @Bindable
@@ -109,7 +109,7 @@ public class StorageRecord extends BaseObservable implements Serializable, ShowT
 
     public void setThingId(String thingId) {
         this.thingId = thingId;
-        notifyPropertyChanged(androidx.databinding.library.baseAdapters.BR.thingId);
+        notifyPropertyChanged(BR.thingId);
     }
 
     @Bindable
