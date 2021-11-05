@@ -23,16 +23,16 @@ public interface ThingDao {
     void delete(Thing thing);
 
     //@Query("select * from things order by name")
-    @Query("select * from things")
-    LiveData<List<Thing>> getAllThings();
+    @Query("select * from things where userId = :userId")
+    LiveData<List<Thing>> getAllThings(String userId);
 /*
     //@Query("select * from things where name like '%' || :namePart || '%'  order by name")
     @Query("select * from things where name like '%' || :namePart || '%'")
     LiveData<List<Thing>> getThings(String namePart);*/
 
-    @Query("select * from things where barCode = :barCode")
-    Thing getThingByBarCode(String barCode);
+    @Query("select * from things where barCode = :barCode and userId = :userId")
+    Thing getThingByBarCode(String barCode, String userId);
 
-    @Query("select * from things where thing_id = :thingId")
-    LiveData<Thing> getThingById(String thingId);
+    @Query("select * from things where thing_id = :thingId and userId = :userId")
+    LiveData<Thing> getThingById(String thingId, String userId);
 }

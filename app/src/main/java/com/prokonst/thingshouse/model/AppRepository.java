@@ -1,6 +1,9 @@
 package com.prokonst.thingshouse.model;
 
 import android.app.Application;
+import android.os.Build;
+
+import androidx.annotation.RequiresApi;
 import androidx.lifecycle.LiveData;
 
 import com.prokonst.thingshouse.model.dataview.StorageRecord;
@@ -41,29 +44,33 @@ public class AppRepository {
     //CRUD For Thing
 
     public LiveData<Thing> getThingById(String thingId) {
-        return thingDao.getThingById(thingId);
+        return thingDao.getThingById(thingId, Authorization.getCurrentUser().getUid());
     }
 
     public LiveData<List<Thing>> getThings() {
-        return thingDao.getAllThings();
+        return thingDao.getAllThings(Authorization.getCurrentUser().getUid());
     }
 /*
     public List<Thing> getThingsByBarCode(String barCode) {
         return thingDao.getThingsByBarCode(barCode);
     }*/
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void insertThing(Thing thing) {
         (new AsyncTaskCUD(application,
                 () -> {
+                    thing.calculateHash();
                     thingDao.insert(thing);
                     return null;
                 }
         )).execute();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void updateThing(Thing thing) {
         (new AsyncTaskCUD(application,
                 () -> {
+                    thing.calculateHash();
                     thingDao.update(thing);
                     return null;
                 }
@@ -103,18 +110,22 @@ public class AppRepository {
         return storageDao.getStorageRecordsByChildId(childId);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void insertStorage(Storage storage) {
         (new AsyncTaskCUD(application,
                 () -> {
+                    storage.calculateHash();
                     storageDao.insert(storage);
                     return null;
                 }
         )).execute();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void updateStorage(Storage storage) {
         (new AsyncTaskCUD(application,
                 () -> {
+                    storage.calculateHash();
                     storageDao.update(storage);
                     return null;
                 }
@@ -150,7 +161,7 @@ public class AppRepository {
     public void addQuantityToStorageByBarcode(String barcode, String childId, double quantity) {
         (new AsyncTaskCUD(application,
                 () -> {
-                    Thing parentThing = thingDao.getThingByBarCode(barcode);
+                    Thing parentThing = thingDao.getThingByBarCode(barcode, Authorization.getCurrentUser().getUid());
                     if(parentThing == null)
                         throw new Exception("Not found thing with barcode: " + barcode);
 
@@ -170,7 +181,7 @@ public class AppRepository {
     public void moveStorageByBarcode(String barcode, StorageRecord storageRecord) {
         (new AsyncTaskCUD(application,
                 () -> {
-                    Thing newParentThing = thingDao.getThingByBarCode(barcode);
+                    Thing newParentThing = thingDao.getThingByBarCode(barcode, Authorization.getCurrentUser().getUid());
                     if(newParentThing == null)
                         throw new Exception("Not found thing with barcode: " + barcode);
 

@@ -9,25 +9,41 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
 
 import com.google.firebase.database.Exclude;
 import com.prokonst.thingshouse.tools.ShowThingsListParameters;
 import com.prokonst.thingshouse.tools.Utils;
 
 import java.io.Serializable;
+import java.util.Date;
+import java.util.Locale;
 
 
 @Entity(tableName = "things", indices = {@Index(value = {"barCode"}, unique = true)})
-public class Thing extends BaseObservable implements Serializable, ShowThingsListParameters.ThingIdInterface {
+public class Thing extends BaseObservable implements Serializable, Synced, ShowThingsListParameters.ThingIdInterface {
 
     @PrimaryKey(autoGenerate = false)
     @NonNull
     @ColumnInfo(name = "thing_id")
     private String id;
+
     private String unit;
+
     private String barCode;
+
     private String name;
+
     private String mainPhotoId;
+
+    @TypeConverters({com.prokonst.thingshouse.tools.DateTimeConverter.class})
+    private Date dateChange;
+
+    public String dataHash;
+
+    public boolean isDeleted;
+
+    public String userId;
 
     @Exclude
     @Ignore
@@ -135,6 +151,61 @@ public class Thing extends BaseObservable implements Serializable, ShowThingsLis
     public void setMainPhotoPrevSrc(String mainPhotoPrevSrc) {
         this.mainPhotoPrevSrc = mainPhotoPrevSrc;
         notifyPropertyChanged(BR.mainPhotoPrevSrc);
+    }
+
+    public Date getDateChange() {
+        return dateChange;
+    }
+
+    public void setDateChange(Date dateChange){
+        this.dateChange = dateChange;
+    }
+
+
+    public String getDataHash() {
+        return dataHash;
+    }
+
+    public void setDataHash(String dataHash){
+        this.dataHash = dataHash;
+    }
+
+    public boolean getIsDeleted() {
+        return isDeleted;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public void setIsDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
+
+    public String getDataForHash(){
+
+        StringBuilder dataForHash = new StringBuilder();
+
+        dataForHash.append("Unit: ");
+        dataForHash.append(this.unit);
+
+        dataForHash.append("BarCode: ");
+        dataForHash.append(this.barCode);
+
+        dataForHash.append("Name: ");
+        dataForHash.append(this.name);
+
+        dataForHash.append("MainPhotoId: ");
+        dataForHash.append(this.mainPhotoId);
+
+        dataForHash.append("IsDeleted: ");
+        dataForHash.append(Boolean.toString(this.isDeleted).toLowerCase());
+
+        return dataForHash.toString();
     }
 
 }

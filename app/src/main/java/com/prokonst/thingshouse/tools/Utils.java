@@ -6,9 +6,12 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.util.Log;
+import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.core.content.FileProvider;
 
 import com.prokonst.thingshouse.MainActivity;
@@ -16,6 +19,8 @@ import com.prokonst.thingshouse.MainActivity;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.util.Base64;
 import java.util.UUID;
 
 public class Utils {
@@ -146,5 +151,12 @@ public class Utils {
     public static Uri getFileProviderUri(Context context, String filePath) {
         File file = new File(filePath);
         return Utils.getFileProviderUri(context, file);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public static String ConvertDoubleToBase64(double val) {
+        byte[] bytes = ByteBuffer.allocate(8).putDouble(val).array();
+        String base64 = new String(Base64.getEncoder().encode(bytes));
+        return base64;
     }
 }

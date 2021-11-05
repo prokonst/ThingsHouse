@@ -2,8 +2,10 @@ package com.prokonst.thingshouse.model;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Build;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
@@ -55,31 +57,38 @@ public abstract class ThingsDataBase extends RoomDatabase {
             storageDao = database.getStorageDao();
         }
 
+        @RequiresApi(api = Build.VERSION_CODES.O)
         @Override
         protected Void doInBackground(Void... voids) {
 
             String idT1 = "3D01C18A-6E2F-4E6F-AD8C-7BD429774DED";
             Thing thing1 = new Thing(idT1, "шт", idT1, "Вещь 1", "");
+            thing1.calculateHash();
             thingDao.insert(thing1);
 
             String idT2 = "0ACE3316-E3D4-4383-B9EA-EBFDB240400F";
             Thing thing2 = new Thing(idT2, "шт", idT2, "Вещь 2", "");
+            thing2.calculateHash();
             thingDao.insert(thing2);
 
             String idB1 = "347C8DCE-93FB-43D0-A186-A77DA2F4B974";
             Thing box1 = new Thing(idB1, "шт", idB1, "Ящик 1", "");
+            box1.calculateHash();
             thingDao.insert(box1);
 
             String idB2 = "41CDBB0C-8FF3-4D29-89D5-4F041BF32EB3";
             Thing box2 = new Thing(idB2, "шт", idB2, "Ящик 2", "");
+            box2.calculateHash();
             thingDao.insert(box2);
 
             String idS1 = "24F9466F-9FC1-49F6-8A0B-68BD15CE7BBC";
             Storage storage_thing1_in_box1 = new Storage(idS1, box1.getId(), thing1.getId(), 3.0);
+            storage_thing1_in_box1.calculateHash();
             storageDao.insert(storage_thing1_in_box1);
 
             String idS2 = "1CFA31CB-5D14-43F5-BB20-E1D1A5005ED3";
             Storage storage_thing2_in_box1 = new Storage(idS2, box1.getId(), thing2.getId(), 5.0);
+            storage_thing2_in_box1.calculateHash();
             storageDao.insert(storage_thing2_in_box1);
 
             return null;
