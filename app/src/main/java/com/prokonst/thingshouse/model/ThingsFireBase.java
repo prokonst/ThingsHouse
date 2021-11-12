@@ -6,12 +6,18 @@ import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.ListResult;
@@ -53,6 +59,39 @@ public class ThingsFireBase {
     public DatabaseReference getCurrentUserNode() {
         DatabaseReference currentUserNode = this.rootNodeReference.child(getCurrentUserId());
         return currentUserNode;
+    }
+
+    public void sync(Context context){
+        FirebaseUser currentUser = Authorization.getCurrentUser();
+
+        if(currentUser == null){
+            Toast.makeText(context, "You are not authorized", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        DatabaseReference thingNode = this.getCurrentUserNode().child("things");
+        thingNode.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                StringBuilder sb = new StringBuilder();
+
+                for(DataSnapshot curDS : snapshot.getChildren()){
+                    Thing curThing = curDS.getValue(Thing.class);
+                    sb.append(curThing.getName());
+                    sb.append("\n");
+                    sb.append("--------------------------\n");
+                }
+
+                Toast.makeText(context, sb.toString(), Toast.LENGTH_LONG).show();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+
     }
 
     public void writeThing(Thing thing, Context context){

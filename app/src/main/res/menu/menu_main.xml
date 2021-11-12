@@ -8,8 +8,8 @@
         android:title="@string/action_settings"
         app:showAsAction="never" />
     <item
-        android:id="@+id/action_view_things"
+        android:id="@+id/action_sync"
         android:orderInCategory="200"
-        android:title="View things"
+        android:title="Sync"
         app:showAsAction="never" />
 </menu>
