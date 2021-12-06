@@ -15,6 +15,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.prokonst.thingshouse.databinding.ActivityMainBinding;
 import com.prokonst.thingshouse.model.Authorization;
+import com.prokonst.thingshouse.model.SyncronizerDBs;
 import com.prokonst.thingshouse.model.ThingsFireBase;
 import com.prokonst.thingshouse.tools.CaptureCameraImage;
 
@@ -69,7 +70,9 @@ public class MainActivity extends AppCompatActivity {
             return true;
         } else if(id == R.id.action_sync) {
 
-            ThingsFireBase.getInstance().sync(MainActivity.this);
+            SyncronizerDBs syncronizerDBs = SyncronizerDBs.getInstance(MainActivity.this);
+            syncronizerDBs.sync();
+
 
             return  true;
         }
