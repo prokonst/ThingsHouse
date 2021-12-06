@@ -91,23 +91,23 @@ public class AppRepository {
     //CRUD For Storage
 
     public LiveData<List<Storage>> getStorages() {
-        return storageDao.getAllStorages();
+        return storageDao.getAllStorages(Authorization.getCurrentUser().getUid());
     }
 
     public LiveData<List<Storage>> getStoragesByParentId(String parentId) {
-        return storageDao.getStoragesByParentId(parentId);
+        return storageDao.getStoragesByParentId(parentId, Authorization.getCurrentUser().getUid());
     }
 
     public LiveData<List<Storage>> getStoragesByChildId(String childId) {
-        return storageDao.getStoragesByChildId(childId);
+        return storageDao.getStoragesByChildId(childId, Authorization.getCurrentUser().getUid());
     }
 
     public LiveData<List<StorageRecord>> getStorageRecordsByParentId(String parentId) {
-        return storageDao.getStorageRecordsByParentId(parentId);
+        return storageDao.getStorageRecordsByParentId(parentId, Authorization.getCurrentUser().getUid());
     }
 
     public LiveData<List<StorageRecord>> getStorageRecordsByChildId(String childId) {
-        return storageDao.getStorageRecordsByChildId(childId);
+        return storageDao.getStorageRecordsByChildId(childId, Authorization.getCurrentUser().getUid());
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -142,15 +142,18 @@ public class AppRepository {
         )).execute();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void addQuantityToStorageByParentId(String parentId, String childId, double quantity) {
         (new AsyncTaskCUD(application,
                 () -> {
-                    Storage storage = storageDao.getStorage(parentId, childId);
+                    Storage storage = storageDao.getStorage(parentId, childId, Authorization.getCurrentUser().getUid());
                     if(storage == null) {
                         storage = new Storage(Utils.generateUUIDStr(), parentId, childId, quantity);
+                        storage.calculateHash();
                         storageDao.insert(storage);
                     } else {
                         storage.setQuantity(storage.getQuantity() + quantity);
+                        storage.calculateHash();
                         storageDao.update(storage);
                     }
                     return null;
@@ -158,6 +161,7 @@ public class AppRepository {
         )).execute();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void addQuantityToStorageByBarcode(String barcode, String childId, double quantity) {
         (new AsyncTaskCUD(application,
                 () -> {
@@ -165,12 +169,14 @@ public class AppRepository {
                     if(parentThing == null)
                         throw new Exception("Not found thing with barcode: " + barcode);
 
-                    Storage storage = storageDao.getStorage(parentThing.getId(), childId);
+                    Storage storage = storageDao.getStorage(parentThing.getId(), childId, Authorization.getCurrentUser().getUid());
                     if(storage == null) {
                         storage = new Storage(Utils.generateUUIDStr(), parentThing.getId(), childId, quantity);
+                        storage.calculateHash();
                         storageDao.insert(storage);
                     } else {
                         storage.setQuantity(storage.getQuantity() + quantity);
+                        storage.calculateHash();
                         storageDao.update(storage);
                     }
                     return null;
@@ -178,6 +184,7 @@ public class AppRepository {
         )).execute();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void moveStorageByBarcode(String barcode, StorageRecord storageRecord) {
         (new AsyncTaskCUD(application,
                 () -> {
@@ -194,6 +201,7 @@ public class AppRepository {
         )).execute();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void moveStorage(ShowThingsListParameters.ThingIdInterface oldParentThing,
                             ShowThingsListParameters.ThingIdInterface movingThing,
                             ShowThingsListParameters.ThingIdInterface newParentThing) {
@@ -208,6 +216,7 @@ public class AppRepository {
         )).execute();
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void moveStorage(String oldParentThingId,
                              String movingThingId,
                              String newParentThingId) throws Exception {
@@ -218,23 +227,26 @@ public class AppRepository {
         if(newParentThingId.equals(movingThingId))
             throw new Exception("Error: apply to self");
 
-        Storage oldStorage = storageDao.getStorage(oldParentThingId, movingThingId);
+        Storage oldStorage = storageDao.getStorage(oldParentThingId, movingThingId, Authorization.getCurrentUser().getUid());
         if(oldStorage == null)
             throw new Exception("oldStorage is NULL" + oldParentThingId + "/" + movingThingId);
 
         if(oldStorage.getQuantity() == 0.0)
             throw new Exception("Moving quantity is 0.0");
 
-        Storage newStorage = storageDao.getStorage(newParentThingId, movingThingId);
+        Storage newStorage = storageDao.getStorage(newParentThingId, movingThingId, Authorization.getCurrentUser().getUid());
         if(newStorage == null) {
             newStorage = new Storage(Utils.generateUUIDStr(), newParentThingId, movingThingId, oldStorage.getQuantity());
+            newStorage.calculateHash();
             storageDao.insert(newStorage);
         } else {
             newStorage.setQuantity(newStorage.getQuantity() + oldStorage.getQuantity());
+            newStorage.calculateHash();
             storageDao.update(newStorage);
         }
 
         oldStorage.setQuantity(0);
+        oldStorage.calculateHash();
         storageDao.update(oldStorage);
     }
 }

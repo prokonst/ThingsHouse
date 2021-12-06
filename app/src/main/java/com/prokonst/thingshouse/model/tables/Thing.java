@@ -3,7 +3,6 @@ package com.prokonst.thingshouse.model.tables;
 import androidx.annotation.NonNull;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
-import androidx.databinding.library.baseAdapters.BR;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
@@ -139,7 +138,7 @@ public class Thing extends BaseObservable implements Serializable, Synced, ShowT
     @Exclude
     public void setMainPhotoBaseSrc(String mainPhotoBaseSrc) {
         this.mainPhotoBaseSrc = mainPhotoBaseSrc;
-        notifyPropertyChanged(BR.mainPhotoBaseSrc);
+        notifyPropertyChanged(androidx.databinding.library.baseAdapters.BR.mainPhotoBaseSrc);
     }
 
     @Exclude
@@ -150,7 +149,7 @@ public class Thing extends BaseObservable implements Serializable, Synced, ShowT
     @Exclude
     public void setMainPhotoPrevSrc(String mainPhotoPrevSrc) {
         this.mainPhotoPrevSrc = mainPhotoPrevSrc;
-        notifyPropertyChanged(BR.mainPhotoPrevSrc);
+        notifyPropertyChanged(androidx.databinding.library.baseAdapters.BR.mainPhotoPrevSrc);
     }
 
     public Date getDateChange() {
