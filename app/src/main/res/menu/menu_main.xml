@@ -12,4 +12,9 @@
         android:orderInCategory="200"
         android:title="Sync"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_example"
+        android:orderInCategory="300"
+        android:title="CreateSample"
+        app:showAsAction="never" />
 </menu>

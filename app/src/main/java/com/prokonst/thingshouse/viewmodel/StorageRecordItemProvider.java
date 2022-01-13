@@ -1,7 +1,9 @@
 package com.prokonst.thingshouse.viewmodel;
 
+import android.os.Build;
 import android.view.View;
 
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavDirections;
 import androidx.navigation.Navigation;
@@ -12,6 +14,7 @@ import com.prokonst.thingshouse.fragments.ShowStorageRecordsFragment;
 import com.prokonst.thingshouse.fragments.ShowStorageRecordsFragmentDirections;
 import com.prokonst.thingshouse.model.AppRepository;
 import com.prokonst.thingshouse.model.dataview.StorageRecord;
+import com.prokonst.thingshouse.model.tables.Storage;
 import com.prokonst.thingshouse.tools.ScanBarCodeLauncher;
 import com.prokonst.thingshouse.tools.ShowThingsListParameters;
 
@@ -43,13 +46,16 @@ public class StorageRecordItemProvider implements Serializable {
                 .navigate(action);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void clearQuantity(View view) {
 
         if(storageRecord.getQuantity() == 0.0) {
             Snackbar
                     .make(view, "Delete item \""+ storageRecord.getName() +"\"?", Snackbar.LENGTH_LONG)
                     .setAction("YES", (v) -> {
-                        appRepository.deleteStorage(storageRecord.createStorage());
+                        Storage storage = storageRecord.createStorage();
+                        storage.setIsDeleted(true);
+                        appRepository.updateStorage(storage);
                     })
                     .show();
         } else {

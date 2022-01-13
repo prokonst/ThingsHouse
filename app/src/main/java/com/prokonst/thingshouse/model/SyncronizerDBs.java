@@ -1,16 +1,15 @@
 package com.prokonst.thingshouse.model;
 
-import android.app.Application;
-import android.content.Context;
+import android.os.Build;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LifecycleRegistry;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 
 import com.google.firebase.auth.FirebaseUser;
@@ -18,6 +17,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.prokonst.thingshouse.model.tables.Storage;
 import com.prokonst.thingshouse.model.tables.Thing;
 import com.prokonst.thingshouse.tools.DataComparer;
 
@@ -49,27 +49,27 @@ public class SyncronizerDBs implements LifecycleOwner {
 
     public void sync(){
         DataComparer.prepare();
-        readFromFireBase();
-        //readFromLocalDB();
+        readThingsFromFireBase();
+        DataComparer.finish();
     }
 
-    private void readFromFireBase(){
+    private void readThingsFromFireBase(){
         FirebaseUser currentUser = Authorization.getCurrentUser();
         if(currentUser == null){
             Toast.makeText(this.appCompatActivity, "You are not authorized", Toast.LENGTH_LONG).show();
             return;
         }
 
-        DatabaseReference thingNode = this.thingsFireBase.getCurrentUserNode().child("things");
-        thingNode.addListenerForSingleValueEvent(new ValueEventListener() {
+        DatabaseReference node = this.thingsFireBase.getCurrentUserNode().child(ThingsFireBase.THINGS_NODE_KEY);
+        node.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot curDS : snapshot.getChildren()){
-                    Thing curThing = curDS.getValue(Thing.class);
-                    DataComparer.addObjToMap(curThing, DataComparer.ObjType.FIRE_BASE_OBJ);
+                    Thing curObj = curDS.getValue(Thing.class);
+                    DataComparer.addObjToMap(curObj, DataComparer.DbType.FIRE_BASE_OBJ, DataComparer.ObjType.THING);
                 }
 
-                SyncronizerDBs.this.readFromLocalDB();
+                SyncronizerDBs.this.readStoragesFromFireBase();
             }
 
             @Override
@@ -79,29 +79,175 @@ public class SyncronizerDBs implements LifecycleOwner {
         });
     }
 
-    private void readFromLocalDB(){
+    private void readStoragesFromFireBase(){
+        FirebaseUser currentUser = Authorization.getCurrentUser();
+        if(currentUser == null){
+            Toast.makeText(this.appCompatActivity, "You are not authorized", Toast.LENGTH_LONG).show();
+            return;
+        }
 
-        this.lifecycleRegistry.setCurrentState(Lifecycle.State.STARTED);
-
-        this.appRepository.getThings().observe(this, new Observer<List<Thing>>() {
+        DatabaseReference node = this.thingsFireBase.getCurrentUserNode().child(ThingsFireBase.STORAGES_NODE_KEY);
+        node.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onChanged(List<Thing> things) {
-                for(Thing curThing : things) {
-                    DataComparer.addObjToMap(curThing, DataComparer.ObjType.LOCAL_OBJ);
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot curDS : snapshot.getChildren()){
+                    Storage curObj = curDS.getValue(Storage.class);
+                    DataComparer.addObjToMap(curObj, DataComparer.DbType.FIRE_BASE_OBJ, DataComparer.ObjType.STORAGE);
                 }
 
-                SyncronizerDBs.this.compare();
+                SyncronizerDBs.this.readThingsFromLocalDB();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
     }
 
-    private void compare(){
-        StringBuilder sb = new StringBuilder();
-        sb.append("Local: " + DataComparer.getCountByObjType(DataComparer.ObjType.LOCAL_OBJ));
-        sb.append("\nFire: " + DataComparer.getCountByObjType(DataComparer.ObjType.FIRE_BASE_OBJ));
-        sb.append("\nIntersect: " + DataComparer.getCountIntersect());
+    private void readThingsFromLocalDB(){
 
-        Toast.makeText(SyncronizerDBs.this.appCompatActivity, sb.toString(), Toast.LENGTH_LONG).show();
+        this.lifecycleRegistry.setCurrentState(Lifecycle.State.STARTED);
+
+        this.appRepository.getThings().observe(this, new Observer<List<Thing>>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onChanged(List<Thing> things) {
+                for(Thing curThing : things) {
+                    DataComparer.addObjToMap(curThing, DataComparer.DbType.LOCAL_OBJ, DataComparer.ObjType.THING);
+                }
+
+                SyncronizerDBs.this.readStoragesFromLocalDB();
+            }
+        });
+
+
+    }
+
+    private void readStoragesFromLocalDB(){
+
+        this.appRepository.getStorages().observe(this, new Observer<List<Storage>>() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onChanged(List<Storage> storages) {
+                for(Storage curStorage : storages) {
+                    DataComparer.addObjToMap(curStorage, DataComparer.DbType.LOCAL_OBJ, DataComparer.ObjType.STORAGE);
+                }
+
+                SyncronizerDBs.this.compareObjects();
+            }
+        });
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void compareObjects(){
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("\nLocal: " + DataComparer.getCountByObjType(DataComparer.DbType.LOCAL_OBJ));
+        sb.append("\nFire: " + DataComparer.getCountByObjType(DataComparer.DbType.FIRE_BASE_OBJ));
+        sb.append("\nIntersect: " + DataComparer.getCountIntersect());
+        Log.d("DC", sb.toString());
+
+        DataComparer.compareAll();
+
+        for(DataComparer curDC: DataComparer.getAllDataComparers()){
+            changeThing(curDC);
+        }
+
+
+        try {
+            SyncronizerDBs.this.finalize();
+        }
+        catch (Throwable ex){
+            Log.d("SyncronizerDBs", ex.getMessage());
+        }
+        //Toast.makeText(SyncronizerDBs.this.appCompatActivity, sb.toString(), Toast.LENGTH_LONG).show();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void changeThing(DataComparer dataComparer){
+        if(dataComparer.getIsHandled())
+            return;
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("\n" + dataComparer.getObjId() + ": " + dataComparer.getActionType());
+/*
+        sb.append("\n   NameL: " + ((Thing)dataComparer.getLocalObj()).getName());
+        sb.append("\n   NameF: " + ((Thing)dataComparer.getFireBaseObj()).getName());
+
+        sb.append("\n   HashL: " + ((Thing)dataComparer.getLocalObj()).getDataHash());
+        sb.append("\n   HashF: " + ((Thing)dataComparer.getFireBaseObj()).getDataHash());*/
+
+        Log.d("DC", sb.toString());
+
+        if(dataComparer.getObjType().equals(DataComparer.ObjType.THING)){
+            switch (dataComparer.getActionType()){
+                case LOCAL_INSERT:
+                    if(!dataComparer.getFireBaseObj().getIsDeleted())
+                        this.appRepository.insertThing((Thing)dataComparer.getFireBaseObj());
+                    break;
+                case FIRE_BASE_INSERT:
+                    if(!dataComparer.getLocalObj().getIsDeleted())
+                        this.thingsFireBase.getInstance().writeThing((Thing)dataComparer.getLocalObj(), this.appCompatActivity);
+                    break;
+                case LOCAL_UPDATE:
+                    this.appRepository.updateThing((Thing)dataComparer.getFireBaseObj());
+                    break;
+                case FIRE_BASE_UPDATE:
+                    this.thingsFireBase.getInstance().writeThing((Thing)dataComparer.getLocalObj(), this.appCompatActivity);
+                    break;
+                case LOCAL_DELETE_PHYSICALLY:
+                    //TODO
+                    break;
+                case FIRE_BASE_DELETE_PHYSICALLY:
+                    //TODO
+                    break;
+                case BOTH_DELETE_PHYSICALLY:
+                    //TODO
+                    break;
+            }
+        }
+        else if(dataComparer.getObjType().equals(DataComparer.ObjType.STORAGE)){
+            switch (dataComparer.getActionType()){
+                case LOCAL_INSERT:
+                    if(!dataComparer.getFireBaseObj().getIsDeleted()) {
+                        Storage fbStorage = (Storage) dataComparer.getFireBaseObj();
+
+                        DataComparer childDC = DataComparer.getDataComparerById(fbStorage.getChildId());
+                        if(childDC != null)
+                            changeThing(childDC);
+
+                        DataComparer parentDC = DataComparer.getDataComparerById(fbStorage.getParentId());
+                        if(parentDC != null)
+                            changeThing(parentDC);
+
+                        this.appRepository.insertStorage(fbStorage);
+                    }
+                    break;
+                case FIRE_BASE_INSERT:
+                    if(!dataComparer.getLocalObj().getIsDeleted())
+                        this.thingsFireBase.getInstance().writeStorage((Storage) dataComparer.getLocalObj(), this.appCompatActivity);
+                    break;
+                case LOCAL_UPDATE:
+                    this.appRepository.updateStorage((Storage) dataComparer.getFireBaseObj());
+                    break;
+                case FIRE_BASE_UPDATE:
+                    this.thingsFireBase.getInstance().writeStorage((Storage)dataComparer.getLocalObj(), this.appCompatActivity);
+                    break;
+                case LOCAL_DELETE_PHYSICALLY:
+                    //TODO
+                    break;
+                case FIRE_BASE_DELETE_PHYSICALLY:
+                    //TODO
+                    break;
+                case BOTH_DELETE_PHYSICALLY:
+                    //TODO
+                    break;
+            }
+        }
+
+        dataComparer.setIsHandled(true);
     }
 
     @NonNull
@@ -114,5 +260,6 @@ public class SyncronizerDBs implements LifecycleOwner {
     protected void finalize() throws Throwable {
         super.finalize();
         this.lifecycleRegistry.setCurrentState(Lifecycle.State.DESTROYED);
+        SyncronizerDBs.syncronizerDBs = null;
     }
 }

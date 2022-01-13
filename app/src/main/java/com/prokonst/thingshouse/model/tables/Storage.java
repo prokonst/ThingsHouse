@@ -11,6 +11,7 @@ import androidx.databinding.Bindable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
+import androidx.room.Ignore;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
@@ -51,6 +52,10 @@ public class Storage extends BaseObservable implements Serializable, Synced {
     private String dataHash;
     private boolean isDeleted;
     private String userId;
+
+    @Ignore
+    public Storage() {
+    }
 
     public Storage(@NonNull String id, String parentId, String childId, double quantity) {
         this.id = id;

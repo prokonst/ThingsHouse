@@ -20,6 +20,8 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.prokonst.thingshouse.model.tables.Storage;
+import com.prokonst.thingshouse.model.tables.Synced;
 import com.prokonst.thingshouse.model.tables.Thing;
 import com.prokonst.thingshouse.tools.DataComparer;
 import com.prokonst.thingshouse.tools.Utils;
@@ -27,6 +29,9 @@ import com.prokonst.thingshouse.tools.Utils;
 import java.util.List;
 
 public class ThingsFireBase {
+    public static final String THINGS_NODE_KEY = "things";
+    public static final String STORAGES_NODE_KEY = "storages";
+
     public static ThingsFireBase thingsFireBase = null;
 
     FirebaseDatabase database;
@@ -54,27 +59,33 @@ public class ThingsFireBase {
         return currentUserNode;
     }
 
-    public void writeThing(Thing thing, Context context){
-        DatabaseReference thingNode = this.getCurrentUserNode().child("things").child(thing.getId().toLowerCase());
-
-        thingNode
-            .setValue(thing)
+    private void writeObject(Synced syncedObj, String nodeKey, Context context){
+        DatabaseReference objNode = this.getCurrentUserNode().child(nodeKey).child(syncedObj.getId().toLowerCase());
+        objNode
+            .setValue(syncedObj)
             .addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {
-                        Toast.makeText(context, "Uploaded thing: " + thing.getName(),
+                        Toast.makeText(context, "Uploaded syncedObj: " + syncedObj.getId(),
                                 Toast.LENGTH_SHORT).show();
                     } else {
                         Exception exception = task.getException();
-                        Toast.makeText(context, "Uploaded thing failed.\n" + exception.getMessage() + "\n" + exception.getClass(),
+                        Toast.makeText(context, "Uploaded syncedObj failed.\n" + exception.getMessage() + "\n" + exception.getClass(),
                                 Toast.LENGTH_SHORT).show();
                     }
                 }
             });
+    }
 
 
+    public void writeThing(Thing thing, Context context){
+        writeObject(thing, THINGS_NODE_KEY, context);
         saveImage(thing, context);
+    }
+
+    public void writeStorage(Storage storage, Context context){
+        writeObject(storage, STORAGES_NODE_KEY, context);
     }
 
     public void saveImage(Thing thing, Context context){

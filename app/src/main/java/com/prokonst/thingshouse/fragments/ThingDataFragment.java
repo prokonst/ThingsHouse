@@ -187,7 +187,7 @@ public class ThingDataFragment extends Fragment {
                     .setMessage("Delete thing " + thing.getName() + "?")
                     .setCancelable(false)
                     .setPositiveButton("Delete ", (dialogBox, id) -> {
-                        thingsViewModel.deleteThing(thing);
+                        thingsViewModel.markAsDeletedThing(thing);
                         NavDirections action = (NavDirections) ThingDataFragmentDirections.actionThingDataFragmentToShowThingListFragment(
                                 new ShowThingsListParameters(true, "Browse things",
                                         ShowThingsListParameters.ActionType.ViewThings, null, null, 0) );

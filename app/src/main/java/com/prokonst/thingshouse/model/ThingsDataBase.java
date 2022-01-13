@@ -60,7 +60,7 @@ public abstract class ThingsDataBase extends RoomDatabase {
         @RequiresApi(api = Build.VERSION_CODES.O)
         @Override
         protected Void doInBackground(Void... voids) {
-
+/*
             String idT1 = "3D01C18A-6E2F-4E6F-AD8C-7BD429774DED";
             Thing thing1 = new Thing(idT1, "шт", idT1, "Вещь 1", "");
             thing1.calculateHash();
@@ -89,7 +89,7 @@ public abstract class ThingsDataBase extends RoomDatabase {
             String idS2 = "1CFA31CB-5D14-43F5-BB20-E1D1A5005ED3";
             Storage storage_thing2_in_box1 = new Storage(idS2, box1.getId(), thing2.getId(), 5.0);
             storage_thing2_in_box1.calculateHash();
-            storageDao.insert(storage_thing2_in_box1);
+            storageDao.insert(storage_thing2_in_box1);*/
 
             return null;
         }
