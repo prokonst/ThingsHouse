@@ -28,6 +28,9 @@ public interface StorageDao {
     LiveData<List<Storage>> getAllPhysicalStorages(String userId);
 
     @Query("select * from storages where userId = :userId and isDeleted = 0")
+    LiveData<List<Storage>> getActualStorages(String userId);
+
+    @Query("select * from storages where userId = :userId")
     LiveData<List<Storage>> getAllStorages(String userId);
 
     @Query("select * from storages where parent_id = :parentId and userId = :userId and isDeleted = 0")

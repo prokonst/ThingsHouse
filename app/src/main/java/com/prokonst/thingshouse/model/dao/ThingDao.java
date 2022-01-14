@@ -27,6 +27,9 @@ public interface ThingDao {
 
     //@Query("select * from things order by name")
     @Query("select * from things where userId = :userId and isDeleted = 0")
+    LiveData<List<Thing>> getActualThings(String userId);
+
+    @Query("select * from things where userId = :userId")
     LiveData<List<Thing>> getAllThings(String userId);
 /*
     //@Query("select * from things where name like '%' || :namePart || '%'  order by name")

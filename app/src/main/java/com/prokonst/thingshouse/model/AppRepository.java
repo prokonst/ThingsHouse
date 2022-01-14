@@ -47,7 +47,11 @@ public class AppRepository {
         return thingDao.getThingById(thingId, Authorization.getCurrentUser().getUid());
     }
 
-    public LiveData<List<Thing>> getThings() {
+    public LiveData<List<Thing>> getActualThings() {
+        return thingDao.getActualThings(Authorization.getCurrentUser().getUid());
+    }
+
+    public LiveData<List<Thing>> getAllThings() {
         return thingDao.getAllThings(Authorization.getCurrentUser().getUid());
     }
 /*
@@ -90,7 +94,11 @@ public class AppRepository {
 
     //CRUD For Storage
 
-    public LiveData<List<Storage>> getStorages() {
+    public LiveData<List<Storage>> getActualStorages() {
+        return storageDao.getActualStorages(Authorization.getCurrentUser().getUid());
+    }
+
+    public LiveData<List<Storage>> getAllStorages() {
         return storageDao.getAllStorages(Authorization.getCurrentUser().getUid());
     }
 

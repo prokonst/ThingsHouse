@@ -76,12 +76,8 @@ public class MainActivity extends AppCompatActivity {
             return true;
         } else if(id == R.id.action_sync) {
 
-/*
-            SyncronizerDBs<Thing> syncronizerDBsThings = SyncronizerDBs.getInstance(MainActivity.this, ThingsFireBase.THINGS_NODE_KEY);
-            syncronizerDBsThings.sync();*/
-
-            SyncronizerDBs syncronizerDBsStorages = SyncronizerDBs.getInstance(MainActivity.this);
-            syncronizerDBsStorages.sync();
+            SyncronizerDBs syncronizerStorages = SyncronizerDBs.getInstance(MainActivity.this);
+            syncronizerStorages.sync();
 
             return  true;
         } else if(id == R.id.action_example) {

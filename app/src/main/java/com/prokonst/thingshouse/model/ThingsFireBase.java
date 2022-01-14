@@ -67,12 +67,12 @@ public class ThingsFireBase {
                 @Override
                 public void onComplete(@NonNull Task<Void> task) {
                     if (task.isSuccessful()) {
-                        Toast.makeText(context, "Uploaded syncedObj: " + syncedObj.getId(),
-                                Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(context, "Uploaded syncedObj to FireBase: " + syncedObj.getId(),
+//                                Toast.LENGTH_SHORT).show();
                     } else {
                         Exception exception = task.getException();
-                        Toast.makeText(context, "Uploaded syncedObj failed.\n" + exception.getMessage() + "\n" + exception.getClass(),
-                                Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(context, "Uploaded syncedObj failed.\n" + exception.getMessage() + "\n" + exception.getClass(),
+//                                Toast.LENGTH_SHORT).show();
                     }
                 }
             });

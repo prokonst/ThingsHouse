@@ -46,7 +46,7 @@ public class ThingsViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<Thing>> getThings() {
-        things = appRepository.getThings();
+        things = appRepository.getActualThings();
         return things;
     }
 

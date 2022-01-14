@@ -109,7 +109,7 @@ public class SyncronizerDBs implements LifecycleOwner {
 
         this.lifecycleRegistry.setCurrentState(Lifecycle.State.STARTED);
 
-        this.appRepository.getThings().observe(this, new Observer<List<Thing>>() {
+        this.appRepository.getAllThings().observe(this, new Observer<List<Thing>>() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onChanged(List<Thing> things) {
@@ -126,7 +126,7 @@ public class SyncronizerDBs implements LifecycleOwner {
 
     private void readStoragesFromLocalDB(){
 
-        this.appRepository.getStorages().observe(this, new Observer<List<Storage>>() {
+        this.appRepository.getAllStorages().observe(this, new Observer<List<Storage>>() {
             @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onChanged(List<Storage> storages) {
@@ -158,11 +158,12 @@ public class SyncronizerDBs implements LifecycleOwner {
 
         try {
             SyncronizerDBs.this.finalize();
+            Toast.makeText(SyncronizerDBs.this.appCompatActivity, "Sync success!", Toast.LENGTH_LONG).show();
         }
         catch (Throwable ex){
             Log.d("SyncronizerDBs", ex.getMessage());
+            Toast.makeText(SyncronizerDBs.this.appCompatActivity, "Sync failed!\n" + ex.getMessage(), Toast.LENGTH_LONG).show();
         }
-        //Toast.makeText(SyncronizerDBs.this.appCompatActivity, sb.toString(), Toast.LENGTH_LONG).show();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -171,14 +172,15 @@ public class SyncronizerDBs implements LifecycleOwner {
             return;
 
         StringBuilder sb = new StringBuilder();
-        sb.append("\n" + dataComparer.getObjId() + ": " + dataComparer.getActionType());
+        sb.append("\n" + dataComparer.getObjId() + ":\n" + dataComparer.getActionType() + "  " + dataComparer.getObjType());
+        sb.append("\nL: " + (dataComparer.getLocalObj() != null) + "   F: " + (dataComparer.getFireBaseObj() != null));
 /*
         sb.append("\n   NameL: " + ((Thing)dataComparer.getLocalObj()).getName());
         sb.append("\n   NameF: " + ((Thing)dataComparer.getFireBaseObj()).getName());
 
         sb.append("\n   HashL: " + ((Thing)dataComparer.getLocalObj()).getDataHash());
         sb.append("\n   HashF: " + ((Thing)dataComparer.getFireBaseObj()).getDataHash());*/
-
+        sb.append("\n");
         Log.d("DC", sb.toString());
 
         if(dataComparer.getObjType().equals(DataComparer.ObjType.THING)){

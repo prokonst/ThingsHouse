@@ -1,5 +1,7 @@
 package com.prokonst.thingshouse.tools;
 
+import android.util.Log;
+
 import com.prokonst.thingshouse.model.tables.Synced;
 
 import java.util.Collection;
@@ -134,8 +136,10 @@ public class DataComparer {
 
         if(dbType.equals(DbType.LOCAL_OBJ)){
             dataComparer.localObj = obj;
+            //Log.d("DC", "ADD Local: " + obj.getId().toLowerCase());
         } else if(dbType.equals(DbType.FIRE_BASE_OBJ)) {
             dataComparer.fireBaseObj = obj;
+            //Log.d("DC", "ADD FireB: " + obj.getId().toLowerCase());
         }
 
         return dataComparer;
