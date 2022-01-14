@@ -155,6 +155,11 @@ public class SyncronizerDBs implements LifecycleOwner {
             changeThing(curDC);
         }
 
+        for(String curImageId : DataComparer.getImagesIdToFireBase()){
+            Log.d("SyncronizerDBs", "IMG: " + curImageId);
+            this.thingsFireBase.saveImageToFireBase(curImageId, this.appCompatActivity);
+        }
+
 
         try {
             SyncronizerDBs.this.finalize();
@@ -174,12 +179,7 @@ public class SyncronizerDBs implements LifecycleOwner {
         StringBuilder sb = new StringBuilder();
         sb.append("\n" + dataComparer.getObjId() + ":\n" + dataComparer.getActionType() + "  " + dataComparer.getObjType());
         sb.append("\nL: " + (dataComparer.getLocalObj() != null) + "   F: " + (dataComparer.getFireBaseObj() != null));
-/*
-        sb.append("\n   NameL: " + ((Thing)dataComparer.getLocalObj()).getName());
-        sb.append("\n   NameF: " + ((Thing)dataComparer.getFireBaseObj()).getName());
 
-        sb.append("\n   HashL: " + ((Thing)dataComparer.getLocalObj()).getDataHash());
-        sb.append("\n   HashF: " + ((Thing)dataComparer.getFireBaseObj()).getDataHash());*/
         sb.append("\n");
         Log.d("DC", sb.toString());
 

@@ -81,19 +81,26 @@ public class ThingsFireBase {
 
     public void writeThing(Thing thing, Context context){
         writeObject(thing, THINGS_NODE_KEY, context);
-        saveImage(thing, context);
     }
 
     public void writeStorage(Storage storage, Context context){
         writeObject(storage, STORAGES_NODE_KEY, context);
     }
 
-    public void saveImage(Thing thing, Context context){
-        if(thing.getMainPhotoId() == null || thing.getMainPhotoId().isEmpty())
+    public void saveImageToFireBase(String imageId, Context context){
+        if(imageId == null || imageId.isEmpty())
             return;
 
-        Uri fileUri = Utils.getFileProviderUri(context, thing.getMainPhotoBaseSrc());
-        String targetImageFileName = Utils.getBaseImageFileName(thing.getMainPhotoId());
+        String targetImageFileName = Utils.getBaseImageFileName(imageId);
+        Log.d("SyncronizerDBs", "IMG targetImageFileName: " + targetImageFileName);
+
+        String imageBasePath = Utils.getImageBasePath(imageId);
+        Log.d("SyncronizerDBs", "IMG imageBasePath: " + imageBasePath);
+
+        Uri fileUri = Utils.getFileProviderUri(context, imageBasePath);
+        Log.d("SyncronizerDBs", "IMG fileUri: " + fileUri.getPath());
+
+
 
         //Upload file to user node
         this.imgStorage
@@ -113,7 +120,7 @@ public class ThingsFireBase {
                         }
                     }
                 });
-
+/*
         //Get list images in current user node
         this.imgStorage
                 .getReference()
@@ -128,9 +135,9 @@ public class ThingsFireBase {
                         }
                         Log.d("Item", "-------------------------------------");
                     }
-                });
+                });*/
 
-
+/*
         //Download file from storage
         Uri downLoadUri = Uri.parse(Utils.getBatchDirectoryPath() + "/TEST.jpg");
         this.imgStorage
@@ -153,7 +160,7 @@ public class ThingsFireBase {
 
 
                     }
-                });
+                });*/
 
     }
 

@@ -3,12 +3,16 @@ package com.prokonst.thingshouse.tools;
 import android.util.Log;
 
 import com.prokonst.thingshouse.model.tables.Synced;
+import com.prokonst.thingshouse.model.tables.Thing;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 
 public class DataComparer {
     private static HashMap<String, DataComparer> dataDict = null;
+    private static ArrayList<String> imagesIdToFireBase = null;
+    private static ArrayList<String> imagesIdToLocalDB = null;
     private String objId;
 
     private Synced localObj;
@@ -22,6 +26,14 @@ public class DataComparer {
         this.actionType = ActionType.UNKNOWN;
         this.isHandled = false;
         this.objType = objType;
+    }
+
+    public static Collection<String> getImagesIdToFireBase() {
+        return imagesIdToFireBase;
+    }
+
+    public static Collection<String> getImagesIdToLocalDB() {
+        return imagesIdToLocalDB;
     }
 
     public String getObjId() {
@@ -68,6 +80,7 @@ public class DataComparer {
                 this.actionType = ActionType.FIRE_BASE_DELETE_PHYSICALLY;
             }else{
                 this.actionType = ActionType.LOCAL_INSERT;
+                addImageIdToLocalDB(fireBaseObj);
             }
 
             return;
@@ -81,6 +94,7 @@ public class DataComparer {
                 this.actionType = ActionType.LOCAL_DELETE_PHYSICALLY;
             }else{
                 this.actionType = ActionType.FIRE_BASE_INSERT;
+                addImageIdToFireBase(localObj);
             }
 
             return;
@@ -100,8 +114,10 @@ public class DataComparer {
 
             if(localObjIsLastUpdate){
                 this.actionType = ActionType.FIRE_BASE_UPDATE;
+                addImageIdToFireBase(localObj);
             }else{
                 this.actionType = ActionType.LOCAL_UPDATE;
+                addImageIdToLocalDB(fireBaseObj);
             }
             return;
         }
@@ -113,6 +129,49 @@ public class DataComparer {
     public static void prepare(){
         if(dataDict == null)
             dataDict = new HashMap<>();
+
+        if(imagesIdToFireBase == null)
+            imagesIdToFireBase = new ArrayList<>();
+
+        if(imagesIdToLocalDB == null)
+            imagesIdToLocalDB = new ArrayList<>();
+    }
+
+    private static String getImageId(Synced obj){
+        if(obj == null)
+            return null;
+
+        if(!(obj instanceof Thing))
+            return null;
+
+        String imageId = ((Thing)obj).getMainPhotoId();
+
+        return  imageId;
+    }
+
+
+    private static void addImageIdToFireBase(Synced obj){
+        String imageId = getImageId(obj);
+
+        if(imageId == null || imageId.isEmpty())
+            return;
+
+        imagesIdToFireBase.add(imageId);
+    }
+
+    private static void addImageIdToLocalDB(Synced obj){
+        String imageId = getImageId(obj);
+
+        if(imageId == null || imageId.isEmpty())
+            return;
+
+        imagesIdToLocalDB.add(imageId);
+    }
+
+    public static void finish(){
+        dataDict = null;
+        imagesIdToFireBase = null;
+        imagesIdToLocalDB = null;
     }
 
     public static Collection<DataComparer> getAllDataComparers(){
@@ -125,10 +184,6 @@ public class DataComparer {
         for(DataComparer curDC : DataComparer.dataDict.values()){
             curDC.compare();
         }
-    }
-
-    public static void finish(){
-        dataDict = null;
     }
 
     public static DataComparer addObjToMap(Synced obj, DbType dbType, ObjType objType){
