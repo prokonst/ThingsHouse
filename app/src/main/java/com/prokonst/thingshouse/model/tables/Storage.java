@@ -17,6 +17,7 @@ import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
 
+import com.google.firebase.database.Exclude;
 import com.prokonst.thingshouse.tools.Utils;
 
 import java.io.Serializable;
@@ -138,7 +139,7 @@ public class Storage extends BaseObservable implements Serializable, Synced {
         this.userId = userId;
     }
 
-
+    @Exclude
     @RequiresApi(api = Build.VERSION_CODES.O)
     public String getDataForHash(){
 

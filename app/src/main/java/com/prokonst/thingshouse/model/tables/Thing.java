@@ -185,6 +185,7 @@ public class Thing extends BaseObservable implements Serializable, Synced, ShowT
         isDeleted = deleted;
     }
 
+    @Exclude
     public String getDataForHash(){
 
         StringBuilder dataForHash = new StringBuilder();
