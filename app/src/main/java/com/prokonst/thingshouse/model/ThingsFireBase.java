@@ -100,8 +100,6 @@ public class ThingsFireBase {
         Uri fileUri = Utils.getFileProviderUri(context, imageBasePath);
         Log.d("SyncronizerDBs", "IMG fileUri: " + fileUri.getPath());
 
-
-
         //Upload file to user node
         this.imgStorage
                 .getReference()
