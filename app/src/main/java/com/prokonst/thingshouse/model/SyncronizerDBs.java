@@ -154,11 +154,15 @@ public class SyncronizerDBs implements LifecycleOwner {
         for(DataComparer curDC: DataComparer.getAllDataComparers()){
             changeThing(curDC);
         }
-
+/*
         for(String curImageId : DataComparer.getImagesIdToFireBase()){
             Log.d("SyncronizerDBs", "IMG: " + curImageId);
             this.thingsFireBase.saveImageToFireBase(curImageId, this.appCompatActivity);
-        }
+        }*/
+
+        this.thingsFireBase.saveImagesToFireBase(DataComparer.getImagesIdToFireBase(), this.appCompatActivity);
+
+        this.thingsFireBase.saveFilesToLocalDisc(DataComparer.getImagesIdToLocalDB(), this.appCompatActivity);
 
 
         try {

@@ -66,6 +66,9 @@ public class DataComparer {
 
     private void compare(){
 
+        addImageIdToLocalDB(fireBaseObj);
+        addImageIdToFireBase(localObj);
+
         // NO_CHANGE
         if(localObj == null && fireBaseObj == null){
             this.actionType = ActionType.NO_CHANGE;
@@ -80,7 +83,7 @@ public class DataComparer {
                 this.actionType = ActionType.FIRE_BASE_DELETE_PHYSICALLY;
             }else{
                 this.actionType = ActionType.LOCAL_INSERT;
-                addImageIdToLocalDB(fireBaseObj);
+                //addImageIdToLocalDB(fireBaseObj);
             }
 
             return;
@@ -94,7 +97,7 @@ public class DataComparer {
                 this.actionType = ActionType.LOCAL_DELETE_PHYSICALLY;
             }else{
                 this.actionType = ActionType.FIRE_BASE_INSERT;
-                addImageIdToFireBase(localObj);
+                //addImageIdToFireBase(localObj);
             }
 
             return;
@@ -114,10 +117,10 @@ public class DataComparer {
 
             if(localObjIsLastUpdate){
                 this.actionType = ActionType.FIRE_BASE_UPDATE;
-                addImageIdToFireBase(localObj);
+                //addImageIdToFireBase(localObj);
             }else{
                 this.actionType = ActionType.LOCAL_UPDATE;
-                addImageIdToLocalDB(fireBaseObj);
+                //addImageIdToLocalDB(fireBaseObj);
             }
             return;
         }
@@ -151,6 +154,9 @@ public class DataComparer {
 
 
     private static void addImageIdToFireBase(Synced obj){
+        if(obj == null)
+            return;
+
         String imageId = getImageId(obj);
 
         if(imageId == null || imageId.isEmpty())
@@ -160,6 +166,9 @@ public class DataComparer {
     }
 
     private static void addImageIdToLocalDB(Synced obj){
+        if(obj == null)
+            return;
+
         String imageId = getImageId(obj);
 
         if(imageId == null || imageId.isEmpty())
