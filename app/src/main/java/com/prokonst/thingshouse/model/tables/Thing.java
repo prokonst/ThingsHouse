@@ -74,17 +74,17 @@ public class Thing extends BaseObservable implements Serializable, Synced, ShowT
 
     @Bindable
     public String getId() {
-        return id;
+        return id.toLowerCase();
     }
 
     public void setId(String id) {
-        this.id = id;
+        this.id = id.toLowerCase();
         notifyPropertyChanged(androidx.databinding.library.baseAdapters.BR.id);
     }
 
     @Exclude
     public String getThingId() {
-        return id;
+        return id.toLowerCase();
     }
 
     @Bindable

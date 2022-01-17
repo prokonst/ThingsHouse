@@ -68,31 +68,31 @@ public class Storage extends BaseObservable implements Serializable, Synced {
     @Bindable
     @NonNull
     public String getId() {
-        return id;
+        return id.toLowerCase();
     }
 
     public void setId(@NonNull String id) {
-        this.id = id;
+        this.id = id.toLowerCase();
         notifyPropertyChanged(androidx.databinding.library.baseAdapters.BR.storageId);
     }
 
     @Bindable
     public String getParentId() {
-        return parentId;
+        return parentId.toLowerCase();
     }
 
     public void setParentId(String parentId) {
-        this.parentId = parentId;
+        this.parentId = parentId.toLowerCase();
         notifyPropertyChanged(androidx.databinding.library.baseAdapters.BR.parentId);
     }
 
     @Bindable
     public String getChildId() {
-        return childId;
+        return childId.toLowerCase();
     }
 
     public void setChildId(String childId) {
-        this.childId = childId;
+        this.childId = childId.toLowerCase();
         notifyPropertyChanged(androidx.databinding.library.baseAdapters.BR.childId);
     }
 

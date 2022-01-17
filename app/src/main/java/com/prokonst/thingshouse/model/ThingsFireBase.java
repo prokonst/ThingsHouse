@@ -92,7 +92,7 @@ public class ThingsFireBase {
         writeObject(storage, STORAGES_NODE_KEY, context);
     }
 
-    public void saveImagesToFireBase(Collection<String> imagesId, Context context) {
+    public void saveImagesToFireBase(Collection<String> imagesId, SyncronizerDBs syncronizerDBs, Context context) {
         if(imagesId == null || imagesId.size() == 0)
             return;
 
@@ -112,20 +112,22 @@ public class ThingsFireBase {
                         }
 
                         for (String curImageId : imagesId){
-                            saveImageToFireBase(curImageId, existFileNames, context);
+                            saveImageToFireBase(curImageId, syncronizerDBs, existFileNames, context);
                         }
                     }
                 });
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    private void saveImageToFireBase(String imageId, Collection<String> existFileNames, Context context){
-        if(imageId == null || imageId.isEmpty())
+    private void saveImageToFireBase(String imageId, SyncronizerDBs syncronizerDBs, Collection<String> existFileNames, Context context){
+        if(imageId == null || imageId.isEmpty()) {
+            syncronizerDBs.decrementCountSyncObj("IMGtoFB: Image isEmpty");
             return;
+        }
 
         String targetImageFileName = Utils.getBaseImageFileName(imageId);
         if(existFileNames.contains(targetImageFileName)){
-            Log.d("SyncronizerDBs", "ExistFileInFB: " + targetImageFileName);
+            syncronizerDBs.decrementCountSyncObj("IMGtoFB: Image isExist: " + targetImageFileName);
             return;
         }
         //Log.d("SyncronizerDBs", "IMG targetImageFileName: " + targetImageFileName);
@@ -150,11 +152,13 @@ public class ThingsFireBase {
                             Exception exception = task.getException();
                             Log.d("SyncronizerDBs", "EXCEPTION UploadFile: " + targetImageFileName + ":\n" + exception.getMessage());
                         }
+                        //Log.d("SyncronizerDBs", "decrementCountSyncObj");
+                        syncronizerDBs.decrementCountSyncObj("IMGtoFB:" + imageId);
                     }
                 });
     }
 
-    public void saveFilesToLocalDisc(Collection<String> imagesId, Context context){
+    public void saveFilesToLocalDisc(Collection<String> imagesId, SyncronizerDBs syncronizerDBs, Context context){
         String batchDirPath = Utils.getBatchDirectoryPath();
 
         File batchDir = new File(batchDirPath);
@@ -167,17 +171,19 @@ public class ThingsFireBase {
         }
 
         for (String curImageId : imagesId){
-            saveImageToLocalDisc(curImageId, existFileNames, context);
+            saveImageToLocalDisc(curImageId, syncronizerDBs, existFileNames, context);
         }
     }
 
-    private void saveImageToLocalDisc(String imageId, Collection<String> existFileNames, Context context) {
-        if (imageId == null || imageId.isEmpty())
+    private void saveImageToLocalDisc(String imageId, SyncronizerDBs syncronizerDBs, Collection<String> existFileNames, Context context) {
+        if (imageId == null || imageId.isEmpty()) {
+            syncronizerDBs.decrementCountSyncObj("IMGfromFB: Image isEmpty");
             return;
+        }
 
         String targetImageFileName = Utils.getBaseImageFileName(imageId);
         if (existFileNames.contains(targetImageFileName)) {
-            Log.d("SyncronizerDBs", "ExistFileInLD: " + targetImageFileName);
+            syncronizerDBs.decrementCountSyncObj("IMGfromFB: Image isExist: " + targetImageFileName);
             return;
         }
 
@@ -201,7 +207,7 @@ public class ThingsFireBase {
                             Exception exception = task.getException();
                             Log.d("SyncronizerDBs", "EXCEPTION DownloadFile: " + targetImageFileName + ":\n" + exception.getMessage());
                         }
-
+                        syncronizerDBs.decrementCountSyncObj("IMGfromFB:" + imageId);
 
                     }
                 });

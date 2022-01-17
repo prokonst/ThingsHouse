@@ -21,6 +21,7 @@ import com.prokonst.thingshouse.model.tables.Storage;
 import com.prokonst.thingshouse.model.tables.Thing;
 import com.prokonst.thingshouse.tools.DataComparer;
 
+import java.util.Collection;
 import java.util.List;
 
 public class SyncronizerDBs implements LifecycleOwner {
@@ -38,6 +39,7 @@ public class SyncronizerDBs implements LifecycleOwner {
     private AppRepository appRepository;
     private AppCompatActivity appCompatActivity;
     private LifecycleRegistry lifecycleRegistry;
+    private int countSyncObj;
 
     private SyncronizerDBs(AppCompatActivity appCompatActivity){
         this.appCompatActivity = appCompatActivity;
@@ -45,12 +47,32 @@ public class SyncronizerDBs implements LifecycleOwner {
         this.appRepository = AppRepository.getInstance(appCompatActivity.getApplication());
         this.lifecycleRegistry = new LifecycleRegistry(this);
         this.lifecycleRegistry.setCurrentState(Lifecycle.State.CREATED);
+        this.countSyncObj = 0;
     }
 
     public void sync(){
         DataComparer.prepare();
         readThingsFromFireBase();
         DataComparer.finish();
+    }
+
+    public void decrementCountSyncObj(String message){
+        this.countSyncObj --;
+        //Log.d("SyncronizerDBs", "SYNC COUNT: " + this.countSyncObj + " [" + message + "]");
+
+        if(this.countSyncObj > 0)
+            return;
+
+        try {
+            SyncronizerDBs.this.finalize();
+            Toast.makeText(SyncronizerDBs.this.appCompatActivity, "Sync success!", Toast.LENGTH_LONG).show();
+            //Log.d("SyncronizerDBs", "Sync success!");
+        }
+        catch (Throwable ex){
+            //Log.d("SyncronizerDBs", ex.getMessage());
+            Toast.makeText(SyncronizerDBs.this.appCompatActivity, "Sync failed!\n" + ex.getMessage(), Toast.LENGTH_LONG).show();
+            //Log.d("SyncronizerDBs", "Sync failed!\n" + ex.getMessage());
+        }
     }
 
     private void readThingsFromFireBase(){
@@ -134,6 +156,7 @@ public class SyncronizerDBs implements LifecycleOwner {
                     DataComparer.addObjToMap(curStorage, DataComparer.DbType.LOCAL_OBJ, DataComparer.ObjType.STORAGE);
                 }
 
+                SyncronizerDBs.this.lifecycleRegistry.setCurrentState(Lifecycle.State.DESTROYED);
                 SyncronizerDBs.this.compareObjects();
             }
         });
@@ -151,28 +174,27 @@ public class SyncronizerDBs implements LifecycleOwner {
 
         DataComparer.compareAll();
 
-        for(DataComparer curDC: DataComparer.getAllDataComparers()){
+        Collection<DataComparer> allDataComparers = DataComparer.getAllDataComparers();
+        this.countSyncObj += allDataComparers.size();
+
+        Collection<String> imagesIdToFireBase = DataComparer.getImagesIdToFireBase();
+        this.countSyncObj += imagesIdToFireBase.size();
+
+        Collection<String> imagesIdToLocalDB = DataComparer.getImagesIdToLocalDB();
+        this.countSyncObj += imagesIdToLocalDB.size();
+
+
+        for(DataComparer curDC: allDataComparers){
             changeThing(curDC);
+            this.decrementCountSyncObj(curDC.getObjId());
         }
-/*
-        for(String curImageId : DataComparer.getImagesIdToFireBase()){
-            Log.d("SyncronizerDBs", "IMG: " + curImageId);
-            this.thingsFireBase.saveImageToFireBase(curImageId, this.appCompatActivity);
-        }*/
 
-        this.thingsFireBase.saveImagesToFireBase(DataComparer.getImagesIdToFireBase(), this.appCompatActivity);
+        this.thingsFireBase.saveImagesToFireBase(imagesIdToFireBase, this, this.appCompatActivity);
 
-        this.thingsFireBase.saveFilesToLocalDisc(DataComparer.getImagesIdToLocalDB(), this.appCompatActivity);
+        this.thingsFireBase.saveFilesToLocalDisc(imagesIdToLocalDB, this, this.appCompatActivity);
 
 
-        try {
-            SyncronizerDBs.this.finalize();
-            Toast.makeText(SyncronizerDBs.this.appCompatActivity, "Sync success!", Toast.LENGTH_LONG).show();
-        }
-        catch (Throwable ex){
-            Log.d("SyncronizerDBs", ex.getMessage());
-            Toast.makeText(SyncronizerDBs.this.appCompatActivity, "Sync failed!\n" + ex.getMessage(), Toast.LENGTH_LONG).show();
-        }
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -265,7 +287,6 @@ public class SyncronizerDBs implements LifecycleOwner {
     @Override
     protected void finalize() throws Throwable {
         super.finalize();
-        this.lifecycleRegistry.setCurrentState(Lifecycle.State.DESTROYED);
         SyncronizerDBs.syncronizerDBs = null;
     }
 }
