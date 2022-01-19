@@ -135,14 +135,14 @@
             app:layout_constraintBottom_toBottomOf="@+id/mainPhotoImageView"
             app:layout_constraintStart_toEndOf="@+id/mainPhotoImageView" />
 
-        <Button
+        <!--<Button
             android:id="@+id/buttonTest"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="@{ckickHandlers::onTest}"
             android:text="Test"
             app:layout_constraintBottom_toTopOf="@+id/buttonShowPhoto"
-            app:layout_constraintStart_toEndOf="@+id/mainPhotoImageView" />
+            app:layout_constraintStart_toEndOf="@+id/mainPhotoImageView" />-->
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
 
