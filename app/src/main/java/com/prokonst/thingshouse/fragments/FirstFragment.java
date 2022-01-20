@@ -19,6 +19,9 @@ import com.prokonst.thingshouse.model.Authorization;
 import com.prokonst.thingshouse.model.ThingsFireBase;
 import com.prokonst.thingshouse.tools.ShowThingsListParameters;
 
+import java.util.Calendar;
+import java.util.Date;
+
 public class FirstFragment extends Fragment {
 
     private FragmentFirstBinding binding;
@@ -69,8 +72,8 @@ public class FirstFragment extends Fragment {
 
         binding.testButton.setOnClickListener((v) -> {
             //ThingsFireBase.getInstance().createUserNode();
-
-            Toast.makeText(this.getContext(), "Ok", Toast.LENGTH_SHORT).show();
+            Date dateTest = Calendar.getInstance().getTime();
+            Toast.makeText(this.getContext(), "Ok " + dateTest, Toast.LENGTH_SHORT).show();
             return;
         });
 

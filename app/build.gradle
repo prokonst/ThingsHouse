@@ -54,6 +54,8 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
+    //implementation group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api-parent', version: '3.0.0', ext: 'pom'
+
 
     def lifecycle_version = "2.4.0-rc01"
     // ViewModel

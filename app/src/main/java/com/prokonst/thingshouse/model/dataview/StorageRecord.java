@@ -3,7 +3,6 @@ package com.prokonst.thingshouse.model.dataview;
 import androidx.annotation.NonNull;
 import androidx.databinding.BaseObservable;
 import androidx.databinding.Bindable;
-import androidx.databinding.library.baseAdapters.BR;
 import androidx.room.ColumnInfo;
 import androidx.room.Ignore;
 
@@ -69,7 +68,7 @@ public class StorageRecord extends BaseObservable implements Serializable, ShowT
 
     public void setStorageId(@NonNull String storageId) {
         this.storageId = storageId;
-        notifyPropertyChanged(BR.storageId);
+        notifyPropertyChanged(androidx.databinding.library.baseAdapters.BR.storageId);
     }
 
     @Bindable
@@ -79,7 +78,7 @@ public class StorageRecord extends BaseObservable implements Serializable, ShowT
 
     public void setParentId(String parentId) {
         this.parentId = parentId;
-        notifyPropertyChanged(BR.parentId);
+        notifyPropertyChanged(androidx.databinding.library.baseAdapters.BR.parentId);
     }
 
     @Bindable
@@ -89,7 +88,7 @@ public class StorageRecord extends BaseObservable implements Serializable, ShowT
 
     public void setChildId(String childId) {
         this.childId = childId;
-        notifyPropertyChanged(BR.childId);
+        notifyPropertyChanged(androidx.databinding.library.baseAdapters.BR.childId);
     }
 
     @Bindable
@@ -99,7 +98,7 @@ public class StorageRecord extends BaseObservable implements Serializable, ShowT
 
     public void setQuantity(double quantity) {
         this.quantity = quantity;
-        notifyPropertyChanged(BR.quantity);
+        notifyPropertyChanged(androidx.databinding.library.baseAdapters.BR.quantity);
     }
 
     @Bindable
@@ -109,7 +108,7 @@ public class StorageRecord extends BaseObservable implements Serializable, ShowT
 
     public void setThingId(String thingId) {
         this.thingId = thingId;
-        notifyPropertyChanged(BR.thingId);
+        notifyPropertyChanged(androidx.databinding.library.baseAdapters.BR.thingId);
     }
 
     @Bindable
@@ -160,6 +159,6 @@ public class StorageRecord extends BaseObservable implements Serializable, ShowT
     }
     public void setMainPhotoPrevSrc(String mainPhotoPrevSrc) {
         this.mainPhotoPrevSrc = mainPhotoPrevSrc;
-        notifyPropertyChanged(BR.mainPhotoPrevSrc);
+        notifyPropertyChanged(androidx.databinding.library.baseAdapters.BR.mainPhotoPrevSrc);
     }
 }

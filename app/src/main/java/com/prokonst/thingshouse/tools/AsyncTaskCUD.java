@@ -43,7 +43,7 @@ public class AsyncTaskCUD extends AsyncTask<Void, Void, Void> {
 
     private void notifyUser(Exception ex) {
         if(ex == null) {
-            showAppToast("Success");
+            //showAppToast("Success");
             return;
         }
 
